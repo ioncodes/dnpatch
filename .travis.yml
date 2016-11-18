@@ -3,5 +3,5 @@ solution: dnpatch.sln
 deploy:
   provider: releases
   api_key: "$GH_TOKEN"
-  file: dnpatch\dnpatch\bin\Release\dnpatch.dll
+  file: /home/travis/build/ioncodes/dnpatch/Example/bin/Release/dnpatch.dll
   skip_cleanup: true
