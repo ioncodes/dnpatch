@@ -5,5 +5,3 @@ deploy:
   api_key: "$GH_TOKEN"
   file: dnpatch\dnpatch\bin\Release\dnpatch.dll
   skip_cleanup: true
-  on:
-    tags: true
