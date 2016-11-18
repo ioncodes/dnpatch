@@ -1,2 +1,9 @@
 language: csharp
 solution: dnpatch.sln
+deploy:
+  provider: releases
+  api_key: "$GH_TOKEN"
+  file: dnpatch\bin\Release\dnpatch.dll
+  skip_cleanup: true
+  on:
+    tags: true
