@@ -1,4 +1,4 @@
 # dnpatch
 .NET Patcher library using dnlib.
 
-[![Build Status](https://travis-ci.org/ioncodes/dnpatch.svg?branch=master)](https://travis-ci.org/ioncodes/dnpatch)
+[![Build status](https://ci.appveyor.com/api/projects/status/39jhu0noimfkgfw2?svg=true)](https://ci.appveyor.com/project/ioncodes/dnpatch)
