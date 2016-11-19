@@ -159,6 +159,28 @@ namespace dnpatch
             return -1;
         }
 
+        public int FindInstruction(Target target, Instruction instruction, int occurence)
+        {
+            var type = FindType(module.Assembly, target.Namespace + "." + target.Class, target.NestedClasses);
+            MethodDef method = FindMethod(type, target.Method);
+            var instructions = method.Body.Instructions;
+            int index = 0;
+            int occurenceCounter = 0;
+            foreach (var i in instructions)
+            {
+                if (i.OpCode.Name == instruction.OpCode.Name && i.Operand.ToString() == instruction.Operand.ToString() && occurenceCounter < occurence)
+                {
+                    occurenceCounter++;
+                }
+                else if (i.OpCode.Name == instruction.OpCode.Name && i.Operand.ToString() == instruction.Operand.ToString() && occurenceCounter == occurence)
+                {
+                    return index;
+                }
+                index++;
+            }
+            return -1;
+        }
+
         public MemberRef BuildMemberRef(string ns, string cs, string name) // debug stuff
         {
             TypeRef consoleRef = new TypeRefUser(module, ns, cs, module.CorLibTypes.AssemblyRef);
