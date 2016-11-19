@@ -59,125 +59,47 @@ namespace dnpatch
 
         private void PatchAndClear(Target target)
         {
-            var types = FindType(module.Assembly, target.Namespace + "." + target.Class);
-            TypeDef t = null;
-            if (target.NestedClasses != null)
+            var type = FindType(module.Assembly, target.Namespace + "." + target.Class, target.NestedClasses);
+            var method = FindMethod(type, target.Method);
+            var instructions = method.Body.Instructions;
+            instructions.Clear();
+            for (int i = 0; i < target.Instructions.Length; i++)
             {
-                foreach (var nc in target.NestedClasses)
-                {
-                    foreach (var type in types.NestedTypes)
-                    { 
-                        if (type.Name == nc)
-                        {
-                            t = type;
-                        }
-                    }
-                }
-            }
-            else
-            {
-                t = types;
-            }
-
-            // t is now the target class
-
-            foreach (var m in t.Methods)
-            {
-                if (target.Method == m.Name)
-                {
-                    if (target.Instructions != null)
-                    {
-                        var instructions = m.Body.Instructions;
-                        instructions.Clear();
-                        for (int i = 0; i < target.Instructions.Length; i++)
-                        {
-                            instructions.Insert(i, target.Instructions[i]);
-                        }
-                    }
-                    else
-                    {
-                        throw new Exception("No instructions specified");
-                    }
-                }
+                instructions.Insert(i, target.Instructions[i]);
             }
         }
 
         private void PatchOffsets(Target target)
         {
-            var types = FindType(module.Assembly, target.Namespace + "." + target.Class);
-            TypeDef t = null;
-            if (target.NestedClasses != null)
+            var type = FindType(module.Assembly, target.Namespace + "." + target.Class, target.NestedClasses);
+            var method = FindMethod(type, target.Method);
+            var instructions = method.Body.Instructions;
+            if (target.Indexes != null && target.Instructions != null)
             {
-                foreach (var nc in target.NestedClasses)
+                for (int i = 0; i < target.Indexes.Length; i++)
                 {
-                    if (t == null)
-                    {
-                        if (!types.HasNestedTypes) continue;
-                        Console.WriteLine(types.NestedTypes[0]);
-                        foreach (var type in types.NestedTypes)
-                        {
-                            if (type.Name == nc)
-                            {
-                                t = type;
-                                Console.WriteLine(t.Name);
-                            }
-                        }
-                    }
-                    else
-                    {
-                        if (!t.HasNestedTypes) continue;
-                        Console.WriteLine(t.NestedTypes[0]);
-                        foreach (var type in t.NestedTypes)
-                        {
-                            if (type.Name == nc)
-                            {
-                                t = type;
-                                Console.WriteLine(t.Name);
-                            }
-                        }
-                    }
+                    instructions[target.Indexes[i]] = target.Instructions[i];
                 }
             }
-            else
+            else if (target.Index != -1 && target.Instruction != null)
             {
-                t = types;
+                instructions[target.Index] = target.Instruction;
             }
-
-            // t is now the target class
-
-            foreach (var m in t.Methods)
+            else if(target.Index == -1)
             {
-                if (target.Method == m.Name)
-                {
-                    var instructions = m.Body.Instructions;
-                    if (target.Indexes != null && target.Instructions != null)
-                    {
-                        for (int i = 0; i < target.Indexes.Length; i++)
-                        {
-                            instructions[target.Indexes[i]] = target.Instructions[i];
-                        }
-                    }
-                    else if (target.Index != -1 && target.Instruction != null)
-                    {
-                        instructions[target.Index] = target.Instruction;
-                    }
-                    else if(target.Index == -1)
-                    {
-                        throw new Exception("No index specified");
-                    }
-                    else if (target.Instruction == null)
-                    {
-                        throw new Exception("No instruction specified");
-                    }
-                    else if (target.Indexes == null)
-                    {
-                        throw new Exception("No indexes specified");
-                    }
-                    else if (target.Instructions == null)
-                    {
-                        throw new Exception("No instructions specified");
-                    }
-                }
+                throw new Exception("No index specified");
+            }
+            else if (target.Instruction == null)
+            {
+                throw new Exception("No instruction specified");
+            }
+            else if (target.Indexes == null)
+            {
+                throw new Exception("No indexes specified");
+            }
+            else if (target.Instructions == null)
+            {
+                throw new Exception("No instructions specified");
             }
         }
 
@@ -209,9 +131,12 @@ namespace dnpatch
             File.Move(file + ".tmp", file);
         }
 
-        public Instruction FindInstruction(Instruction[] instructions, Code code)
+        public int FindInstruction(Target target, Instruction instruction)
         {
-            return instructions.Single(i => i.OpCode.Code == code);
+            var type = FindType(module.Assembly, target.Namespace + "." + target.Class, target.NestedClasses);
+            MethodDef method = FindMethod(type, target.Method);
+            var instructions = method.Body.Instructions;
+            return instructions.IndexOf(instruction);
         }
 
         public MemberRef BuildMemberRef(string ns, string cs, string name) // debug stuff
@@ -222,17 +147,57 @@ namespace dnpatch
                         consoleRef);
         }
 
-        private TypeDef FindType(AssemblyDef asm, string classPath)
+        private TypeDef FindType(AssemblyDef asm, string classPath, string[] nestedClasses)
         {
             foreach (var module in asm.Modules)
             {
                 foreach (var type in module.Types)
                 {
                     if (type.FullName == classPath)
-                        return type;
+                    {
+                        TypeDef t = null;
+                        if (nestedClasses != null)
+                        {
+                            foreach (var nc in nestedClasses)
+                            {
+                                if (t == null)
+                                {
+                                    if (!type.HasNestedTypes) continue;
+                                    foreach (var typeN in type.NestedTypes)
+                                    {
+                                        if (typeN.Name == nc)
+                                        {
+                                            t = typeN;
+                                        }
+                                    }
+                                }
+                                else
+                                {
+                                    if (!t.HasNestedTypes) continue;
+                                    foreach (var typeN in t.NestedTypes)
+                                    {
+                                        if (typeN.Name == nc)
+                                        {
+                                            t = typeN;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        else
+                        {
+                            t = type;
+                        }
+                        return t;
+                    }
                 }
             }
             return null;
+        }
+
+        private MethodDef FindMethod(TypeDef type, string methodName)
+        {
+            return type.Methods.FirstOrDefault(m => methodName == m.Name);
         }
     }
 }
