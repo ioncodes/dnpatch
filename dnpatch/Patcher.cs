@@ -36,6 +36,27 @@ namespace dnpatch
             }
         }
 
+        public void Patch(Target[] targets)
+        {
+            foreach (Target target in targets)
+            {
+                if ((target.Indexes != null || target.Index != -1) &&
+                    (target.Instruction != null || target.Instructions != null))
+                {
+                    PatchOffsets(target);
+                }
+                else if ((target.Index == -1 && target.Indexes == null) &&
+                         (target.Instruction != null || target.Instructions != null))
+                {
+                    PatchAndClear(target);
+                }
+                else
+                {
+                    throw new Exception("Check your Target object for inconsistent assignements");
+                }
+            }
+        }
+
         private void PatchAndClear(Target target)
         {
             var types = FindType(module.Assembly, target.Namespace + "." + target.Class);
