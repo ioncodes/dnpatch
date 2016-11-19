@@ -105,10 +105,6 @@ namespace dnpatch
 
         public void Save(string name)
         {
-            //if (Path.GetFileName(file) == Path.GetFileName(name))
-            //{
-            //    throw new Exception("Save name cannot be the same as the assemblies name, use the overloaded function for this");
-            //}
             module.Write(name);
         }
 
