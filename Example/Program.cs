@@ -98,7 +98,25 @@ namespace Example
                 Index = index
             };
             p.Patch(target);
-            p.Save(true);
+            p.Save("Test4.exe");
+
+
+            /*
+             * Replaces the instructions at the given index in a big nested class
+             */
+            p = new Patcher("Test.exe");
+            Instruction opCodeReplaceInstruction = Instruction.Create(OpCodes.Ldstr, "TheTrain");
+            Instruction toFind = Instruction.Create(OpCodes.Ldstr, "TheWord");
+            target = new Target()
+            {
+                Namespace = "Test",
+                Class = "Program",
+                Method = "FindMe",
+                Instruction = opCodeReplaceInstruction
+            };
+            target.Index = p.FindInstruction(target, toFind);
+            p.Patch(target);
+            p.Save("Test5.exe");
         }
     }
 }

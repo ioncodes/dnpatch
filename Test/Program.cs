@@ -17,6 +17,7 @@ namespace Test
             foobar.NestedPrint();
             I.Am.A.Burger burger = new I.Am.A.Burger();
             burger.Eat();
+            FindMe();
             Console.Read();
         }
 
@@ -40,6 +41,16 @@ namespace Test
             Console.WriteLine("Hello");
             Console.WriteLine("Hello");
             Console.WriteLine("Hello");
+        }
+
+        static void FindMe()
+        {
+            Console.WriteLine("You");
+            Console.WriteLine("Wont");
+            Console.WriteLine("Find");
+            Console.WriteLine("TheWord");
+            Console.WriteLine("The");
+            Console.WriteLine("Word");
         }
     }
 }

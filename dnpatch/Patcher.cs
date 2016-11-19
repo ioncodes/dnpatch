@@ -147,7 +147,16 @@ namespace dnpatch
             var type = FindType(module.Assembly, target.Namespace + "." + target.Class, target.NestedClasses);
             MethodDef method = FindMethod(type, target.Method);
             var instructions = method.Body.Instructions;
-            return instructions.IndexOf(instruction);
+            int index = 0;
+            foreach (var i in instructions)
+            {
+                if (i.OpCode.Name == instruction.OpCode.Name && i.Operand.ToString() == instruction.Operand.ToString())
+                {
+                    return index;
+                }
+                index++;
+            }
+            return -1;
         }
 
         public MemberRef BuildMemberRef(string ns, string cs, string name) // debug stuff
