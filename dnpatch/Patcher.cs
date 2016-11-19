@@ -181,6 +181,13 @@ namespace dnpatch
             return -1;
         }
 
+        public Instruction[] GetInstructions(Target target)
+        {
+            var type = FindType(module.Assembly, target.Namespace + "." + target.Class, target.NestedClasses);
+            MethodDef method = FindMethod(type, target.Method);
+            return (Instruction[]) method.Body.Instructions;
+        }
+
         public MemberRef BuildMemberRef(string ns, string cs, string name) // debug stuff
         {
             TypeRef consoleRef = new TypeRefUser(module, ns, cs, module.CorLibTypes.AssemblyRef);
