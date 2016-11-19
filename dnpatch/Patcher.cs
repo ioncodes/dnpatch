@@ -1,9 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using dnlib.DotNet;
 using dnlib.DotNet.Emit;
 
@@ -59,7 +56,16 @@ namespace dnpatch
 
         private void PatchAndClear(Target target)
         {
-            var type = FindType(module.Assembly, target.Namespace + "." + target.Class, target.NestedClasses);
+            string[] nestedClasses = { };
+            if (target.NestedClasses != null)
+            {
+                nestedClasses = target.NestedClasses;
+            }
+            else if (target.NestedClass != null)
+            {
+                nestedClasses = new[] { target.NestedClass };
+            }
+            var type = FindType(module.Assembly, target.Namespace + "." + target.Class, nestedClasses);
             var method = FindMethod(type, target.Method);
             var instructions = method.Body.Instructions;
             instructions.Clear();
@@ -71,7 +77,16 @@ namespace dnpatch
 
         private void PatchOffsets(Target target)
         {
-            var type = FindType(module.Assembly, target.Namespace + "." + target.Class, target.NestedClasses);
+            string[] nestedClasses = { };
+            if (target.NestedClasses != null)
+            {
+                nestedClasses = target.NestedClasses;
+            }
+            else if (target.NestedClass != null)
+            {
+                nestedClasses = new[] {target.NestedClass};
+            }
+            var type = FindType(module.Assembly, target.Namespace + "." + target.Class, nestedClasses);
             var method = FindMethod(type, target.Method);
             var instructions = method.Body.Instructions;
             if (target.Indexes != null && target.Instructions != null)
@@ -152,7 +167,7 @@ namespace dnpatch
                     if (type.FullName == classPath)
                     {
                         TypeDef t = null;
-                        if (nestedClasses != null)
+                        if (nestedClasses != null && nestedClasses.Length > 0)
                         {
                             foreach (var nc in nestedClasses)
                             {
