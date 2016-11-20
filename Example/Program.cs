@@ -134,6 +134,21 @@ namespace Example
             };
             p.ReplaceInstruction(target);
             p.Save("Test6.exe");
+
+
+            /*
+             * Removes the instrutions at the given index
+             */
+            p = new Patcher("Test.exe");
+            target = new Target()
+            {
+                Namespace = "Test",
+                Class = "Program",
+                Method = "ReplaceMe",
+                Indexes = {}
+            };
+            p.RemoveInstruction(target);
+            p.Save("Test7.exe");
         }
     }
 }

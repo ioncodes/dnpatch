@@ -148,7 +148,7 @@ namespace dnpatch
             }
         }
 
-        public void RemoveInstruction(Target target, int index)
+        public void RemoveInstruction(Target target)
         {
             string[] nestedClasses = { };
             if (target.NestedClasses != null)
@@ -162,7 +162,21 @@ namespace dnpatch
             var type = FindType(module.Assembly, target.Namespace + "." + target.Class, nestedClasses);
             var method = FindMethod(type, target.Method);
             var instructions = method.Body.Instructions;
-            instructions.RemoveAt(index);
+            if (target.Index != -1 && target.Indexes == null)
+            {
+                instructions.RemoveAt(target.Index);
+            }
+            else if (target.Index == -1 && target.Indexes != null)
+            {
+                foreach (var index in target.Indexes)
+                {
+                    instructions.RemoveAt(index);
+                }
+            }
+            else
+            {
+                throw new Exception("Target object built wrong");
+            }
         }
 
         public Instruction[] GetInstructions(Target target)

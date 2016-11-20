@@ -19,6 +19,7 @@ namespace Test
             burger.Eat();
             FindMe();
             ReplaceMe();
+            RemoveMe();
             Console.Read();
         }
 
@@ -57,6 +58,12 @@ namespace Test
         static void ReplaceMe()
         {
             Console.WriteLine("I love dogs");
+        }
+
+        static void RemoveMe()
+        {
+            Console.WriteLine("The next sentence is a lie");
+            Console.WriteLine("ion is best");
         }
     }
 }
