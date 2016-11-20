@@ -137,15 +137,15 @@ namespace Example
 
 
             /*
-             * Removes the instrutions at the given index
+             * Removes the instrutions at the given indexes
              */
             p = new Patcher("Test.exe");
             target = new Target()
             {
                 Namespace = "Test",
                 Class = "Program",
-                Method = "ReplaceMe",
-                Indexes = {}
+                Method = "RemoveMe",
+                Indexes = new[]{0,1}
             };
             p.RemoveInstruction(target);
             p.Save("Test7.exe");
