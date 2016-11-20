@@ -131,7 +131,21 @@ namespace dnpatch
             var type = FindType(module.Assembly, target.Namespace + "." + target.Class, nestedClasses);
             var method = FindMethod(type, target.Method);
             var instructions = method.Body.Instructions;
-            instructions[index] = instruction;
+            if (target.Index != -1 && target.Instruction != null)
+            {
+                instructions[target.Index] = target.Instruction;
+            }
+            else if (target.Indexes != null && target.Instructions != null)
+            {
+                foreach (var index in target.Indexes)
+                {
+                    instructions[index] = target.Instructions[index];
+                }
+            }
+            else
+            {
+                throw new Exception("Target object built wrong");
+            }
         }
 
         public void RemoveInstruction(Target target, int index)
