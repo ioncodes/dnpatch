@@ -54,6 +54,101 @@ namespace dnpatch
             }
         }
 
+        public void Save(string name)
+        {
+            module.Write(name);
+        }
+
+        public void Save(bool backup)
+        {
+            module.Write(file + ".tmp");
+            module.Dispose();
+            if (backup)
+            {
+                if (File.Exists(file + ".bak"))
+                {
+                    File.Delete(file + ".bak");
+                }
+                File.Move(file, file + ".bak");
+            }
+            else
+            {
+                File.Delete(file);
+            }
+            File.Move(file + ".tmp", file);
+        }
+
+        public int FindInstruction(Target target, Instruction instruction)
+        {
+            var type = FindType(module.Assembly, target.Namespace + "." + target.Class, target.NestedClasses);
+            MethodDef method = FindMethod(type, target.Method);
+            var instructions = method.Body.Instructions;
+            int index = 0;
+            foreach (var i in instructions)
+            {
+                if (i.OpCode.Name == instruction.OpCode.Name && i.Operand.ToString() == instruction.Operand.ToString())
+                {
+                    return index;
+                }
+                index++;
+            }
+            return -1;
+        }
+
+        public int FindInstruction(Target target, Instruction instruction, int occurence)
+        {
+            var type = FindType(module.Assembly, target.Namespace + "." + target.Class, target.NestedClasses);
+            MethodDef method = FindMethod(type, target.Method);
+            var instructions = method.Body.Instructions;
+            int index = 0;
+            int occurenceCounter = 0;
+            foreach (var i in instructions)
+            {
+                if (i.OpCode.Name == instruction.OpCode.Name && i.Operand.ToString() == instruction.Operand.ToString() && occurenceCounter < occurence)
+                {
+                    occurenceCounter++;
+                }
+                else if (i.OpCode.Name == instruction.OpCode.Name && i.Operand.ToString() == instruction.Operand.ToString() && occurenceCounter == occurence)
+                {
+                    return index;
+                }
+                index++;
+            }
+            return -1;
+        }
+
+        public void ReplaceInstruction(Target target, Instruction instruction, int index)
+        {
+            string[] nestedClasses = { };
+            if (target.NestedClasses != null)
+            {
+                nestedClasses = target.NestedClasses;
+            }
+            else if (target.NestedClass != null)
+            {
+                nestedClasses = new[] { target.NestedClass };
+            }
+            var type = FindType(module.Assembly, target.Namespace + "." + target.Class, nestedClasses);
+            var method = FindMethod(type, target.Method);
+            var instructions = method.Body.Instructions;
+            instructions[index] = instruction;
+        }
+
+        public Instruction[] GetInstructions(Target target)
+        {
+            var type = FindType(module.Assembly, target.Namespace + "." + target.Class, target.NestedClasses);
+            MethodDef method = FindMethod(type, target.Method);
+            return (Instruction[])method.Body.Instructions;
+        }
+
+        public MemberRef BuildMemberRef(string ns, string cs, string name) // debug stuff
+        {
+            TypeRef consoleRef = new TypeRefUser(module, ns, cs, module.CorLibTypes.AssemblyRef);
+            return new MemberRefUser(module, name,
+                        MethodSig.CreateStatic(module.CorLibTypes.Void, module.CorLibTypes.String),
+                        consoleRef);
+        }
+
         private void PatchAndClear(Target target)
         {
             string[] nestedClasses = { };
@@ -116,84 +211,6 @@ namespace dnpatch
             {
                 throw new Exception("No instructions specified");
             }
-        }
-
-        public void Save(string name)
-        {
-            module.Write(name);
-        }
-
-        public void Save(bool backup)
-        {
-            module.Write(file+".tmp");
-            module.Dispose();
-            if (backup)
-            {
-                if (File.Exists(file + ".bak"))
-                {
-                    File.Delete(file + ".bak");
-                }
-                File.Move(file, file+".bak");
-            }
-            else
-            {
-                File.Delete(file);
-            }
-            File.Move(file + ".tmp", file);
-        }
-
-        public int FindInstruction(Target target, Instruction instruction)
-        {
-            var type = FindType(module.Assembly, target.Namespace + "." + target.Class, target.NestedClasses);
-            MethodDef method = FindMethod(type, target.Method);
-            var instructions = method.Body.Instructions;
-            int index = 0;
-            foreach (var i in instructions)
-            {
-                if (i.OpCode.Name == instruction.OpCode.Name && i.Operand.ToString() == instruction.Operand.ToString())
-                {
-                    return index;
-                }
-                index++;
-            }
-            return -1;
-        }
-
-        public int FindInstruction(Target target, Instruction instruction, int occurence)
-        {
-            var type = FindType(module.Assembly, target.Namespace + "." + target.Class, target.NestedClasses);
-            MethodDef method = FindMethod(type, target.Method);
-            var instructions = method.Body.Instructions;
-            int index = 0;
-            int occurenceCounter = 0;
-            foreach (var i in instructions)
-            {
-                if (i.OpCode.Name == instruction.OpCode.Name && i.Operand.ToString() == instruction.Operand.ToString() && occurenceCounter < occurence)
-                {
-                    occurenceCounter++;
-                }
-                else if (i.OpCode.Name == instruction.OpCode.Name && i.Operand.ToString() == instruction.Operand.ToString() && occurenceCounter == occurence)
-                {
-                    return index;
-                }
-                index++;
-            }
-            return -1;
-        }
-
-        public Instruction[] GetInstructions(Target target)
-        {
-            var type = FindType(module.Assembly, target.Namespace + "." + target.Class, target.NestedClasses);
-            MethodDef method = FindMethod(type, target.Method);
-            return (Instruction[]) method.Body.Instructions;
-        }
-
-        public MemberRef BuildMemberRef(string ns, string cs, string name) // debug stuff
-        {
-            TypeRef consoleRef = new TypeRefUser(module, ns, cs, module.CorLibTypes.AssemblyRef);
-            return new MemberRefUser(module, name,
-                        MethodSig.CreateStatic(module.CorLibTypes.Void, module.CorLibTypes.String),
-                        consoleRef);
         }
 
         private TypeDef FindType(AssemblyDef asm, string classPath, string[] nestedClasses)
