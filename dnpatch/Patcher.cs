@@ -134,6 +134,23 @@ namespace dnpatch
             instructions[index] = instruction;
         }
 
+        public void RemoveInstruction(Target target, int index)
+        {
+            string[] nestedClasses = { };
+            if (target.NestedClasses != null)
+            {
+                nestedClasses = target.NestedClasses;
+            }
+            else if (target.NestedClass != null)
+            {
+                nestedClasses = new[] { target.NestedClass };
+            }
+            var type = FindType(module.Assembly, target.Namespace + "." + target.Class, nestedClasses);
+            var method = FindMethod(type, target.Method);
+            var instructions = method.Body.Instructions;
+            instructions.RemoveAt(index);
+        }
+
         public Instruction[] GetInstructions(Target target)
         {
             var type = FindType(module.Assembly, target.Namespace + "." + target.Class, target.NestedClasses);
