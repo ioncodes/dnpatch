@@ -102,7 +102,7 @@ namespace Example
 
 
             /*
-             * Replaces the instructions at the given index in a big nested class
+             * Replaces the instructions at the given index which has been find via FindInstruction
              */
             p = new Patcher("Test.exe");
             Instruction opCodeReplaceInstruction = Instruction.Create(OpCodes.Ldstr, "TheTrain");
@@ -117,6 +117,23 @@ namespace Example
             target.Index = p.FindInstruction(target, toFind);
             p.Patch(target);
             p.Save("Test5.exe");
+
+
+            /*
+             * Replaces a instruction at the given index
+             */
+            p = new Patcher("Test.exe");
+            Instruction opCodeReplaceMe = Instruction.Create(OpCodes.Ldstr, "I love kittens");
+            target = new Target()
+            {
+                Namespace = "Test",
+                Class = "Program",
+                Method = "ReplaceMe",
+                Instruction = opCodeReplaceMe,
+                Index = 0
+            };
+            p.ReplaceInstruction(target);
+            p.Save("Test6.exe");
         }
     }
 }

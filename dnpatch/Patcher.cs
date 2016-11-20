@@ -117,7 +117,7 @@ namespace dnpatch
             return -1;
         }
 
-        public void ReplaceInstruction(Target target, Instruction instruction, int index)
+        public void ReplaceInstruction(Target target)
         {
             string[] nestedClasses = { };
             if (target.NestedClasses != null)

@@ -18,6 +18,7 @@ namespace Test
             I.Am.A.Burger burger = new I.Am.A.Burger();
             burger.Eat();
             FindMe();
+            ReplaceMe();
             Console.Read();
         }
 
@@ -51,6 +52,11 @@ namespace Test
             Console.WriteLine("TheWord");
             Console.WriteLine("The");
             Console.WriteLine("Word");
+        }
+
+        static void ReplaceMe()
+        {
+            Console.WriteLine("I love dogs");
         }
     }
 }
