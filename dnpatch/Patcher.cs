@@ -168,7 +168,7 @@ namespace dnpatch
             }
             else if (target.Index == -1 && target.Indexes != null)
             {
-                foreach (var index in target.Indexes)
+                foreach (var index in target.Indexes.OrderByDescending(v => v))
                 {
                     instructions.RemoveAt(index);
                 }
