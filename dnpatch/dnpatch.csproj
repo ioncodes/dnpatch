@@ -43,6 +43,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ObfuscatedTarget.cs" />
+    <Compile Include="ObfuscationPatcher.cs" />
     <Compile Include="Patcher.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Target.cs" />
