@@ -186,6 +186,86 @@ namespace dnpatch
             return (Instruction[])method.Body.Instructions;
         }
 
+        public void PatchOperand(Target target, string operand)
+        {
+            TypeDef type = FindType(module.Assembly, target.Namespace + "." + target.Class, target.NestedClasses);
+            MethodDef method = FindMethod(type, target.Method);
+            var instructions = method.Body.Instructions;
+            if (target.Indexes == null && target.Index != -1)
+            {
+                instructions[target.Index].Operand = operand;
+            }
+            else if (target.Indexes != null && target.Index == -1)
+            {
+                foreach (var index in target.Indexes)
+                {
+                    instructions[index].Operand = operand;
+                }
+            }
+            else
+            {
+                throw new Exception("Operand error");
+            }
+        }
+
+        public void PatchOperand(Target target, int operand)
+        {
+            TypeDef type = FindType(module.Assembly, target.Namespace + "." + target.Class, target.NestedClasses);
+            MethodDef method = FindMethod(type, target.Method);
+            var instructions = method.Body.Instructions;
+            if (target.Indexes == null && target.Index != -1)
+            {
+                instructions[target.Index].Operand = operand;
+            }
+            else if (target.Indexes != null && target.Index == -1)
+            {
+                foreach (var index in target.Indexes)
+                {
+                    instructions[index].Operand = operand;
+                }
+            }
+            else
+            {
+                throw new Exception("Operand error");
+            }
+        }
+
+        public void PatchOperand(Target target, string[] operand)
+        {
+            TypeDef type = FindType(module.Assembly, target.Namespace + "." + target.Class, target.NestedClasses);
+            MethodDef method = FindMethod(type, target.Method);
+            var instructions = method.Body.Instructions;
+            if (target.Indexes != null && target.Index == -1)
+            {
+                foreach (var index in target.Indexes)
+                {
+                    instructions[index].Operand = operand[index];
+                }
+            }
+            else
+            {
+                throw new Exception("Operand error");
+            }
+        }
+
+        public void PatchOperand(Target target, int[] operand)
+        {
+            TypeDef type = FindType(module.Assembly, target.Namespace + "." + target.Class, target.NestedClasses);
+            MethodDef method = FindMethod(type, target.Method);
+            var instructions = method.Body.Instructions;
+            if (target.Indexes != null && target.Index == -1)
+            {
+                foreach (var index in target.Indexes)
+                {
+                    instructions[index].Operand = operand[index];
+                }
+            }
+            else
+            {
+                throw new Exception("Operand error");
+            }
+        }
+
         public MemberRef BuildMemberRef(string ns, string cs, string name) // debug stuff
         {
             TypeRef consoleRef = new TypeRefUser(module, ns, cs, module.CorLibTypes.AssemblyRef);
