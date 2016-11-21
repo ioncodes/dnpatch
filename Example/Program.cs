@@ -149,6 +149,21 @@ namespace Example
             };
             p.RemoveInstruction(target);
             p.Save("Test7.exe");
+
+
+            /*
+             * Patches the operands at the given index
+             */
+            p = new Patcher("Test.exe");
+            target = new Target()
+            {
+                Namespace = "Test",
+                Class = "Program",
+                Method = "PrintAlot",
+                Index = 0
+            };
+            p.PatchOperand(target, "PatchedOperand");
+            p.Save("Test8.exe");
         }
     }
 }
