@@ -3,6 +3,7 @@
 
 [![Build status](https://ci.appveyor.com/api/projects/status/39jhu0noimfkgfw2?svg=true)](https://ci.appveyor.com/project/ioncodes/dnpatch)
 [![Github All Releases](https://img.shields.io/github/downloads/ioncodes/dnpatch/total.svg)]
+(https://github.com/ioncodes/dnpatch/releases)
 
 ## Patching
 The constructor takes the filename of the assembly.
