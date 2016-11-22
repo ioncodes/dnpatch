@@ -1,7 +1,7 @@
 # dnpatch
 .NET Patcher library using dnlib.
 
-[![Build Status](https://travis-ci.org/ioncodes/dnpatch.svg?branch=master)](https://travis-ci.org/ioncodes/dnpatch)
+[![Build status](https://ci.appveyor.com/api/projects/status/39jhu0noimfkgfw2?svg=true)](https://ci.appveyor.com/project/ioncodes/dnpatch)
 
 ## Patching
 The constructor takes the filename of the assembly.
@@ -45,7 +45,7 @@ If you want to patch multiple methods create a Target[] and pass it to the funct
 Reference dnlib and create an Instruction[] or Instruction with your Instruction(s) and assign Indexes (int[]) or Index with the indexes where the Instructions are. You can find them by reverse engineering your assembly via dnSpy or some other decompiler.
 
 Small Example:
-```
+```cs
 Instruction[] opCodes = {
   Instruction.Create(OpCodes.Ldstr, "Hello Sir 1"),
   Instruction.Create(OpCodes.Ldstr, "Hello Sir 2")
@@ -67,4 +67,174 @@ Target target = new Target()
 ### Patch the whole methodbody
 To clear the whole methodbody and write your instructions, make sure that you don't assign the Indexes or Index property.
 
-........ Gimme a few days
+Here is an example:
+```cs
+Instruction[] opCodes = {
+    Instruction.Create(OpCodes.Ldstr, "Hello Sir"), // String to print
+    Instruction.Create(OpCodes.Call, p.BuildMemberRef("System", "Console", "WriteLine")), // Console.WriteLine call -> BUILDMEMBERREF IS ONLY FOR CONSOLE.WRITELINE
+    Instruction.Create(OpCodes.Ret) // Alaway return smth
+};
+Target target = new Target()
+{
+    Namespace = "Test",
+    Class = "Program",
+    Method = "Print",
+    Instructions = opCodes
+};
+```
+
+### Apply the patch
+To apply your modified instructions you can call the method 'Patch':
+```cs
+patcher.Patch(Target);
+```
+or
+```cs
+patcher.Patch(Target[]);
+```
+
+### Finding an instruction
+In some cases it might be useful to have find an instruction within a method, for example if the method got updated.
+```cs
+Instruction opCode = Instruction.Create(OpCodes.Ldstr, "TheTrain");
+Instruction toFind = Instruction.Create(OpCodes.Ldstr, "TheWord");
+Target target = new Target()
+{
+    Namespace = "Test",
+    Class = "Program",
+    Method = "FindMe",
+    Instruction = opCode // you can also set it later
+};
+target.Index = p.FindInstruction(target, toFind);
+// now you have the full Target object
+```
+
+Let's say there are multiple identical instructions. What now, baoss? Well, it's simple. There's an overload that takes and int which is the occurence of the instruction which you'd like to find.
+```cs
+Instruction opCode = Instruction.Create(OpCodes.Ldstr, "TheTrain");
+Instruction toFind = Instruction.Create(OpCodes.Ldstr, "TheWord");
+Target target = new Target()
+{
+    Namespace = "Test",
+    Class = "Program",
+    Method = "FindMe",
+    Instruction = opCode // you can also set it later
+};
+target.Index = p.FindInstruction(target, toFind, 2); // Sir, find the second occurence!
+```
+
+### Replacing instructions
+In some cases it might be easier to just replace an instruction. At this point of development, it doesn't make much sense, but the features will come soon.
+```cs
+Instruction opCode = Instruction.Create(OpCodes.Ldstr, "I love kittens");
+Target target = new Target()
+{
+    Namespace = "Test",
+    Class = "Program",
+    Method = "ReplaceMe",
+    Instruction = opCode,
+    Index = 0
+};
+p.ReplaceInstruction(target);
+```
+
+### Removing instructions
+Let's say you want to remove instructions... Well it's simple as this:
+```cs
+Target target = new Target()
+{
+    Namespace = "Test",
+    Class = "Program",
+    Method = "RemoveMe",
+    Indexes = new[]{0,1} // the indexes, you can also just use 'Index'
+};
+p.RemoveInstruction(target);
+```
+
+### Patching operands
+Hmmm.... What if you find the console output offending? You can modify the Ldstr without even creating an instruction :)
+```cs
+Target target = new Target()
+{
+    Namespace = "Test",
+    Class = "Program",
+    Method = "PrintAlot",
+    Index = 0
+};
+p.PatchOperand(target, "PatchedOperand"); // pass the Target and a string to replace
+```
+or incase you need to modify an int:
+```cs
+p.PatchOperand(target, 1337);
+```
+It is also able to patch multiple operands in the same method by using int[] or string[].
+
+### Saving the patches assembly
+If you want to safe the assembly under a different name use this:
+```cs
+patcher.Save(String); // filename here
+```
+Or if you want to replace the original file:
+```cs
+patcher.Save(bool); // if true it will create a backup first (filename.bak)
+```
+
+## Obfuscated assemblies...
+This part is in heavy development right now. The main purpose is to find a method and patch the instructions without the need of knowing the names incase the namespaces, etc are renamed via an obfuscator.
+
+### Constructor
+Create an Object called 'ObfuscationPatcher':
+```cs
+var op = new ObfuscationPatcher(string, bool);
+// string: filename
+// bool: keep old max stack?
+```
+
+### Searching the target method
+#### By operand
+Let's say the strings are not encrypted (I'm talking about Ldstr here):
+```cs
+string[] operands = {
+    "Find",
+    "TheWord",
+    "The",
+    "Word",
+    "You",
+    "Wont"
+}; // Find there words within the method.
+Target[] obfuscatedTargets = op.FindInstructionsByOperand(operands); // let the boi work. It will return an Target[] with all methods he could find.
+/* 
+foreach (var obfTarget in obfuscatedTargets) // Let's iterate and have fun
+{
+    obfTarget.Instructions = new Instruction[]
+    {
+        Instruction.Create(OpCodes.Ldstr, "Obfuscator"),
+        Instruction.Create(OpCodes.Ldstr, "Got"),
+        Instruction.Create(OpCodes.Ldstr, "Rekt"),
+        Instruction.Create(OpCodes.Ldstr, "Hell"),
+        Instruction.Create(OpCodes.Ldstr, "Yeah"),
+        Instruction.Create(OpCodes.Ldstr, "!")
+    }; // modify the instructions
+}
+op.Patch(obfuscatedTargets); // Patch the instructions
+```
+
+#### By OpCode [WIP]
+Let's say you look for an OpCode, you can do this:
+```cs
+op.FindInstructionsByOpcode(new[] {OpCodes.Add}) // NOT TESTED
+```
+
+### Patching
+As before you will just do this:
+```cs
+op.Patch(Target); // Patch the instructions
+// or
+op.Patch(Target[]); // Patch multiple targets
+```
+
+### Save the assembly
+Again, as before :)
+```cs
+op.Save(string); // string -> filename
+```
