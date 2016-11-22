@@ -205,7 +205,6 @@ string[] operands = {
     "Wont"
 }; // Find there words within the method.
 Target[] obfuscatedTargets = op.FindInstructionsByOperand(operands); // let the boi work. It will return an Target[] with all methods he could find.
-/* 
 foreach (var obfTarget in obfuscatedTargets) // Let's iterate and have fun
 {
     obfTarget.Instructions = new Instruction[]
