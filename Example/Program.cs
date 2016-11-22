@@ -194,7 +194,7 @@ namespace Example
             op.Patch(obfuscatedTargets);
             op.Save("TestObfuscated1.exe");
 
-            op.FindInstructionsByOpcode(new[] {OpCodes.Add});
+            //op.FindInstructionsByOpcode(new[] {OpCodes.Add});
         }
     }
 }
