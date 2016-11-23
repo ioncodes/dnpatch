@@ -269,9 +269,7 @@ namespace dnpatch
 
         public void WriteReturnBody(Target target, bool trueOrFalse)
         {
-            target.Indexes = new int[] {};
-            target.Index = -1;
-            target.Instruction = null;
+            target = FixTarget(target);
             if (trueOrFalse)
             {
                 target.Instructions = new Instruction[]
@@ -290,6 +288,11 @@ namespace dnpatch
             }
 
             PatchAndClear(target);
+        }
+
+        public void WriteEmptyBody(Target target)
+        {
+            target.
         }
 
         public MemberRef BuildMemberRef(string ns, string cs, string name) // debug stuff
@@ -415,6 +418,14 @@ namespace dnpatch
         private MethodDef FindMethod(TypeDef type, string methodName)
         {
             return type.Methods.FirstOrDefault(m => methodName == m.Name);
+        }
+
+        private Target FixTarget(Target target)
+        {
+            target.Indexes = new int[] { };
+            target.Index = -1;
+            target.Instruction = null;
+            return target;
         }
     }
 }
