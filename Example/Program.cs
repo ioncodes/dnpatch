@@ -19,7 +19,7 @@ namespace Example
             Patcher p = new Patcher("Test.exe");
             Instruction[] opcodesConsoleWriteLine = {
                 Instruction.Create(OpCodes.Ldstr, "Hello Sir"), // String to print
-                Instruction.Create(OpCodes.Call, p.BuildMemberRef("System", "Console", "WriteLine")), // Console.WriteLine call
+                Instruction.Create(OpCodes.Call, p.BuildMemberRef("System", "Console", "WriteLine", Patcher.MemberRefType.Static)), // Console.WriteLine call
                 Instruction.Create(OpCodes.Ret) // Alaway return smth
             };
             Target target = new Target()
