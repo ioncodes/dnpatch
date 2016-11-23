@@ -20,6 +20,9 @@ namespace Test
             FindMe();
             ReplaceMe();
             RemoveMe();
+            VerifyMe();
+            VerifyMeNot();
+            WriteLog();
             Console.Read();
         }
 
@@ -64,6 +67,26 @@ namespace Test
         {
             Console.WriteLine("The next sentence is a lie");
             Console.WriteLine("ion is best");
+        }
+
+        static bool VerifyMe()
+        {
+            Console.WriteLine("Verification failed");
+            return false;
+        }
+
+        static bool VerifyMeNot()
+        {
+            Console.WriteLine("Verification worked, but that's not good");
+            return true;
+        }
+
+        static void WriteLog()
+        {
+            Console.WriteLine("harmful log 1");
+            Console.WriteLine("harmful log 2");
+            Console.WriteLine("harmful log 3");
+            Console.WriteLine("harmful log 4");
         }
     }
 }

@@ -267,6 +267,31 @@ namespace dnpatch
             }
         }
 
+        public void WriteReturnBody(Target target, bool trueOrFalse)
+        {
+            target.Indexes = new int[] {};
+            target.Index = -1;
+            target.Instruction = null;
+            if (trueOrFalse)
+            {
+                target.Instructions = new Instruction[]
+                {
+                    Instruction.Create(OpCodes.Ldc_I4_1),
+                    Instruction.Create(OpCodes.Ret)
+                };
+            }
+            else
+            {
+                target.Instructions = new Instruction[]
+                {
+                Instruction.Create(OpCodes.Ldc_I4_0),
+                Instruction.Create(OpCodes.Ret)
+                };
+            }
+
+            PatchAndClear(target);
+        }
+
         public MemberRef BuildMemberRef(string ns, string cs, string name) // debug stuff
         {
             TypeRef consoleRef = new TypeRefUser(module, ns, cs, module.CorLibTypes.AssemblyRef);

@@ -194,7 +194,35 @@ namespace Example
             op.Patch(obfuscatedTargets);
             op.Save("TestObfuscated1.exe");
 
-            //op.FindInstructionsByOpcode(new[] {OpCodes.Add});
+
+            target = new Target()
+            {
+                Namespace = "Test",
+                Class = "Program",
+                Method = "VerifyMe"
+            };
+            p.WriteReturnBody(target, true);
+            p.Save("Test9.exe");
+
+
+            target = new Target()
+            {
+                Namespace = "Test",
+                Class = "Program",
+                Method = "VerifyMeNot"
+            };
+            p.WriteReturnBody(target, false);
+            p.Save("Test10.exe");
+
+
+            target = new Target()
+            {
+                Namespace = "Test",
+                Class = "Program",
+                Method = "VerifyMe"
+            };
+            p.WriteReturnBody(target, true);
+            p.Save("Test9.exe");
         }
     }
 }
