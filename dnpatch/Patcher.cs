@@ -320,9 +320,16 @@ namespace dnpatch
             var method = FindMethod(type, target.Method);
             var instructions = method.Body.Instructions;
             instructions.Clear();
-            for (int i = 0; i < target.Instructions.Length; i++)
+            if (target.Instructions != null)
             {
-                instructions.Insert(i, target.Instructions[i]);
+                for (int i = 0; i < target.Instructions.Length; i++)
+                {
+                    instructions.Insert(i, target.Instructions[i]);
+                }
+            }
+            else
+            {
+                instructions.Insert(0, target.Instruction);
             }
         }
 
