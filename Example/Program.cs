@@ -169,30 +169,30 @@ namespace Example
             /*
              * Tries to find indexes in a obfuscated assembly by string operands
              */
-            var op = new ObfuscationPatcher("TestObfuscated.exe", true);
-            string[] operands = {
-                "Find",
-                "TheWord",
-                "The",
-                "Word",
-                "You",
-                "Wont"
-            };
-            var obfuscatedTargets = op.FindInstructionsByOperand(operands);
-            foreach (var obfTarget in obfuscatedTargets)
-            {
-                obfTarget.Instructions = new Instruction[]
-                {
-                    Instruction.Create(OpCodes.Ldstr, "Obfuscator"),
-                    Instruction.Create(OpCodes.Ldstr, "Got"),
-                    Instruction.Create(OpCodes.Ldstr, "Rekt"),
-                    Instruction.Create(OpCodes.Ldstr, "Hell"),
-                    Instruction.Create(OpCodes.Ldstr, "Yeah"),
-                    Instruction.Create(OpCodes.Ldstr, "!")
-                };
-            }
-            op.Patch(obfuscatedTargets);
-            op.Save("TestObfuscated1.exe");
+            //var op = new ObfuscationPatcher("TestObfuscated.exe", true);
+            //string[] operands = {
+            //    "Find",
+            //    "TheWord",
+            //    "The",
+            //    "Word",
+            //    "You",
+            //    "Wont"
+            //};
+            //var obfuscatedTargets = op.FindInstructionsByOperand(operands);
+            //foreach (var obfTarget in obfuscatedTargets)
+            //{
+            //    obfTarget.Instructions = new Instruction[]
+            //    {
+            //        Instruction.Create(OpCodes.Ldstr, "Obfuscator"),
+            //        Instruction.Create(OpCodes.Ldstr, "Got"),
+            //        Instruction.Create(OpCodes.Ldstr, "Rekt"),
+            //        Instruction.Create(OpCodes.Ldstr, "Hell"),
+            //        Instruction.Create(OpCodes.Ldstr, "Yeah"),
+            //        Instruction.Create(OpCodes.Ldstr, "!")
+            //    };
+            //}
+            //op.Patch(obfuscatedTargets);
+            //op.Save("TestObfuscated1.exe");
 
 
             target = new Target()
