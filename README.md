@@ -1,9 +1,12 @@
 # dnpatch
-.NET Patcher library using dnlib.
+[WIP] .NET Patcher library using dnlib.
+
+*If you have questions feel free to ask me via Gitter! I'm glad to help you out!*
 
 [![Build status](https://ci.appveyor.com/api/projects/status/39jhu0noimfkgfw2?svg=true)](https://ci.appveyor.com/project/ioncodes/dnpatch)
 [![Github All Releases](https://img.shields.io/github/downloads/ioncodes/dnpatch/total.svg)]
 (https://github.com/ioncodes/dnpatch/releases)
+[![Gitter](https://img.shields.io/gitter/room/dnpatch/dnpatch.js.svg)](https://gitter.im/dnpatch/Lobby?utm_source=share-link&utm_medium=link&utm_campaign=share-link)
 
 ## Patching
 The constructor takes the filename of the assembly.
