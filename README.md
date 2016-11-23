@@ -39,8 +39,8 @@ Please make sure that you don't assign inconsistent values, e.g.
 ```cs
 var target = new Target
 {
-  Instructions = ...
-  Instruction = ...
+    Instructions = ...
+    Instruction = ...
 }
 ```
 
@@ -52,12 +52,12 @@ Reference dnlib and create an Instruction[] or Instruction with your Instruction
 Small Example:
 ```cs
 Instruction[] opCodes = {
-  Instruction.Create(OpCodes.Ldstr, "Hello Sir 1"),
-  Instruction.Create(OpCodes.Ldstr, "Hello Sir 2")
+    Instruction.Create(OpCodes.Ldstr, "Hello Sir 1"),
+    Instruction.Create(OpCodes.Ldstr, "Hello Sir 2")
 };
 int[] indexes = {
-  0, // index of Instruction
-  2
+    0, // index of Instruction
+    2
 };
 Target target = new Target()
 {
@@ -173,6 +173,30 @@ or incase you need to modify an int:
 p.PatchOperand(target, 1337);
 ```
 It is also able to patch multiple operands in the same method by using int[] or string[].
+
+### Returning true/false
+If you want to overwrite the methodbody with a return true/false statement you can do this:
+```cs
+target = new Target()
+{
+    Namespace = "Test",
+    Class = "Program",
+    Method = "VerifyMe"
+};
+p.WriteReturnBody(target, bool); // bool represents the return value
+```
+
+### Clearing methodbodies
+If you just want to empty a methodbody, use this amigo:
+```cs
+target = new Target()
+{
+    Namespace = "Test",
+    Class = "Program",
+    Method = "WriteLog"
+};
+p.WriteEmptyBody(target);
+```
 
 ### Saving the patches assembly
 If you want to safe the assembly under a different name use this:
