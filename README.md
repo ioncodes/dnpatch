@@ -242,3 +242,8 @@ Again, as before :)
 ```cs
 op.Save(string); // string -> filename
 ```
+
+
+# Credits
+I'd like to thank these people:
+* [0xd4d](https://github.com/0xd4d) for creating [dnlib](https://github.com/0xd4d/dnlib)
