@@ -6,7 +6,7 @@
 [![Build status](https://ci.appveyor.com/api/projects/status/39jhu0noimfkgfw2?svg=true)](https://ci.appveyor.com/project/ioncodes/dnpatch)
 [![Github All Releases](https://img.shields.io/github/downloads/ioncodes/dnpatch/total.svg)]
 (https://github.com/ioncodes/dnpatch/releases)
-[![Gitter](https://img.shields.io/gitter/room/dnpatch/dnpatch.js.svg)](https://gitter.im/dnpatch/Lobby?utm_source=share-link&utm_medium=link&utm_campaign=share-link)
+[![Join the chat at https://gitter.im/dnpatch/Lobby](https://badges.gitter.im/dnpatch/Lobby.svg)](https://gitter.im/dnpatch/Lobby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
 ## Patching
 The constructor takes the filename of the assembly.
