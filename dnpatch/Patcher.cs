@@ -292,7 +292,9 @@ namespace dnpatch
 
         public void WriteEmptyBody(Target target)
         {
-            target.
+            target = FixTarget(target);
+            target.Instruction = Instruction.Create(OpCodes.Ret);
+            PatchAndClear(target);
         }
 
         public MemberRef BuildMemberRef(string ns, string cs, string name) // debug stuff
