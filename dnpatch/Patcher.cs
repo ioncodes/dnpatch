@@ -12,6 +12,12 @@ namespace dnpatch
         private string file;
         private readonly ModuleDefMD module;
 
+        public enum MemberRefType
+        {
+            Static,
+            Instance
+        }
+
         public Patcher(string file)
         {
             this.file = file;
@@ -297,12 +303,21 @@ namespace dnpatch
             PatchAndClear(target);
         }
 
-        public MemberRef BuildMemberRef(string ns, string cs, string name) // debug stuff
+        public MemberRef BuildMemberRef(string ns, string cs, string name, MemberRefType type)
         {
             TypeRef consoleRef = new TypeRefUser(module, ns, cs, module.CorLibTypes.AssemblyRef);
-            return new MemberRefUser(module, name,
-                        MethodSig.CreateStatic(module.CorLibTypes.Void, module.CorLibTypes.String),
-                        consoleRef);
+            if (type == MemberRefType.Static)
+            {
+                return new MemberRefUser(module, name,
+                    MethodSig.CreateStatic(module.CorLibTypes.Void, module.CorLibTypes.String),
+                    consoleRef);
+            }
+            else
+            {
+                return new MemberRefUser(module, name,
+                   MethodSig.CreateInstance(module.CorLibTypes.Void, module.CorLibTypes.String),
+                   consoleRef);
+            }
         }
 
         private void PatchAndClear(Target target)
