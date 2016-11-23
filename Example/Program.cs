@@ -195,6 +195,9 @@ namespace Example
             //op.Save("TestObfuscated1.exe");
 
 
+            /*
+             * Overwrites methodbody with return true
+             */
             target = new Target()
             {
                 Namespace = "Test",
@@ -205,6 +208,9 @@ namespace Example
             p.Save("Test9.exe");
 
 
+            /*
+            * Overwrites methodbody with return false
+            */
             target = new Target()
             {
                 Namespace = "Test",
@@ -215,6 +221,9 @@ namespace Example
             p.Save("Test10.exe");
 
 
+            /*
+            * Clears the methodbody
+            */
             target = new Target()
             {
                 Namespace = "Test",
