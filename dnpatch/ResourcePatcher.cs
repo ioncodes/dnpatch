@@ -50,5 +50,34 @@ namespace dnpatch
         {
             resources.Insert(resources.Count - 1, new EmbeddedResource(name, data));
         }
+
+        public void InsertResource(string name, string file)
+        {
+            resources.Insert(resources.Count - 1, new EmbeddedResource(name, File.ReadAllBytes(file)));
+        }
+
+        public void Save(string name)
+        {
+            module.Write(name);
+        }
+
+        public void Save(bool backup)
+        {
+            module.Write(file + ".tmp");
+            module.Dispose();
+            if (backup)
+            {
+                if (File.Exists(file + ".bak"))
+                {
+                    File.Delete(file + ".bak");
+                }
+                File.Move(file, file + ".bak");
+            }
+            else
+            {
+                File.Delete(file);
+            }
+            File.Move(file + ".tmp", file);
+        }
     }
 }
