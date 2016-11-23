@@ -219,10 +219,10 @@ namespace Example
             {
                 Namespace = "Test",
                 Class = "Program",
-                Method = "VerifyMe"
+                Method = "WriteLog"
             };
-            p.WriteReturnBody(target, true);
-            p.Save("Test9.exe");
+            p.WriteEmptyBody(target);
+            p.Save("Test11.exe");
         }
     }
 }
