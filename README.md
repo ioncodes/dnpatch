@@ -198,7 +198,31 @@ target = new Target()
 p.WriteEmptyBody(target);
 ```
 
-### Saving the patches assembly
+### Building calls
+To build calls like "Console.WriteLine()" you can use this method:
+```cs
+p.BuildMemberRef(string, string, string, Patcher.MemberRefType);
+/* 
+ * string 1 -> namespace, e.g. "System"
+ * string 2 -> class, e.g. "Console"
+ * string 3 -> method, e.g. "WriteLine"
+ * MemberRefType -> the reference type, e.g. Static
+ */
+```
+MemberRefType is defined as follows:
+```cs
+public enum MemberRefType
+{
+    Static,
+    Instance
+}
+```
+Here is an IL example for Console.WriteLine:
+```cs
+Instruction.Create(OpCodes.Call, p.BuildMemberRef("System", "Console", "WriteLine", Patcher.MemberRefType.Static));
+```
+
+### Saving the patched assembly
 If you want to safe the assembly under a different name use this:
 ```cs
 patcher.Save(String); // filename here
@@ -305,6 +329,12 @@ rp.ReplaceResource(int, string, byte[]);
  */
 ```
 You can replace byte[] with a string pointing to a file.
+
+### Getting resources
+dnlib stores the resources as ResourceCollection and I'm not going to wrap it, use this method to get the resources:
+```cs
+rp.GetResources();
+```
 
 ### Save
 As always:
