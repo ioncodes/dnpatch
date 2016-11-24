@@ -23,6 +23,7 @@ namespace Test
             VerifyMe();
             VerifyMeNot();
             WriteLog();
+            BigMethodBootySorryIMeanBody();
             Console.Read();
         }
 
@@ -87,6 +88,20 @@ namespace Test
             Console.WriteLine("harmful log 2");
             Console.WriteLine("harmful log 3");
             Console.WriteLine("harmful log 4");
+        }
+
+        static void BigMethodBootySorryIMeanBody()
+        {
+            Console.WriteLine("need to get some ideas");
+            if (VerifyMe())
+            {
+                Console.WriteLine("for my console prints...");
+            }
+            int imUseless = 1337;
+            for (int i = 0; i < imUseless; i++)
+            {
+                Console.WriteLine(i);
+            }
         }
     }
 }

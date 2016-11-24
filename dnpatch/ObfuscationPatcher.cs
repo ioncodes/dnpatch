@@ -314,13 +314,10 @@ namespace dnpatch
                             int i = 0;
                             foreach (var instruction in method.Body.Instructions)
                             {
-                                if (instruction.Operand != null)
+                                if (operands.Contains(instruction.OpCode.Name))
                                 {
-                                    if (operands.Contains(instruction.OpCode.Name))
-                                    {
-                                        indexList.Add(i);
-                                        operands.Remove(instruction.OpCode.Name);
-                                    }
+                                    indexList.Add(i);
+                                    operands.Remove(instruction.OpCode.Name);
                                 }
                                 i++;
                             }
@@ -353,13 +350,10 @@ namespace dnpatch
                                 obfuscatedTarget.NestedTypes.Add(nestedType.Name);
                                 foreach (var instruction in method.Body.Instructions)
                                 {
-                                    if (instruction.Operand != null)
+                                    if (operands.Contains(instruction.OpCode.Name))
                                     {
-                                        if (operands.Contains(instruction.OpCode.Name))
-                                        {
-                                            indexList.Add(i);
-                                            operands.Remove(instruction.OpCode.Name);
-                                        }
+                                        indexList.Add(i);
+                                        operands.Remove(instruction.OpCode.Name);
                                     }
                                     i++;
                                 }
@@ -394,8 +388,27 @@ namespace dnpatch
             return targets.ToArray();
         }
 
+        public MemberRef BuildMemberRef(string ns, string cs, string name, Patcher.MemberRefType type)
+        {
+            TypeRef consoleRef = new TypeRefUser(module, ns, cs, module.CorLibTypes.AssemblyRef);
+            if (type == Patcher.MemberRefType.Static)
+            {
+                return new MemberRefUser(module, name,
+                    MethodSig.CreateStatic(module.CorLibTypes.Void, module.CorLibTypes.String),
+                    consoleRef);
+            }
+            else
+            {
+                return new MemberRefUser(module, name,
+                   MethodSig.CreateInstance(module.CorLibTypes.Void, module.CorLibTypes.String),
+                   consoleRef);
+            }
+        }
+
         private TypeDef FindType(AssemblyDef asm, string classPath, string[] nestedClasses)
         {
+            if (classPath[0] == '.')
+                classPath = classPath.Remove(0, 1);
             foreach (var module in asm.Modules)
             {
                 foreach (var type in module.Types)
