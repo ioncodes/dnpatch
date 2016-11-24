@@ -267,6 +267,52 @@ Again, as before :)
 op.Save(string); // string -> filename
 ```
 
+## Resources
+Wanna patch some resources? No, problem! Just create an object called ResourcePatcher!
+```cs
+ResourcePatcher rp = new ResourcePatcher(string); // string-> assembly
+```
+
+### Insert resources
+Add resources using this piece of code:
+```cs
+rp.InsertResource(string, byte[]);
+/*
+ * string -> resourcename
+ * byte[] -> ByteArray of the data to write
+ */
+```
+You can replace byte[] with a string to load the byte[] from a file.
+
+### Removing resources
+You can remove resources if you know the index:
+```cs
+rp.RemoveResource(int); // int -> index
+```
+If you want to remove all resources do this:
+```cs
+rp.RemoveResources();
+```
+
+### Replacing resources
+If you want to replace a resource, you can do this my friend:
+```cs
+rp.ReplaceResource(int, string, byte[]);
+/*
+ * int -> index
+ * string -> name
+ * byte[] -> ByteArray with your data
+ */
+```
+You can replace byte[] with a string pointing to a file.
+
+### Save
+As always:
+```cs
+rp.Save(string);
+// or
+rp.Save(bool);
+```
 
 # Credits
 I'd like to thank these people:
