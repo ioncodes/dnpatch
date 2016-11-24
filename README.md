@@ -271,7 +271,7 @@ foreach (var obfTarget in obfuscatedTargets) // Let's iterate and have fun
 op.Patch(obfuscatedTargets); // Patch the instructions
 ```
 
-#### By OpCode [WIP]
+#### By OpCode
 Let's say you look for an OpCode, you can do this:
 ```cs
 op.FindInstructionsByOpcode(new[] {OpCodes.Add}) // NOT TESTED
