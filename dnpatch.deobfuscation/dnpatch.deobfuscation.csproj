@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{14CA7A28-7FA8-40A0-ABC6-81E9F36318DE}</ProjectGuid>
+    <ProjectGuid>{D2A5E850-4078-4C19-B2F4-7F8556CAD473}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>dnpatch</RootNamespace>
-    <AssemblyName>dnpatch</AssemblyName>
+    <RootNamespace>dnpatch.deobfuscation</RootNamespace>
+    <AssemblyName>dnpatch.deobfuscation</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -23,15 +23,29 @@
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
-    <Optimize>false</Optimize>
+    <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="dnlib, Version=1.6.0.0, Culture=neutral, PublicKeyToken=50e96378b6e77999, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="AssemblyData">
+      <HintPath>..\Libraries\AssemblyData.dll</HintPath>
+    </Reference>
+    <Reference Include="de4dot.blocks">
+      <HintPath>..\Libraries\de4dot.blocks.dll</HintPath>
+    </Reference>
+    <Reference Include="de4dot.code">
+      <HintPath>..\Libraries\de4dot.code.dll</HintPath>
+    </Reference>
+    <Reference Include="de4dot.cui">
+      <HintPath>..\Libraries\de4dot.cui.dll</HintPath>
+    </Reference>
+    <Reference Include="de4dot.mdecrypt">
+      <HintPath>..\Libraries\de4dot.mdecrypt.dll</HintPath>
+    </Reference>
+    <Reference Include="dnlib">
       <HintPath>..\Libraries\dnlib.dll</HintPath>
     </Reference>
     <Reference Include="System" />
@@ -44,14 +58,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ObfuscatedTarget.cs" />
-    <Compile Include="ObfuscationPatcher.cs" />
-    <Compile Include="Patcher.cs" />
+    <Compile Include="CommandLineParser.cs" />
+    <Compile Include="Deobfuscation.cs" />
+    <Compile Include="FilesDeobfuscator.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ResourcePatcher.cs" />
-    <Compile Include="Target.cs" />
   </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

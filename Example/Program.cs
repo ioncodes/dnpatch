@@ -265,6 +265,8 @@ namespace Example
             }
             op.Patch(obfuscatedTargets);
             op.Save("TestObfuscated2.exe");
+
+            Console.Read();
         }
     }
 }
