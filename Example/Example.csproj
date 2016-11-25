@@ -33,8 +33,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="dnlib">
-      <HintPath>..\dnlib.dll</HintPath>
+    <Reference Include="dnlib, Version=1.6.0.0, Culture=neutral, PublicKeyToken=50e96378b6e77999, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Libraries\dnlib.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
