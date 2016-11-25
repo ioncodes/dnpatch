@@ -358,3 +358,4 @@ d.Deobfuscate(); // Deobfuscates the file and writes it to the disk
 # Credits
 I'd like to thank these people:
 * [0xd4d](https://github.com/0xd4d) for creating [dnlib](https://github.com/0xd4d/dnlib)
+* [0xd4d](https://github.com/0xd4d) for creating [de4dot](https://github.com/0xd4d/de4dot)
