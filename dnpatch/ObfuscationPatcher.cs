@@ -394,14 +394,23 @@ namespace dnpatch
             List<Target> targets = new List<Target>();
             foreach (var obfuscatedTarget in obfuscatedTargets)
             {
-                targets.Add(new Target()
+                Target t = new Target()
                 {
                     Namespace = obfuscatedTarget.Type.Namespace,
                     Class = obfuscatedTarget.Type.Name,
                     Method = obfuscatedTarget.Method.Name,
-                    Indexes = obfuscatedTarget.Indexes.ToArray(),
                     NestedClasses = obfuscatedTarget.NestedTypes.ToArray()
-                });
+                };
+                if (obfuscatedTarget.Indexes.Count == 1)
+                {
+                    t.Index = obfuscatedTarget.Indexes[0];
+                }
+                else if (obfuscatedTarget.Indexes.Count > 1)
+                {
+                    t.Indexes = obfuscatedTarget.Indexes.ToArray();
+                }
+
+                targets.Add(t);
             }
             return targets.ToArray();
         }
