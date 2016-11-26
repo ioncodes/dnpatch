@@ -11,6 +11,13 @@ namespace UnpackMe2
 {
     class Program
     {
+        /*
+         * First field: ioncodes
+         * Click Button 1
+         * Second field: ionCODES
+         * Click Button 2
+         * Enjoy Patches MessageBox
+         */
         static void Main(string[] args)
         {
             Deobfuscation deobfuscation = new Deobfuscation("UnpackMe2.ori.exe", "UnpackMe2.deob1.exe");
@@ -45,6 +52,7 @@ namespace UnpackMe2
                 target.Instruction = Instruction.Create(OpCodes.Ldstr, "ioncodes");
             }
             obfuscationPatcher.Patch(targets);
+
             obfuscationPatcher.Save("UnpackMe2.patched.exe");
         }
     }
