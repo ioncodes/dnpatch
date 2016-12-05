@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using dnlib.DotNet;
 using dnlib.DotNet.Emit;
+using dnlib.DotNet.Writer;
 
 namespace dnpatch
 {
@@ -26,11 +27,13 @@ namespace dnpatch
 
         public void Patch(Target target)
         {
-            if ((target.Indexes != null || target.Index != -1) && (target.Instruction != null || target.Instructions != null))
+            if ((target.Indexes != null || target.Index != -1) &&
+                (target.Instruction != null || target.Instructions != null))
             {
                 PatchOffsets(target);
             }
-            else if((target.Index == -1 && target.Indexes == null) && (target.Instruction != null || target.Instructions != null))
+            else if ((target.Index == -1 && target.Indexes == null) &&
+                     (target.Instruction != null || target.Instructions != null))
             {
                 PatchAndClear(target);
             }
@@ -93,7 +96,14 @@ namespace dnpatch
             int index = 0;
             foreach (var i in instructions)
             {
-                if (i.OpCode.Name == instruction.OpCode.Name && i.Operand.ToString() == instruction.Operand.ToString())
+                if (i.Operand == null && instruction.Operand == null)
+                {
+                    if (i.OpCode.Name == instruction.OpCode.Name)
+                    {
+                        return index;
+                    }
+                }
+                else if(i.OpCode.Name == instruction.OpCode.Name && i.Operand.ToString() == instruction.Operand.ToString())
                 {
                     return index;
                 }
@@ -104,6 +114,7 @@ namespace dnpatch
 
         public int FindInstruction(Target target, Instruction instruction, int occurence)
         {
+
             var type = FindType(module.Assembly, target.Namespace + "." + target.Class, target.NestedClasses);
             MethodDef method = FindMethod(type, target.Method);
             var instructions = method.Body.Instructions;
@@ -111,11 +122,24 @@ namespace dnpatch
             int occurenceCounter = 0;
             foreach (var i in instructions)
             {
-                if (i.OpCode.Name == instruction.OpCode.Name && i.Operand.ToString() == instruction.Operand.ToString() && occurenceCounter < occurence)
+                if (i.Operand == null && instruction.Operand == null)
+                {
+                    if (i.OpCode.Name == instruction.OpCode.Name && occurenceCounter < occurence)
+                    {
+                        occurenceCounter++;
+                    }
+                    else if (i.OpCode.Name == instruction.OpCode.Name && occurenceCounter == occurence)
+                    {
+                        return index;
+                    }
+                }
+                else if (i.OpCode.Name == instruction.OpCode.Name && i.Operand.ToString() == instruction.Operand.ToString() &&
+                         occurenceCounter < occurence)
                 {
                     occurenceCounter++;
                 }
-                else if (i.OpCode.Name == instruction.OpCode.Name && i.Operand.ToString() == instruction.Operand.ToString() && occurenceCounter == occurence)
+                else if (i.OpCode.Name == instruction.OpCode.Name && i.Operand.ToString() == instruction.Operand.ToString() &&
+                         occurenceCounter == occurence)
                 {
                     return index;
                 }
