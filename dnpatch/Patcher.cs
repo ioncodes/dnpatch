@@ -327,6 +327,520 @@ namespace dnpatch
             PatchAndClear(target);
         }
 
+        public Target[] FindInstructionsByOperand(string[] operand)
+        {
+            List<ObfuscatedTarget> obfuscatedTargets = new List<ObfuscatedTarget>();
+            List<string> operands = operand.ToList();
+            foreach (var type in module.Types)
+            {
+                if (!type.HasNestedTypes)
+                {
+                    foreach (var method in type.Methods)
+                    {
+                        if (method.Body != null)
+                        {
+                            List<int> indexList = new List<int>();
+                            var obfuscatedTarget = new ObfuscatedTarget()
+                            {
+                                Type = type,
+                                Method = method
+                            };
+                            int i = 0;
+                            foreach (var instruction in method.Body.Instructions)
+                            {
+                                if (instruction.Operand != null)
+                                {
+                                    if (operands.Contains(instruction.Operand.ToString()))
+                                    {
+                                        indexList.Add(i);
+                                        operands.Remove(instruction.Operand.ToString());
+                                    }
+                                }
+                                i++;
+                            }
+                            if (indexList.Count == operand.Length)
+                            {
+                                obfuscatedTarget.Indexes = indexList;
+                                obfuscatedTargets.Add(obfuscatedTarget);
+                            }
+                            operands = operand.ToList();
+                        }
+                    }
+                }
+                else
+                {
+                    var nestedTypes = type.NestedTypes;
+                    NestedWorker:
+                    foreach (var nestedType in nestedTypes)
+                    {
+                        foreach (var method in type.Methods)
+                        {
+                            if (method.Body != null)
+                            {
+                                List<int> indexList = new List<int>();
+                                var obfuscatedTarget = new ObfuscatedTarget()
+                                {
+                                    Type = type,
+                                    Method = method
+                                };
+                                int i = 0;
+                                obfuscatedTarget.NestedTypes.Add(nestedType.Name);
+                                foreach (var instruction in method.Body.Instructions)
+                                {
+                                    if (instruction.Operand != null)
+                                    {
+                                        if (operands.Contains(instruction.Operand.ToString()))
+                                        {
+                                            indexList.Add(i);
+                                            operands.Remove(instruction.Operand.ToString());
+                                        }
+                                    }
+                                    i++;
+                                }
+                                if (indexList.Count == operand.Length)
+                                {
+                                    obfuscatedTarget.Indexes = indexList;
+                                    obfuscatedTargets.Add(obfuscatedTarget);
+                                }
+                                operands = operand.ToList();
+                            }
+                        }
+                        if (nestedType.HasNestedTypes)
+                        {
+                            nestedTypes = nestedType.NestedTypes;
+                            goto NestedWorker;
+                        }
+                    }
+                }
+            }
+            List<Target> targets = new List<Target>();
+            foreach (var obfuscatedTarget in obfuscatedTargets)
+            {
+                Target t = new Target()
+                {
+                    Namespace = obfuscatedTarget.Type.Namespace,
+                    Class = obfuscatedTarget.Type.Name,
+                    Method = obfuscatedTarget.Method.Name,
+                    NestedClasses = obfuscatedTarget.NestedTypes.ToArray()
+                };
+                if (obfuscatedTarget.Indexes.Count == 1)
+                {
+                    t.Index = obfuscatedTarget.Indexes[0];
+                }
+                else if (obfuscatedTarget.Indexes.Count > 1)
+                {
+                    t.Indexes = obfuscatedTarget.Indexes.ToArray();
+                }
+
+                targets.Add(t);
+            }
+            return targets.ToArray();
+        }
+
+        public Target[] FindInstructionsByOperand(int[] operand)
+        {
+            List<ObfuscatedTarget> obfuscatedTargets = new List<ObfuscatedTarget>();
+            List<int> operands = operand.ToList();
+            foreach (var type in module.Types)
+            {
+                if (!type.HasNestedTypes)
+                {
+                    foreach (var method in type.Methods)
+                    {
+                        if (method.Body != null)
+                        {
+                            List<int> indexList = new List<int>();
+                            var obfuscatedTarget = new ObfuscatedTarget()
+                            {
+                                Type = type,
+                                Method = method
+                            };
+                            int i = 0;
+                            foreach (var instruction in method.Body.Instructions)
+                            {
+                                if (instruction.Operand != null)
+                                {
+                                    if (operands.Contains(Convert.ToInt32(instruction.Operand.ToString())))
+                                    {
+                                        indexList.Add(i);
+                                        operands.Remove(Convert.ToInt32(instruction.Operand.ToString()));
+                                    }
+                                }
+                                i++;
+                            }
+                            if (indexList.Count == operand.Length)
+                            {
+                                obfuscatedTarget.Indexes = indexList;
+                                obfuscatedTargets.Add(obfuscatedTarget);
+                            }
+                            operands = operand.ToList();
+                        }
+                    }
+                }
+                else
+                {
+                    var nestedTypes = type.NestedTypes;
+                    NestedWorker:
+                    foreach (var nestedType in nestedTypes)
+                    {
+                        foreach (var method in type.Methods)
+                        {
+                            if (method.Body != null)
+                            {
+                                List<int> indexList = new List<int>();
+                                var obfuscatedTarget = new ObfuscatedTarget()
+                                {
+                                    Type = type,
+                                    Method = method
+                                };
+                                int i = 0;
+                                obfuscatedTarget.NestedTypes.Add(nestedType.Name);
+                                foreach (var instruction in method.Body.Instructions)
+                                {
+                                    if (instruction.Operand != null)
+                                    {
+                                        if (operands.Contains(Convert.ToInt32(instruction.Operand.ToString())))
+                                        {
+                                            indexList.Add(i);
+                                            operands.Remove(Convert.ToInt32(instruction.Operand.ToString()));
+                                        }
+                                    }
+                                    i++;
+                                }
+                                if (indexList.Count == operand.Length)
+                                {
+                                    obfuscatedTarget.Indexes = indexList;
+                                    obfuscatedTargets.Add(obfuscatedTarget);
+                                }
+                                operands = operand.ToList();
+                            }
+                        }
+                        if (nestedType.HasNestedTypes)
+                        {
+                            nestedTypes = nestedType.NestedTypes;
+                            goto NestedWorker;
+                        }
+                    }
+                }
+            }
+            List<Target> targets = new List<Target>();
+            foreach (var obfuscatedTarget in obfuscatedTargets)
+            {
+                Target t = new Target()
+                {
+                    Namespace = obfuscatedTarget.Type.Namespace,
+                    Class = obfuscatedTarget.Type.Name,
+                    Method = obfuscatedTarget.Method.Name,
+                    NestedClasses = obfuscatedTarget.NestedTypes.ToArray()
+                };
+                if (obfuscatedTarget.Indexes.Count == 1)
+                {
+                    t.Index = obfuscatedTarget.Indexes[0];
+                }
+                else if (obfuscatedTarget.Indexes.Count > 1)
+                {
+                    t.Indexes = obfuscatedTarget.Indexes.ToArray();
+                }
+
+                targets.Add(t);
+            }
+            return targets.ToArray();
+        }
+
+        public Target[] FindInstructionsByOpcode(OpCode[] opcode)
+        {
+            List<ObfuscatedTarget> obfuscatedTargets = new List<ObfuscatedTarget>();
+            List<string> operands = opcode.Select(o => o.Name).ToList();
+            foreach (var type in module.Types)
+            {
+                if (!type.HasNestedTypes)
+                {
+                    foreach (var method in type.Methods)
+                    {
+                        if (method.Body != null)
+                        {
+                            List<int> indexList = new List<int>();
+                            var obfuscatedTarget = new ObfuscatedTarget()
+                            {
+                                Type = type,
+                                Method = method
+                            };
+                            int i = 0;
+                            foreach (var instruction in method.Body.Instructions)
+                            {
+                                if (operands.Contains(instruction.OpCode.Name))
+                                {
+                                    indexList.Add(i);
+                                    operands.Remove(instruction.OpCode.Name);
+                                }
+                                i++;
+                            }
+                            if (indexList.Count == opcode.Length)
+                            {
+                                obfuscatedTarget.Indexes = indexList;
+                                obfuscatedTargets.Add(obfuscatedTarget);
+                            }
+                            operands = opcode.Select(o => o.Name).ToList();
+                        }
+                    }
+                }
+                else
+                {
+                    var nestedTypes = type.NestedTypes;
+                    NestedWorker:
+                    foreach (var nestedType in nestedTypes)
+                    {
+                        foreach (var method in type.Methods)
+                        {
+                            if (method.Body != null)
+                            {
+                                List<int> indexList = new List<int>();
+                                var obfuscatedTarget = new ObfuscatedTarget()
+                                {
+                                    Type = type,
+                                    Method = method
+                                };
+                                int i = 0;
+                                obfuscatedTarget.NestedTypes.Add(nestedType.Name);
+                                foreach (var instruction in method.Body.Instructions)
+                                {
+                                    if (operands.Contains(instruction.OpCode.Name))
+                                    {
+                                        indexList.Add(i);
+                                        operands.Remove(instruction.OpCode.Name);
+                                    }
+                                    i++;
+                                }
+                                if (indexList.Count == opcode.Length)
+                                {
+                                    obfuscatedTarget.Indexes = indexList;
+                                    obfuscatedTargets.Add(obfuscatedTarget);
+                                }
+                                operands = opcode.Select(o => o.Name).ToList();
+                            }
+                        }
+                        if (nestedType.HasNestedTypes)
+                        {
+                            nestedTypes = nestedType.NestedTypes;
+                            goto NestedWorker;
+                        }
+                    }
+                }
+            }
+            List<Target> targets = new List<Target>();
+            foreach (var obfuscatedTarget in obfuscatedTargets)
+            {
+                Target t = new Target()
+                {
+                    Namespace = obfuscatedTarget.Type.Namespace,
+                    Class = obfuscatedTarget.Type.Name,
+                    Method = obfuscatedTarget.Method.Name,
+                    NestedClasses = obfuscatedTarget.NestedTypes.ToArray()
+                };
+                if (obfuscatedTarget.Indexes.Count == 1)
+                {
+                    t.Index = obfuscatedTarget.Indexes[0];
+                }
+                else if (obfuscatedTarget.Indexes.Count > 1)
+                {
+                    t.Indexes = obfuscatedTarget.Indexes.ToArray();
+                }
+
+                targets.Add(t);
+            }
+            return targets.ToArray();
+        }
+
+        public Target[] FindInstructionsByOperand(Target target, int[] operand)
+        {
+            List<ObfuscatedTarget> obfuscatedTargets = new List<ObfuscatedTarget>();
+            List<int> operands = operand.ToList();
+            TypeDef type = FindType(module.Assembly, target.Namespace + "." + target.Class, target.NestedClasses);
+            MethodDef m = null;
+            if (target.Method != null)
+                m = FindMethod(type, target.Method);
+            if (m != null)
+            {
+                List<int> indexList = new List<int>();
+                var obfuscatedTarget = new ObfuscatedTarget()
+                {
+                    Type = type,
+                    Method = m
+                };
+                int i = 0;
+                foreach (var instruction in m.Body.Instructions)
+                {
+                    if (instruction.Operand != null)
+                    {
+                        if (operands.Contains(Convert.ToInt32(instruction.Operand.ToString())))
+                        {
+                            indexList.Add(i);
+                            operands.Remove(Convert.ToInt32(instruction.Operand.ToString()));
+                        }
+                    }
+                    i++;
+                }
+                if (indexList.Count == operand.Length)
+                {
+                    obfuscatedTarget.Indexes = indexList;
+                    obfuscatedTargets.Add(obfuscatedTarget);
+                }
+                operands = operand.ToList();
+            }
+            else
+            {
+                foreach (var method in type.Methods)
+                {
+                    if (method.Body != null)
+                    {
+                        List<int> indexList = new List<int>();
+                        var obfuscatedTarget = new ObfuscatedTarget()
+                        {
+                            Type = type,
+                            Method = method
+                        };
+                        int i = 0;
+                        foreach (var instruction in method.Body.Instructions)
+                        {
+                            if (instruction.Operand != null)
+                            {
+                                if (operands.Contains(Convert.ToInt32(instruction.Operand.ToString())))
+                                {
+                                    indexList.Add(i);
+                                    operands.Remove(Convert.ToInt32(instruction.Operand.ToString()));
+                                }
+                            }
+                            i++;
+                        }
+                        if (indexList.Count == operand.Length)
+                        {
+                            obfuscatedTarget.Indexes = indexList;
+                            obfuscatedTargets.Add(obfuscatedTarget);
+                        }
+                        operands = operand.ToList();
+                    }
+                }
+            }
+
+            List<Target> targets = new List<Target>();
+            foreach (var obfuscatedTarget in obfuscatedTargets)
+            {
+                Target t = new Target()
+                {
+                    Namespace = obfuscatedTarget.Type.Namespace,
+                    Class = obfuscatedTarget.Type.Name,
+                    Method = obfuscatedTarget.Method.Name,
+                    NestedClasses = obfuscatedTarget.NestedTypes.ToArray()
+                };
+                if (obfuscatedTarget.Indexes.Count == 1)
+                {
+                    t.Index = obfuscatedTarget.Indexes[0];
+                }
+                else if (obfuscatedTarget.Indexes.Count > 1)
+                {
+                    t.Indexes = obfuscatedTarget.Indexes.ToArray();
+                }
+
+                targets.Add(t);
+            }
+            return targets.ToArray();
+        }
+
+        public Target[] FindInstructionsByOpcode(Target target, OpCode[] opcode)
+        {
+            List<ObfuscatedTarget> obfuscatedTargets = new List<ObfuscatedTarget>();
+            List<string> operands = opcode.Select(o => o.Name).ToList();
+            TypeDef type = FindType(module.Assembly, target.Namespace + "." + target.Class, target.NestedClasses);
+            MethodDef m = null;
+            if (target.Method != null)
+                m = FindMethod(type, target.Method);
+            if (m != null)
+            {
+                foreach (var method in type.Methods)
+                {
+                    if (method.Body != null)
+                    {
+                        List<int> indexList = new List<int>();
+                        var obfuscatedTarget = new ObfuscatedTarget()
+                        {
+                            Type = type,
+                            Method = method
+                        };
+                        int i = 0;
+                        foreach (var instruction in method.Body.Instructions)
+                        {
+                            if (operands.Contains(instruction.OpCode.Name))
+                            {
+                                indexList.Add(i);
+                                operands.Remove(instruction.OpCode.Name);
+                            }
+                            i++;
+                        }
+                        if (indexList.Count == opcode.Length)
+                        {
+                            obfuscatedTarget.Indexes = indexList;
+                            obfuscatedTargets.Add(obfuscatedTarget);
+                        }
+                        operands = opcode.Select(o => o.Name).ToList();
+                    }
+                }
+            }
+            else
+            {
+                foreach (var method in type.Methods)
+                {
+                    if (method.Body != null)
+                    {
+                        List<int> indexList = new List<int>();
+                        var obfuscatedTarget = new ObfuscatedTarget()
+                        {
+                            Type = type,
+                            Method = method
+                        };
+                        int i = 0;
+                        foreach (var instruction in method.Body.Instructions)
+                        {
+                            if (operands.Contains(instruction.OpCode.Name))
+                            {
+                                indexList.Add(i);
+                                operands.Remove(instruction.OpCode.Name);
+                            }
+                            i++;
+                        }
+                        if (indexList.Count == opcode.Length)
+                        {
+                            obfuscatedTarget.Indexes = indexList;
+                            obfuscatedTargets.Add(obfuscatedTarget);
+                        }
+                        operands = opcode.Select(o => o.Name).ToList();
+                    }
+                }
+            }
+
+            List<Target> targets = new List<Target>();
+            foreach (var obfuscatedTarget in obfuscatedTargets)
+            {
+                Target t = new Target()
+                {
+                    Namespace = obfuscatedTarget.Type.Namespace,
+                    Class = obfuscatedTarget.Type.Name,
+                    Method = obfuscatedTarget.Method.Name,
+                    NestedClasses = obfuscatedTarget.NestedTypes.ToArray()
+                };
+                if (obfuscatedTarget.Indexes.Count == 1)
+                {
+                    t.Index = obfuscatedTarget.Indexes[0];
+                }
+                else if (obfuscatedTarget.Indexes.Count > 1)
+                {
+                    t.Indexes = obfuscatedTarget.Indexes.ToArray();
+                }
+
+                targets.Add(t);
+            }
+            return targets.ToArray();
+        }
+
         public MemberRef BuildMemberRef(string ns, string cs, string name, MemberRefType type)
         {
             TypeRef consoleRef = new TypeRefUser(module, ns, cs, module.CorLibTypes.AssemblyRef);
