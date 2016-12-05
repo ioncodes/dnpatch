@@ -114,7 +114,7 @@ namespace dnpatch
 
         public int FindInstruction(Target target, Instruction instruction, int occurence)
         {
-
+            occurence--; // Fix the occurence, e.g. second occurence must be 1 but hoomans like to write like they speak so why don't assist them?
             var type = FindType(module.Assembly, target.Namespace + "." + target.Class, target.NestedClasses);
             MethodDef method = FindMethod(type, target.Method);
             var instructions = method.Body.Instructions;
