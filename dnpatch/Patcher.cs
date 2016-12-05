@@ -651,7 +651,7 @@ namespace dnpatch
             return targets.ToArray();
         }
 
-        public Target[] FindInstructionsByOperand(Target target, int[] operand)
+        public Target[] FindInstructionsByOperand(Target target, int[] operand, bool removeIfFound = false)
         {
             List<ObfuscatedTarget> obfuscatedTargets = new List<ObfuscatedTarget>();
             List<int> operands = operand.ToList();
@@ -675,12 +675,13 @@ namespace dnpatch
                         if (operands.Contains(Convert.ToInt32(instruction.Operand.ToString())))
                         {
                             indexList.Add(i);
-                            operands.Remove(Convert.ToInt32(instruction.Operand.ToString()));
+                            if(removeIfFound)
+                                operands.Remove(Convert.ToInt32(instruction.Operand.ToString()));
                         }
                     }
                     i++;
                 }
-                if (indexList.Count == operand.Length)
+                if (indexList.Count == operand.Length || removeIfFound == false)
                 {
                     obfuscatedTarget.Indexes = indexList;
                     obfuscatedTargets.Add(obfuscatedTarget);
@@ -707,12 +708,13 @@ namespace dnpatch
                                 if (operands.Contains(Convert.ToInt32(instruction.Operand.ToString())))
                                 {
                                     indexList.Add(i);
-                                    operands.Remove(Convert.ToInt32(instruction.Operand.ToString()));
+                                    if(removeIfFound)
+                                        operands.Remove(Convert.ToInt32(instruction.Operand.ToString()));
                                 }
                             }
                             i++;
                         }
-                        if (indexList.Count == operand.Length)
+                        if (indexList.Count == operand.Length || removeIfFound == false)
                         {
                             obfuscatedTarget.Indexes = indexList;
                             obfuscatedTargets.Add(obfuscatedTarget);
@@ -746,7 +748,7 @@ namespace dnpatch
             return targets.ToArray();
         }
 
-        public Target[] FindInstructionsByOpcode(Target target, OpCode[] opcode)
+        public Target[] FindInstructionsByOpcode(Target target, OpCode[] opcode, bool removeIfFound = false)
         {
             List<ObfuscatedTarget> obfuscatedTargets = new List<ObfuscatedTarget>();
             List<string> operands = opcode.Select(o => o.Name).ToList();
@@ -756,33 +758,27 @@ namespace dnpatch
                 m = FindMethod(type, target.Method);
             if (m != null)
             {
-                foreach (var method in type.Methods)
+                List<int> indexList = new List<int>();
+                var obfuscatedTarget = new ObfuscatedTarget()
                 {
-                    if (method.Body != null)
+                    Type = type,
+                    Method = m
+                };
+                int i = 0;
+                foreach (var instruction in m.Body.Instructions)
+                {
+                    if (operands.Contains(instruction.OpCode.Name))
                     {
-                        List<int> indexList = new List<int>();
-                        var obfuscatedTarget = new ObfuscatedTarget()
-                        {
-                            Type = type,
-                            Method = method
-                        };
-                        int i = 0;
-                        foreach (var instruction in method.Body.Instructions)
-                        {
-                            if (operands.Contains(instruction.OpCode.Name))
-                            {
-                                indexList.Add(i);
-                                operands.Remove(instruction.OpCode.Name);
-                            }
-                            i++;
-                        }
-                        if (indexList.Count == opcode.Length)
-                        {
-                            obfuscatedTarget.Indexes = indexList;
-                            obfuscatedTargets.Add(obfuscatedTarget);
-                        }
-                        operands = opcode.Select(o => o.Name).ToList();
+                        indexList.Add(i);
+                        if(removeIfFound)
+                            operands.Remove(instruction.OpCode.Name);
                     }
+                    i++;
+                }
+                if (indexList.Count == opcode.Length || removeIfFound == false)
+                {
+                    obfuscatedTarget.Indexes = indexList;
+                    obfuscatedTargets.Add(obfuscatedTarget);
                 }
             }
             else
@@ -803,11 +799,12 @@ namespace dnpatch
                             if (operands.Contains(instruction.OpCode.Name))
                             {
                                 indexList.Add(i);
-                                operands.Remove(instruction.OpCode.Name);
+                                if(removeIfFound)
+                                    operands.Remove(instruction.OpCode.Name);
                             }
                             i++;
                         }
-                        if (indexList.Count == opcode.Length)
+                        if (indexList.Count == opcode.Length || removeIfFound == false)
                         {
                             obfuscatedTarget.Indexes = indexList;
                             obfuscatedTargets.Add(obfuscatedTarget);
@@ -839,6 +836,13 @@ namespace dnpatch
                 targets.Add(t);
             }
             return targets.ToArray();
+        }
+
+        public string GetOperand(Target target)
+        {
+            TypeDef type = FindType(module.Assembly, target.Namespace + "." + target.Class, target.NestedClasses);
+            MethodDef method = FindMethod(type, target.Method);
+            return method.Body.Instructions[target.Index].Operand.ToString();
         }
 
         public MemberRef BuildMemberRef(string ns, string cs, string name, MemberRefType type)
