@@ -117,7 +117,7 @@ namespace de4dot.cui {
 					TheAssemblyResolver.Instance.ClearAll();
 					deobfuscatorContext.Clear();
 				}
-				catch (Exception ex) {
+				catch (Exception) {
 					Logger.Instance.Log(false, null, LoggerEvent.Warning, "Could not deobfuscate {0}. Use -v to see stack trace", file.Filename);
 				}
 				finally {

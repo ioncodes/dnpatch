@@ -10,6 +10,8 @@ namespace dnpatch
 {
     public class Patcher
     {
+        private PatchHelper patcher = null;
+
         public enum MemberRefType
         {
             Static,
@@ -18,15 +20,12 @@ namespace dnpatch
 
         public Patcher(string file)
         {
-            PatchHelper.Module = ModuleDefMD.Load(file);
-            PatchHelper.OFile = file;
+            patcher = new PatchHelper(file);
         }
 
         public Patcher(string file, bool keepOldMaxStack)
         {
-            PatchHelper.Module = ModuleDefMD.Load(file);
-            PatchHelper.OFile = file;
-            PatchHelper.KeepOldMaxStack = keepOldMaxStack;
+            patcher = new PatchHelper(file, keepOldMaxStack);
         }
 
         public void Patch(Target target)
@@ -34,12 +33,12 @@ namespace dnpatch
             if ((target.Indexes != null || target.Index != -1) &&
                 (target.Instruction != null || target.Instructions != null))
             {
-                PatchHelper.PatchOffsets(target);
+                patcher.PatchOffsets(target);
             }
             else if ((target.Index == -1 && target.Indexes == null) &&
                      (target.Instruction != null || target.Instructions != null))
             {
-                PatchHelper.PatchAndClear(target);
+                patcher.PatchAndClear(target);
             }
             else
             {
@@ -54,12 +53,12 @@ namespace dnpatch
                 if ((target.Indexes != null || target.Index != -1) &&
                     (target.Instruction != null || target.Instructions != null))
                 {
-                    PatchHelper.PatchOffsets(target);
+                    patcher.PatchOffsets(target);
                 }
                 else if ((target.Index == -1 && target.Indexes == null) &&
                          (target.Instruction != null || target.Instructions != null))
                 {
-                    PatchHelper.PatchAndClear(target);
+                    patcher.PatchAndClear(target);
                 }
                 else
                 {
@@ -70,62 +69,62 @@ namespace dnpatch
 
         public void Save(string name)
         {
-            PatchHelper.Save(name);
+            patcher.Save(name);
         }
 
         public void Save(bool backup)
         {
-           PatchHelper.Save(backup);
+           patcher.Save(backup);
         }
 
         public int FindInstruction(Target target, Instruction instruction)
         {
-            return PatchHelper.FindInstruction(target, instruction, 1);
+            return patcher.FindInstruction(target, instruction, 1);
         }
 
         public int FindInstruction(Target target, Instruction instruction, int occurence)
         {
-            return PatchHelper.FindInstruction(target, instruction, occurence);
+            return patcher.FindInstruction(target, instruction, occurence);
         }
 
         public void ReplaceInstruction(Target target)
         {
-            PatchHelper.ReplaceInstruction(target);
+            patcher.ReplaceInstruction(target);
         }
 
         public void RemoveInstruction(Target target)
         {
-            PatchHelper.RemoveInstruction(target);
+            patcher.RemoveInstruction(target);
         }
 
         public Instruction[] GetInstructions(Target target)
         {
-            return PatchHelper.GetInstructions(target);
+            return patcher.GetInstructions(target);
         }
 
         public void PatchOperand(Target target, string operand)
         {
-            PatchHelper.PatchOperand(target, operand);
+            patcher.PatchOperand(target, operand);
         }
 
         public void PatchOperand(Target target, int operand)
         {
-            PatchHelper.PatchOperand(target, operand);
+            patcher.PatchOperand(target, operand);
         }
 
         public void PatchOperand(Target target, string[] operand)
         {
-            PatchHelper.PatchOperand(target, operand);
+            patcher.PatchOperand(target, operand);
         }
 
         public void PatchOperand(Target target, int[] operand)
         {
-            PatchHelper.PatchOperand(target, operand);
+            patcher.PatchOperand(target, operand);
         }
 
         public void WriteReturnBody(Target target, bool trueOrFalse)
         {
-            target = PatchHelper.FixTarget(target);
+            target = patcher.FixTarget(target);
             if (trueOrFalse)
             {
                 target.Instructions = new Instruction[]
@@ -143,49 +142,49 @@ namespace dnpatch
                 };
             }
 
-            PatchHelper.PatchAndClear(target);
+            patcher.PatchAndClear(target);
         }
 
         public void WriteEmptyBody(Target target)
         {
-            target = PatchHelper.FixTarget(target);
+            target = patcher.FixTarget(target);
             target.Instruction = Instruction.Create(OpCodes.Ret);
-            PatchHelper.PatchAndClear(target);
+            patcher.PatchAndClear(target);
         }
 
         public Target[] FindInstructionsByOperand(string[] operand)
         {
-            return PatchHelper.FindInstructionsByOperand(operand);
+            return patcher.FindInstructionsByOperand(operand);
         }
 
         public Target[] FindInstructionsByOperand(int[] operand)
         {
-            return PatchHelper.FindInstructionsByOperand(operand);
+            return patcher.FindInstructionsByOperand(operand);
         }
 
         public Target[] FindInstructionsByOpcode(OpCode[] opcode)
         {
-            return PatchHelper.FindInstructionsByOpcode(opcode);
+            return patcher.FindInstructionsByOpcode(opcode);
         }
 
         public Target[] FindInstructionsByOperand(Target target, int[] operand, bool removeIfFound = false)
         {
-            return PatchHelper.FindInstructionsByOperand(target, operand, removeIfFound);
+            return patcher.FindInstructionsByOperand(target, operand, removeIfFound);
         }
 
         public Target[] FindInstructionsByOpcode(Target target, OpCode[] opcode, bool removeIfFound = false)
         {
-            return PatchHelper.FindInstructionsByOpcode(target, opcode, removeIfFound);
+            return patcher.FindInstructionsByOpcode(target, opcode, removeIfFound);
         }
 
         public string GetOperand(Target target)
         {
-            return PatchHelper.GetOperand(target);
+            return patcher.GetOperand(target);
         }
 
         public MemberRef BuildMemberRef(string ns, string cs, string name, MemberRefType type)
         {
-            return PatchHelper.BuildMemberRef(ns, cs, name, type);
+            return patcher.BuildMemberRef(ns, cs, name, type);
         }
     }
 }

@@ -10,13 +10,26 @@ using dnlib.DotNet.Writer;
 
 namespace dnpatch
 {
-    internal static class PatchHelper
+    internal class PatchHelper
     {
-        public static ModuleDef Module;
-        public static string OFile;
-        public static bool KeepOldMaxStack = false;
+        private readonly ModuleDef _module;
+        private readonly string _file;
+        private readonly bool _keepOldMaxStack = false;
 
-        public static void PatchAndClear(Target target)
+        public PatchHelper(string file)
+        {
+            _file = file;
+            _module = ModuleDefMD.Load(file);
+        }
+
+        public PatchHelper(string file, bool keepOldMaxStack)
+        {
+            _file = file;
+            _module = ModuleDefMD.Load(file);
+            _keepOldMaxStack = keepOldMaxStack;
+        }
+
+        public  void PatchAndClear(Target target)
         {
             string[] nestedClasses = { };
             if (target.NestedClasses != null)
@@ -44,7 +57,7 @@ namespace dnpatch
             }
         }
 
-        public static void PatchOffsets(Target target)
+        public  void PatchOffsets(Target target)
         {
             string[] nestedClasses = { };
             if (target.NestedClasses != null)
@@ -87,13 +100,13 @@ namespace dnpatch
             }
         }
 
-        public static TypeDef FindType(string classPath, string[] nestedClasses)
+        public  TypeDef FindType(string classPath, string[] nestedClasses)
         {
             if (classPath.First() == '.')
                 classPath = classPath.Remove(0, 1);
-            foreach (var module in Module.Assembly.Modules)
+            foreach (var module in _module.Assembly.Modules)
             {
-                foreach (var type in module.Types)
+                foreach (var type in _module.Types)
                 {
                     if (type.FullName == classPath)
                     {
@@ -137,12 +150,12 @@ namespace dnpatch
             return null;
         }
 
-        public static MethodDef FindMethod(TypeDef type, string methodName)
+        public  MethodDef FindMethod(TypeDef type, string methodName)
         {
             return type.Methods.FirstOrDefault(m => methodName == m.Name);
         }
 
-        public static Target FixTarget(Target target)
+        public  Target FixTarget(Target target)
         {
             target.Indexes = new int[] { };
             target.Index = -1;
@@ -150,47 +163,47 @@ namespace dnpatch
             return target;
         }
 
-        public static void Save(string name)
+        public  void Save(string name)
         {
-            if (KeepOldMaxStack)
-                Module.Write(name, new ModuleWriterOptions(Module)
+            if (_keepOldMaxStack)
+                _module.Write(name, new ModuleWriterOptions(_module)
                 {
                     MetaDataOptions = {Flags = MetaDataFlags.KeepOldMaxStack}
                 });
             else
-                Module.Write(name);
+                _module.Write(name);
         }
 
-        public static void Save(bool backup)
+        public  void Save(bool backup)
         {
-            if (KeepOldMaxStack)
-                Module.Write(OFile + ".tmp", new ModuleWriterOptions(Module)
+            if (_keepOldMaxStack)
+                _module.Write(_file + ".tmp", new ModuleWriterOptions(_module)
                 {
                     MetaDataOptions = { Flags = MetaDataFlags.KeepOldMaxStack }
                 });
             else
-                Module.Write(OFile + ".tmp");
-            Module.Dispose();
+                _module.Write(_file + ".tmp");
+            _module.Dispose();
             if (backup)
             {
-                if (File.Exists(OFile + ".bak"))
+                if (File.Exists(_file + ".bak"))
                 {
-                    File.Delete(OFile + ".bak");
+                    File.Delete(_file + ".bak");
                 }
-                File.Move(OFile, OFile + ".bak");
+                File.Move(_file, _file + ".bak");
             }
             else
             {
-                File.Delete(OFile);
+                File.Delete(_file);
             }
-            File.Move(OFile + ".tmp", OFile);
+            File.Move(_file + ".tmp", _file);
         }
 
-        public static Target[] FindInstructionsByOperand(string[] operand)
+        public  Target[] FindInstructionsByOperand(string[] operand)
         {
             List<ObfuscatedTarget> obfuscatedTargets = new List<ObfuscatedTarget>();
             List<string> operands = operand.ToList();
-            foreach (var type in Module.Types)
+            foreach (var type in _module.Types)
             {
                 if (!type.HasNestedTypes)
                 {
@@ -296,11 +309,11 @@ namespace dnpatch
             return targets.ToArray();
         }
 
-        public static Target[] FindInstructionsByOperand(int[] operand)
+        public  Target[] FindInstructionsByOperand(int[] operand)
         {
             List<ObfuscatedTarget> obfuscatedTargets = new List<ObfuscatedTarget>();
             List<int> operands = operand.ToList();
-            foreach (var type in Module.Types)
+            foreach (var type in _module.Types)
             {
                 if (!type.HasNestedTypes)
                 {
@@ -406,11 +419,11 @@ namespace dnpatch
             return targets.ToArray();
         }
 
-        public static Target[] FindInstructionsByOpcode(OpCode[] opcode)
+        public  Target[] FindInstructionsByOpcode(OpCode[] opcode)
         {
             List<ObfuscatedTarget> obfuscatedTargets = new List<ObfuscatedTarget>();
             List<string> operands = opcode.Select(o => o.Name).ToList();
-            foreach (var type in Module.Types)
+            foreach (var type in _module.Types)
             {
                 if (!type.HasNestedTypes)
                 {
@@ -510,14 +523,14 @@ namespace dnpatch
             return targets.ToArray();
         }
 
-        public static Target[] FindInstructionsByOperand(Target target, int[] operand, bool removeIfFound = false)
+        public  Target[] FindInstructionsByOperand(Target target, int[] operand, bool removeIfFound = false)
         {
             List<ObfuscatedTarget> obfuscatedTargets = new List<ObfuscatedTarget>();
             List<int> operands = operand.ToList();
-            TypeDef type = PatchHelper.FindType(target.Namespace + "." + target.Class, target.NestedClasses);
+            TypeDef type = FindType(target.Namespace + "." + target.Class, target.NestedClasses);
             MethodDef m = null;
             if (target.Method != null)
-                m = PatchHelper.FindMethod(type, target.Method);
+                m = FindMethod(type, target.Method);
             if (m != null)
             {
                 List<int> indexList = new List<int>();
@@ -607,14 +620,14 @@ namespace dnpatch
             return targets.ToArray();
         }
 
-        public static Target[] FindInstructionsByOpcode(Target target, OpCode[] opcode, bool removeIfFound = false)
+        public  Target[] FindInstructionsByOpcode(Target target, OpCode[] opcode, bool removeIfFound = false)
         {
             List<ObfuscatedTarget> obfuscatedTargets = new List<ObfuscatedTarget>();
             List<string> operands = opcode.Select(o => o.Name).ToList();
-            TypeDef type = PatchHelper.FindType(target.Namespace + "." + target.Class, target.NestedClasses);
+            TypeDef type = FindType(target.Namespace + "." + target.Class, target.NestedClasses);
             MethodDef m = null;
             if (target.Method != null)
-                m = PatchHelper.FindMethod(type, target.Method);
+                m = FindMethod(type, target.Method);
             if (m != null)
             {
                 List<int> indexList = new List<int>();
@@ -697,24 +710,24 @@ namespace dnpatch
             return targets.ToArray();
         }
 
-        public static MemberRef BuildMemberRef(string ns, string cs, string name, Patcher.MemberRefType type)
+        public  MemberRef BuildMemberRef(string ns, string cs, string name, Patcher.MemberRefType type)
         {
-            TypeRef consoleRef = new TypeRefUser(Module, ns, cs, Module.CorLibTypes.AssemblyRef);
+            TypeRef consoleRef = new TypeRefUser(_module, ns, cs, _module.CorLibTypes.AssemblyRef);
             if (type == Patcher.MemberRefType.Static)
             {
-                return new MemberRefUser(Module, name,
-                    MethodSig.CreateStatic(Module.CorLibTypes.Void, Module.CorLibTypes.String),
+                return new MemberRefUser(_module, name,
+                    MethodSig.CreateStatic(_module.CorLibTypes.Void, _module.CorLibTypes.String),
                     consoleRef);
             }
             else
             {
-                return new MemberRefUser(Module, name,
-                   MethodSig.CreateInstance(Module.CorLibTypes.Void, Module.CorLibTypes.String),
+                return new MemberRefUser(_module, name,
+                   MethodSig.CreateInstance(_module.CorLibTypes.Void, _module.CorLibTypes.String),
                    consoleRef);
             }
         }
 
-        public static void ReplaceInstruction(Target target)
+        public  void ReplaceInstruction(Target target)
         {
             string[] nestedClasses = { };
             if (target.NestedClasses != null)
@@ -745,7 +758,7 @@ namespace dnpatch
             }
         }
 
-        public static void RemoveInstruction(Target target)
+        public  void RemoveInstruction(Target target)
         {
             string[] nestedClasses = { };
             if (target.NestedClasses != null)
@@ -776,17 +789,17 @@ namespace dnpatch
             }
         }
 
-        public static Instruction[] GetInstructions(Target target)
+        public  Instruction[] GetInstructions(Target target)
         {
-            var type = PatchHelper.FindType(target.Namespace + "." + target.Class, target.NestedClasses);
-            MethodDef method = PatchHelper.FindMethod(type, target.Method);
+            var type = FindType(target.Namespace + "." + target.Class, target.NestedClasses);
+            MethodDef method = FindMethod(type, target.Method);
             return (Instruction[])method.Body.Instructions;
         }
 
-        public static void PatchOperand(Target target, string operand)
+        public  void PatchOperand(Target target, string operand)
         {
-            TypeDef type = PatchHelper.FindType(target.Namespace + "." + target.Class, target.NestedClasses);
-            MethodDef method = PatchHelper.FindMethod(type, target.Method);
+            TypeDef type = FindType(target.Namespace + "." + target.Class, target.NestedClasses);
+            MethodDef method = FindMethod(type, target.Method);
             var instructions = method.Body.Instructions;
             if (target.Indexes == null && target.Index != -1)
             {
@@ -805,10 +818,10 @@ namespace dnpatch
             }
         }
 
-        public static void PatchOperand(Target target, int operand)
+        public  void PatchOperand(Target target, int operand)
         {
-            TypeDef type = PatchHelper.FindType(target.Namespace + "." + target.Class, target.NestedClasses);
-            MethodDef method = PatchHelper.FindMethod(type, target.Method);
+            TypeDef type = FindType(target.Namespace + "." + target.Class, target.NestedClasses);
+            MethodDef method = FindMethod(type, target.Method);
             var instructions = method.Body.Instructions;
             if (target.Indexes == null && target.Index != -1)
             {
@@ -827,10 +840,10 @@ namespace dnpatch
             }
         }
 
-        public static void PatchOperand(Target target, string[] operand)
+        public  void PatchOperand(Target target, string[] operand)
         {
-            TypeDef type = PatchHelper.FindType(target.Namespace + "." + target.Class, target.NestedClasses);
-            MethodDef method = PatchHelper.FindMethod(type, target.Method);
+            TypeDef type = FindType(target.Namespace + "." + target.Class, target.NestedClasses);
+            MethodDef method = FindMethod(type, target.Method);
             var instructions = method.Body.Instructions;
             if (target.Indexes != null && target.Index == -1)
             {
@@ -845,10 +858,10 @@ namespace dnpatch
             }
         }
 
-        public static void PatchOperand(Target target, int[] operand)
+        public  void PatchOperand(Target target, int[] operand)
         {
-            TypeDef type = PatchHelper.FindType(target.Namespace + "." + target.Class, target.NestedClasses);
-            MethodDef method = PatchHelper.FindMethod(type, target.Method);
+            TypeDef type = FindType(target.Namespace + "." + target.Class, target.NestedClasses);
+            MethodDef method = FindMethod(type, target.Method);
             var instructions = method.Body.Instructions;
             if (target.Indexes != null && target.Index == -1)
             {
@@ -863,18 +876,18 @@ namespace dnpatch
             }
         }
 
-        public static string GetOperand(Target target)
+        public  string GetOperand(Target target)
         {
-            TypeDef type = PatchHelper.FindType(target.Namespace + "." + target.Class, target.NestedClasses);
-            MethodDef method = PatchHelper.FindMethod(type, target.Method);
+            TypeDef type = FindType(target.Namespace + "." + target.Class, target.NestedClasses);
+            MethodDef method = FindMethod(type, target.Method);
             return method.Body.Instructions[target.Index].Operand.ToString();
         }
 
-        public static int FindInstruction(Target target, Instruction instruction, int occurence)
+        public  int FindInstruction(Target target, Instruction instruction, int occurence)
         {
             occurence--; // Fix the occurence, e.g. second occurence must be 1 but hoomans like to write like they speak so why don't assist them?
-            var type = PatchHelper.FindType(target.Namespace + "." + target.Class, target.NestedClasses);
-            MethodDef method = PatchHelper.FindMethod(type, target.Method);
+            var type = FindType(target.Namespace + "." + target.Class, target.NestedClasses);
+            MethodDef method = FindMethod(type, target.Method);
             var instructions = method.Body.Instructions;
             int index = 0;
             int occurenceCounter = 0;
