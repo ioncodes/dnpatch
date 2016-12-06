@@ -89,6 +89,8 @@ namespace dnpatch
 
         public static TypeDef FindType(string classPath, string[] nestedClasses)
         {
+            if (classPath.First() == '.')
+                classPath = classPath.Remove(0, 1);
             foreach (var module in Module.Assembly.Modules)
             {
                 foreach (var type in module.Types)
