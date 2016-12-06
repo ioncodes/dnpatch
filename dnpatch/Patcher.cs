@@ -138,8 +138,8 @@ namespace dnpatch
             {
                 target.Instructions = new Instruction[]
                 {
-                Instruction.Create(OpCodes.Ldc_I4_0),
-                Instruction.Create(OpCodes.Ret)
+                    Instruction.Create(OpCodes.Ldc_I4_0),
+                    Instruction.Create(OpCodes.Ret)
                 };
             }
 
