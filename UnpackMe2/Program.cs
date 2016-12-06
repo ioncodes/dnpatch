@@ -25,7 +25,7 @@ namespace UnpackMe2
             deobfuscation = new Deobfuscation("UnpackMe2.deob1.exe", "UnpackMe2.deob2.exe");
             deobfuscation.Deobfuscate();
 
-            ObfuscationPatcher obfuscationPatcher = new ObfuscationPatcher("UnpackMe2.deob2.exe", false);
+            Patcher obfuscationPatcher = new Patcher("UnpackMe2.deob2.exe", false);
             Target[] targets = obfuscationPatcher.FindInstructionsByOperand(new[]
             {
                 "bBbBbBbBb",

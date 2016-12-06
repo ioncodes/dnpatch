@@ -169,7 +169,7 @@ namespace Example
             /*
              * Tries to find indexes in a obfuscated assembly by string operands
              */
-            var op = new ObfuscationPatcher("TestObfuscated.exe", true);
+            var op = new Patcher("TestObfuscated.exe", true);
             string[] operands = {
                 "Find",
                 "TheWord",
@@ -237,7 +237,7 @@ namespace Example
             /*
              * Find method in obfuscated assembly by OpCodes
              */
-            op = new ObfuscationPatcher("TestObfuscated.exe", true);
+            op = new Patcher("TestObfuscated.exe", true);
             OpCode[] opc = { 
                 OpCodes.Ldstr,
                 OpCodes.Call,
