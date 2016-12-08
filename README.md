@@ -13,6 +13,10 @@ The constructor takes the filename of the assembly.
 ```cs
 Patcher patcher = new Patcher("Test.exe");
 ```
+If you want to keep the old maxstack (for example for obfuscated assemblies) use the overload:
+```cs
+Patcher patcher = new Patcher("Test.exe", true);
+```
 
 ### Targeting Methods
 All methods take an object called Target as argument. The object is defined as follows:
@@ -198,6 +202,64 @@ target = new Target()
 p.WriteEmptyBody(target);
 ```
 
+### Getting instructions from target
+Simply do this if you want to get instructions of the Target object:
+```cs
+target = new Target()
+{
+    Namespace = "Test",
+    Class = "Program",
+    Method = "WriteLog"
+};
+Instruction[] instructions = p.GetInstructions(target);
+```
+
+### Writing return bodies
+If you want to overwrite the body with a return true/false do this:
+```cs
+target = new Target()
+{
+    Namespace = "Test",
+    Class = "Program",
+    Method = "WriteLog"
+};
+p.WriteReturnBody(target, bool);
+// bool is the return value, e.g. true will return true ;)
+```
+If you want to remove the body simply call this:
+```cs
+target = new Target()
+{
+    Namespace = "Test",
+    Class = "Program",
+    Method = "WriteLog"
+};
+p.WriteEmptyBody(target);
+```
+
+### Find methods
+If you want to find a method, you can simply scan the whole file by 2 ways:
+```cs
+p.FindInstructionsByOperand(string[]);
+// or p.FindInstructionsByOperand(int[]);
+// string[] with all operands in the method, if there are multiple identical operands, make sure to have the same amount as in the method.
+
+// or do this via opcodes:
+p.FindInstructionsByOpcode(OpCode[]);
+```
+Both ways return an Target[] which contains all targets pointing to the findings.
+
+#### Find instructions in methods or classes
+If you want to find the instructions and you know the class and optionally the method you can let this method return a Target[] with the pathes and indexes.
+```cs
+p.FindInstructionsByOperand(Target,int[],bool);
+// int[]: the operands
+// bool: if true it will search for the operands once, it will delete the index if the index was found
+
+// for opcodes:
+p.FindInstructionsByOpcode(Target,int[],bool);
+```
+mbo
 ### Building calls
 To build calls like "Console.WriteLine()" you can use this method:
 ```cs
@@ -230,118 +292,6 @@ patcher.Save(String); // filename here
 Or if you want to replace the original file:
 ```cs
 patcher.Save(bool); // if true it will create a backup first (filename.bak)
-```
-
-## Obfuscated assemblies...
-This part is in heavy development right now. The main purpose is to find a method and patch the instructions without the need of knowing the names incase the namespaces, etc are renamed via an obfuscator.
-
-### Constructor
-Create an Object called 'ObfuscationPatcher':
-```cs
-var op = new ObfuscationPatcher(string, bool);
-// string: filename
-// bool: keep old max stack?
-```
-
-### Searching the target method
-#### By operand
-Let's say the strings are not encrypted (I'm talking about Ldstr here):
-```cs
-string[] operands = {
-    "Find",
-    "TheWord",
-    "The",
-    "Word",
-    "You",
-    "Wont"
-}; // Find there words within the method.
-Target[] obfuscatedTargets = op.FindInstructionsByOperand(operands); // let the boi work. It will return an Target[] with all methods he could find.
-foreach (var obfTarget in obfuscatedTargets) // Let's iterate and have fun
-{
-    obfTarget.Instructions = new Instruction[]
-    {
-        Instruction.Create(OpCodes.Ldstr, "Obfuscator"),
-        Instruction.Create(OpCodes.Ldstr, "Got"),
-        Instruction.Create(OpCodes.Ldstr, "Rekt"),
-        Instruction.Create(OpCodes.Ldstr, "Hell"),
-        Instruction.Create(OpCodes.Ldstr, "Yeah"),
-        Instruction.Create(OpCodes.Ldstr, "!")
-    }; // modify the instructions
-}
-op.Patch(obfuscatedTargets); // Patch the instructions
-```
-
-#### By OpCode
-Let's say you look for an OpCode, you can do this:
-```cs
-op.FindInstructionsByOpcode(new[] {OpCodes.Add}) // NOT TESTED
-```
-
-### Patching
-As before you will just do this:
-```cs
-op.Patch(Target); // Patch the instructions
-// or
-op.Patch(Target[]); // Patch multiple targets
-```
-
-### Save the assembly
-Again, as before :)
-```cs
-op.Save(string); // string -> filename
-```
-
-## Resources
-Wanna patch some resources? No, problem! Just create an object called ResourcePatcher!
-```cs
-ResourcePatcher rp = new ResourcePatcher(string); // string-> assembly
-```
-
-### Insert resources
-Add resources using this piece of code:
-```cs
-rp.InsertResource(string, byte[]);
-/*
- * string -> resourcename
- * byte[] -> ByteArray of the data to write
- */
-```
-You can replace byte[] with a string to load the byte[] from a file.
-
-### Removing resources
-You can remove resources if you know the index:
-```cs
-rp.RemoveResource(int); // int -> index
-```
-If you want to remove all resources do this:
-```cs
-rp.RemoveResources();
-```
-
-### Replacing resources
-If you want to replace a resource, you can do this my friend:
-```cs
-rp.ReplaceResource(int, string, byte[]);
-/*
- * int -> index
- * string -> name
- * byte[] -> ByteArray with your data
- */
-```
-You can replace byte[] with a string pointing to a file.
-
-### Getting resources
-dnlib stores the resources as ResourceCollection and I'm not going to wrap it, use this method to get the resources:
-```cs
-rp.GetResources();
-```
-
-### Save
-As always:
-```cs
-rp.Save(string);
-// or
-rp.Save(bool);
 ```
 
 ## Deobfuscation [BETA]
