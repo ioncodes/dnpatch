@@ -305,6 +305,32 @@ Deobfuscation d = new Deobfuscation(string, string);
 d.Deobfuscate(); // Deobfuscates the file and writes it to the disk
 ```
 
+## Scripting
+With dnpatch.script you're now able to script patchers with JSON!
+Example JSON:
+```json
+{
+    "target":"Test.exe",
+    "targets":[{
+        "ns":"Test",
+        "cl":"Program",
+        "me":"ReplaceMe",
+        "ac":"replace",
+        "index":0,
+        "instructions":[{
+            "opcode":"ldstr",
+            "operand":"script working"
+        }]
+    },{
+        "ns":"Test",
+        "cl":"Program",
+        "me":"RemoveMe",
+        "ac":"empty"
+    }]
+}
+```
+Name this file script.json and place it into TestScript build folder and use it with Test.exe. For more info please refer to the [standalone repo](https://github.com/ioncodes/dnpatch.script).
+
 # Credits
 I'd like to thank these people:
 * [0xd4d](https://github.com/0xd4d) for creating [dnlib](https://github.com/0xd4d/dnlib)
