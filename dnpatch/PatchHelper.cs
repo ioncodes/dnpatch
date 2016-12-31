@@ -199,7 +199,7 @@ namespace dnpatch
             File.Move(_file + ".tmp", _file);
         }
 
-        public  Target[] FindInstructionsByOperand(string[] operand)
+        public Target[] FindInstructionsByOperand(string[] operand)
         {
             List<ObfuscatedTarget> obfuscatedTargets = new List<ObfuscatedTarget>();
             List<string> operands = operand.ToList();
