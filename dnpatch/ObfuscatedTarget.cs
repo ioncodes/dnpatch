@@ -11,7 +11,7 @@ namespace dnpatch
     {
         public TypeDef Type { get; set; }
         public MethodDef Method { get; set; }
-        public List<int> Indexes { get; set; }
+        public List<int> Indices { get; set; }
         public List<string> NestedTypes = new List<string>();
     }
 }

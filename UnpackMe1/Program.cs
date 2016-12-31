@@ -24,7 +24,7 @@ namespace UnpackMe1
                 Class = "Form1",
                 Namespace = "Confuser_1._7",
                 Method = "Form1_Load",
-                Indexes = new []
+                Indices = new []
                 {
                     0,
                     1,
@@ -36,7 +36,7 @@ namespace UnpackMe1
                 }
             };
             patcher.RemoveInstruction(target);
-            target.Indexes = null;
+            target.Indices = null;
             target.Index = 2;
             patcher.PatchOperand(target, "Patched!");
             patcher.Save("UnpackMe_Confuser 1.7.deob.patch.exe");

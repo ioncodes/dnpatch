@@ -16,7 +16,7 @@ namespace dnpatch
 
     public partial class Target
     {
-        public int[] Indexes { get; set; }
+        public int[] Indices { get; set; }
         public Instruction[] Instructions { get; set; }
     }
 

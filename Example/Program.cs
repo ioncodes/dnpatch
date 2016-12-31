@@ -41,7 +41,7 @@ namespace Example
                 Instruction.Create(OpCodes.Ldstr, "Place easter egg here 1"),
                 Instruction.Create(OpCodes.Ldstr, "Place easter egg here 2")
             };
-            int[] indexes = {
+            int[] Indices = {
                 4,
                 8
             };
@@ -51,7 +51,7 @@ namespace Example
                 Class = "Program",
                 Method = "PrintAlot",
                 Instructions = opCodesManipulateOffset,
-                Indexes = indexes
+                Indices = Indices
             };
             p.Patch(target);
             p.Save("Test2.exe");
@@ -137,7 +137,7 @@ namespace Example
 
 
             /*
-             * Removes the instrutions at the given indexes
+             * Removes the instrutions at the given Indices
              */
             p = new Patcher("Test.exe");
             target = new Target()
@@ -145,7 +145,7 @@ namespace Example
                 Namespace = "Test",
                 Class = "Program",
                 Method = "RemoveMe",
-                Indexes = new[]{0,1}
+                Indices = new[]{0,1}
             };
             p.RemoveInstruction(target);
             p.Save("Test7.exe");
@@ -211,7 +211,7 @@ namespace Example
 
 
             /*
-             * Tries to find indexes in a obfuscated assembly by string operands
+             * Tries to find Indices in a obfuscated assembly by string operands
              */
             var op = new Patcher("TestObfuscated.exe", true);
             string[] operands = {
@@ -266,7 +266,7 @@ namespace Example
                     Instruction.Create(OpCodes.Call, op.BuildMemberRef("System", "Console", "WriteLine", Patcher.MemberRefType.Static)),
                     Instruction.Create(OpCodes.Ret)  
                 };
-                obfTarget.Indexes = null; // Replace whole body
+                obfTarget.Indices = null; // Replace whole body
             }
             op.Patch(obfuscatedTargets);
             op.Save("TestObfuscated2.exe");

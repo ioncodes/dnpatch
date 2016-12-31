@@ -71,11 +71,11 @@ namespace dnpatch
             var type = FindType(target.Namespace + "." + target.Class, nestedClasses);
             var method = FindMethod(type, target.Method);
             var instructions = method.Body.Instructions;
-            if (target.Indexes != null && target.Instructions != null)
+            if (target.Indices != null && target.Instructions != null)
             {
-                for (int i = 0; i < target.Indexes.Length; i++)
+                for (int i = 0; i < target.Indices.Length; i++)
                 {
-                    instructions[target.Indexes[i]] = target.Instructions[i];
+                    instructions[target.Indices[i]] = target.Instructions[i];
                 }
             }
             else if (target.Index != -1 && target.Instruction != null)
@@ -90,9 +90,9 @@ namespace dnpatch
             {
                 throw new Exception("No instruction specified");
             }
-            else if (target.Indexes == null)
+            else if (target.Indices == null)
             {
-                throw new Exception("No indexes specified");
+                throw new Exception("No Indices specified");
             }
             else if (target.Instructions == null)
             {
@@ -157,7 +157,7 @@ namespace dnpatch
 
         public  Target FixTarget(Target target)
         {
-            target.Indexes = new int[] { };
+            target.Indices = new int[] { };
             target.Index = -1;
             target.Instruction = null;
             return target;
@@ -232,7 +232,7 @@ namespace dnpatch
                             }
                             if (indexList.Count == operand.Length)
                             {
-                                obfuscatedTarget.Indexes = indexList;
+                                obfuscatedTarget.Indices = indexList;
                                 obfuscatedTargets.Add(obfuscatedTarget);
                             }
                             operands = operand.ToList();
@@ -271,7 +271,7 @@ namespace dnpatch
                                 }
                                 if (indexList.Count == operand.Length)
                                 {
-                                    obfuscatedTarget.Indexes = indexList;
+                                    obfuscatedTarget.Indices = indexList;
                                     obfuscatedTargets.Add(obfuscatedTarget);
                                 }
                                 operands = operand.ToList();
@@ -295,13 +295,13 @@ namespace dnpatch
                     Method = obfuscatedTarget.Method.Name,
                     NestedClasses = obfuscatedTarget.NestedTypes.ToArray()
                 };
-                if (obfuscatedTarget.Indexes.Count == 1)
+                if (obfuscatedTarget.Indices.Count == 1)
                 {
-                    t.Index = obfuscatedTarget.Indexes[0];
+                    t.Index = obfuscatedTarget.Indices[0];
                 }
-                else if (obfuscatedTarget.Indexes.Count > 1)
+                else if (obfuscatedTarget.Indices.Count > 1)
                 {
-                    t.Indexes = obfuscatedTarget.Indexes.ToArray();
+                    t.Indices = obfuscatedTarget.Indices.ToArray();
                 }
 
                 targets.Add(t);
@@ -342,7 +342,7 @@ namespace dnpatch
                             }
                             if (indexList.Count == operand.Length)
                             {
-                                obfuscatedTarget.Indexes = indexList;
+                                obfuscatedTarget.Indices = indexList;
                                 obfuscatedTargets.Add(obfuscatedTarget);
                             }
                             operands = operand.ToList();
@@ -381,7 +381,7 @@ namespace dnpatch
                                 }
                                 if (indexList.Count == operand.Length)
                                 {
-                                    obfuscatedTarget.Indexes = indexList;
+                                    obfuscatedTarget.Indices = indexList;
                                     obfuscatedTargets.Add(obfuscatedTarget);
                                 }
                                 operands = operand.ToList();
@@ -405,13 +405,13 @@ namespace dnpatch
                     Method = obfuscatedTarget.Method.Name,
                     NestedClasses = obfuscatedTarget.NestedTypes.ToArray()
                 };
-                if (obfuscatedTarget.Indexes.Count == 1)
+                if (obfuscatedTarget.Indices.Count == 1)
                 {
-                    t.Index = obfuscatedTarget.Indexes[0];
+                    t.Index = obfuscatedTarget.Indices[0];
                 }
-                else if (obfuscatedTarget.Indexes.Count > 1)
+                else if (obfuscatedTarget.Indices.Count > 1)
                 {
-                    t.Indexes = obfuscatedTarget.Indexes.ToArray();
+                    t.Indices = obfuscatedTarget.Indices.ToArray();
                 }
 
                 targets.Add(t);
@@ -449,7 +449,7 @@ namespace dnpatch
                             }
                             if (indexList.Count == opcode.Length)
                             {
-                                obfuscatedTarget.Indexes = indexList;
+                                obfuscatedTarget.Indices = indexList;
                                 obfuscatedTargets.Add(obfuscatedTarget);
                             }
                             operands = opcode.Select(o => o.Name).ToList();
@@ -485,7 +485,7 @@ namespace dnpatch
                                 }
                                 if (indexList.Count == opcode.Length)
                                 {
-                                    obfuscatedTarget.Indexes = indexList;
+                                    obfuscatedTarget.Indices = indexList;
                                     obfuscatedTargets.Add(obfuscatedTarget);
                                 }
                                 operands = opcode.Select(o => o.Name).ToList();
@@ -509,13 +509,13 @@ namespace dnpatch
                     Method = obfuscatedTarget.Method.Name,
                     NestedClasses = obfuscatedTarget.NestedTypes.ToArray()
                 };
-                if (obfuscatedTarget.Indexes.Count == 1)
+                if (obfuscatedTarget.Indices.Count == 1)
                 {
-                    t.Index = obfuscatedTarget.Indexes[0];
+                    t.Index = obfuscatedTarget.Indices[0];
                 }
-                else if (obfuscatedTarget.Indexes.Count > 1)
+                else if (obfuscatedTarget.Indices.Count > 1)
                 {
-                    t.Indexes = obfuscatedTarget.Indexes.ToArray();
+                    t.Indices = obfuscatedTarget.Indices.ToArray();
                 }
 
                 targets.Add(t);
@@ -555,7 +555,7 @@ namespace dnpatch
                 }
                 if (indexList.Count == operand.Length || removeIfFound == false)
                 {
-                    obfuscatedTarget.Indexes = indexList;
+                    obfuscatedTarget.Indices = indexList;
                     obfuscatedTargets.Add(obfuscatedTarget);
                 }
                 operands = operand.ToList();
@@ -588,7 +588,7 @@ namespace dnpatch
                         }
                         if (indexList.Count == operand.Length || removeIfFound == false)
                         {
-                            obfuscatedTarget.Indexes = indexList;
+                            obfuscatedTarget.Indices = indexList;
                             obfuscatedTargets.Add(obfuscatedTarget);
                         }
                         operands = operand.ToList();
@@ -606,13 +606,13 @@ namespace dnpatch
                     Method = obfuscatedTarget.Method.Name,
                     NestedClasses = obfuscatedTarget.NestedTypes.ToArray()
                 };
-                if (obfuscatedTarget.Indexes.Count == 1)
+                if (obfuscatedTarget.Indices.Count == 1)
                 {
-                    t.Index = obfuscatedTarget.Indexes[0];
+                    t.Index = obfuscatedTarget.Indices[0];
                 }
-                else if (obfuscatedTarget.Indexes.Count > 1)
+                else if (obfuscatedTarget.Indices.Count > 1)
                 {
-                    t.Indexes = obfuscatedTarget.Indexes.ToArray();
+                    t.Indices = obfuscatedTarget.Indices.ToArray();
                 }
 
                 targets.Add(t);
@@ -649,7 +649,7 @@ namespace dnpatch
                 }
                 if (indexList.Count == opcode.Length || removeIfFound == false)
                 {
-                    obfuscatedTarget.Indexes = indexList;
+                    obfuscatedTarget.Indices = indexList;
                     obfuscatedTargets.Add(obfuscatedTarget);
                 }
             }
@@ -678,7 +678,7 @@ namespace dnpatch
                         }
                         if (indexList.Count == opcode.Length || removeIfFound == false)
                         {
-                            obfuscatedTarget.Indexes = indexList;
+                            obfuscatedTarget.Indices = indexList;
                             obfuscatedTargets.Add(obfuscatedTarget);
                         }
                         operands = opcode.Select(o => o.Name).ToList();
@@ -696,13 +696,13 @@ namespace dnpatch
                     Method = obfuscatedTarget.Method.Name,
                     NestedClasses = obfuscatedTarget.NestedTypes.ToArray()
                 };
-                if (obfuscatedTarget.Indexes.Count == 1)
+                if (obfuscatedTarget.Indices.Count == 1)
                 {
-                    t.Index = obfuscatedTarget.Indexes[0];
+                    t.Index = obfuscatedTarget.Indices[0];
                 }
-                else if (obfuscatedTarget.Indexes.Count > 1)
+                else if (obfuscatedTarget.Indices.Count > 1)
                 {
-                    t.Indexes = obfuscatedTarget.Indexes.ToArray();
+                    t.Indices = obfuscatedTarget.Indices.ToArray();
                 }
 
                 targets.Add(t);
@@ -745,9 +745,9 @@ namespace dnpatch
             {
                 instructions[target.Index] = target.Instruction;
             }
-            else if (target.Indexes != null && target.Instructions != null)
+            else if (target.Indices != null && target.Instructions != null)
             {
-                foreach (var index in target.Indexes)
+                foreach (var index in target.Indices)
                 {
                     instructions[index] = target.Instructions[index];
                 }
@@ -772,13 +772,13 @@ namespace dnpatch
             var type = FindType(target.Namespace + "." + target.Class, nestedClasses);
             var method = FindMethod(type, target.Method);
             var instructions = method.Body.Instructions;
-            if (target.Index != -1 && target.Indexes == null)
+            if (target.Index != -1 && target.Indices == null)
             {
                 instructions.RemoveAt(target.Index);
             }
-            else if (target.Index == -1 && target.Indexes != null)
+            else if (target.Index == -1 && target.Indices != null)
             {
-                foreach (var index in target.Indexes.OrderByDescending(v => v))
+                foreach (var index in target.Indices.OrderByDescending(v => v))
                 {
                     instructions.RemoveAt(index);
                 }
@@ -801,13 +801,13 @@ namespace dnpatch
             TypeDef type = FindType(target.Namespace + "." + target.Class, target.NestedClasses);
             MethodDef method = FindMethod(type, target.Method);
             var instructions = method.Body.Instructions;
-            if (target.Indexes == null && target.Index != -1)
+            if (target.Indices == null && target.Index != -1)
             {
                 instructions[target.Index].Operand = operand;
             }
-            else if (target.Indexes != null && target.Index == -1)
+            else if (target.Indices != null && target.Index == -1)
             {
-                foreach (var index in target.Indexes)
+                foreach (var index in target.Indices)
                 {
                     instructions[index].Operand = operand;
                 }
@@ -823,13 +823,13 @@ namespace dnpatch
             TypeDef type = FindType(target.Namespace + "." + target.Class, target.NestedClasses);
             MethodDef method = FindMethod(type, target.Method);
             var instructions = method.Body.Instructions;
-            if (target.Indexes == null && target.Index != -1)
+            if (target.Indices == null && target.Index != -1)
             {
                 instructions[target.Index].Operand = operand;
             }
-            else if (target.Indexes != null && target.Index == -1)
+            else if (target.Indices != null && target.Index == -1)
             {
-                foreach (var index in target.Indexes)
+                foreach (var index in target.Indices)
                 {
                     instructions[index].Operand = operand;
                 }
@@ -845,9 +845,9 @@ namespace dnpatch
             TypeDef type = FindType(target.Namespace + "." + target.Class, target.NestedClasses);
             MethodDef method = FindMethod(type, target.Method);
             var instructions = method.Body.Instructions;
-            if (target.Indexes != null && target.Index == -1)
+            if (target.Indices != null && target.Index == -1)
             {
-                foreach (var index in target.Indexes)
+                foreach (var index in target.Indices)
                 {
                     instructions[index].Operand = operand[index];
                 }
@@ -863,9 +863,9 @@ namespace dnpatch
             TypeDef type = FindType(target.Namespace + "." + target.Class, target.NestedClasses);
             MethodDef method = FindMethod(type, target.Method);
             var instructions = method.Body.Instructions;
-            if (target.Indexes != null && target.Index == -1)
+            if (target.Indices != null && target.Index == -1)
             {
-                foreach (var index in target.Indexes)
+                foreach (var index in target.Indices)
                 {
                     instructions[index].Operand = operand[index];
                 }

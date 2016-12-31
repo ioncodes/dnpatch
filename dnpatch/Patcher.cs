@@ -30,12 +30,12 @@ namespace dnpatch
 
         public void Patch(Target target)
         {
-            if ((target.Indexes != null || target.Index != -1) &&
+            if ((target.Indices != null || target.Index != -1) &&
                 (target.Instruction != null || target.Instructions != null))
             {
                 patcher.PatchOffsets(target);
             }
-            else if ((target.Index == -1 && target.Indexes == null) &&
+            else if ((target.Index == -1 && target.Indices == null) &&
                      (target.Instruction != null || target.Instructions != null))
             {
                 patcher.PatchAndClear(target);
@@ -50,12 +50,12 @@ namespace dnpatch
         {
             foreach (Target target in targets)
             {
-                if ((target.Indexes != null || target.Index != -1) &&
+                if ((target.Indices != null || target.Index != -1) &&
                     (target.Instruction != null || target.Instructions != null))
                 {
                     patcher.PatchOffsets(target);
                 }
-                else if ((target.Index == -1 && target.Indexes == null) &&
+                else if ((target.Index == -1 && target.Indices == null) &&
                          (target.Instruction != null || target.Instructions != null))
                 {
                     patcher.PatchAndClear(target);
