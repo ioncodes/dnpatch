@@ -49,7 +49,6 @@
   <ItemGroup>
     <Compile Include="Script.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ScriptConfig.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\dnpatch\dnpatch.csproj">
