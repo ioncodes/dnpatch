@@ -37,6 +37,20 @@ namespace dnpatch.script
                     _patcher.WriteReturnBody(target.Value, Convert.ToBoolean(_optional));
                 else if (target.Key == "replace")
                     _patcher.ReplaceInstruction(target.Value);
+                else if(target.Key == "remove")
+                    _patcher.RemoveInstruction(target.Value);
+            }
+
+            if (_script["save"] != null)
+            {
+                if (_script.GetValue("save").ToString() == _script.GetValue("target").ToString())
+                {
+                    Save(true);
+                }
+                else
+                {
+                    Save(_script.GetValue("save").ToString());
+                }
             }
         }
 
@@ -72,7 +86,7 @@ namespace dnpatch.script
                 if (t["index"] != null)
                     target.Index = Convert.ToInt32(t["index"]);
                 if (t["indices"] != null)
-                    target.Indices = null; // to int[]
+                    target.Indices = t["indices"].Values<int>().ToArray();
                 if (t["optional"] != null)
                     _optional = t["optional"].ToString();
                 if (t["instructions"] != null)
