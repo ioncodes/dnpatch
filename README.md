@@ -312,20 +312,20 @@ Example JSON:
 {
     "target":"Test.exe",
     "targets":[{
-        "ns":"Test",
-        "cl":"Program",
-        "me":"ReplaceMe",
-        "ac":"replace",
+        "namespace":"Test",
+        "class":"Program",
+        "method":"ReplaceMe",
+        "action":"replace",
         "index":0,
         "instructions":[{
             "opcode":"ldstr",
             "operand":"script working"
         }]
     },{
-        "ns":"Test",
-        "cl":"Program",
-        "me":"RemoveMe",
-        "ac":"empty"
+        "namespace":"Test",
+        "class":"Program",
+        "method":"RemoveMe",
+        "action":"empty"
     }]
 }
 ```
