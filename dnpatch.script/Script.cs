@@ -79,9 +79,9 @@ namespace dnpatch.script
             {
                 Target target = new Target
                 {
-                    Namespace = t["ns"].ToString(),
-                    Class = t["cl"].ToString(),
-                    Method = t["me"].ToString()
+                    Namespace = t["namespace"].ToString(),
+                    Class = t["class"].ToString(),
+                    Method = t["method"].ToString()
                 };
                 if (t["index"] != null)
                     target.Index = Convert.ToInt32(t["index"]);
@@ -136,7 +136,7 @@ namespace dnpatch.script
                         }
                     }
                 }
-                _targets.Add(t["ac"].ToString(), target);
+                _targets.Add(t["action"].ToString(), target);
             }
         }
 
