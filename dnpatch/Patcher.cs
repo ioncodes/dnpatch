@@ -28,6 +28,11 @@ namespace dnpatch
             patcher = new PatchHelper(file, keepOldMaxStack);
         }
 
+        public Patcher(ModuleDefMD module, bool keepOldMaxStack)
+        {
+            patcher = new PatchHelper(module, keepOldMaxStack);
+        }
+
         public void Patch(Target target)
         {
             if ((target.Indices != null || target.Index != -1) &&
