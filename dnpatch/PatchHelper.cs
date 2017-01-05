@@ -165,25 +165,18 @@ namespace dnpatch
 
         public  MethodDef FindMethod(TypeDef type, string methodName, string[] parameters, string returnType)
         {
-            if (parameters == null)
-                parameters = new string[] {}; // incase someone sets it to null
+            bool checkParams = parameters != null;
             foreach (var m in type.Methods)
             {
-                bool isMethod = false;
-                if (parameters.Length != m.Parameters.Count) continue;
+                bool isMethod = true;
+                if (checkParams && parameters.Length != m.Parameters.Count) continue;
                 if (methodName != m.Name) continue;
                 if (!string.IsNullOrEmpty(returnType) && returnType != m.ReturnType.TypeName) continue;
-                for (int i = 0; i < m.Parameters.Count; i++)
+                if (checkParams)
                 {
-                    var param = m.Parameters[i];
-                    if (param.Type.TypeName == parameters[i])
-                    {
-                        isMethod = true;
-                    }
-                    else
+                    if (m.Parameters.Where((param, i) => param.Type.TypeName != parameters[i]).Any())
                     {
                         isMethod = false;
-                        break;
                     }
                 }
                 if(isMethod) return m;

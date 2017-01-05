@@ -38,11 +38,11 @@ namespace dnpatch
 
     public partial class Target
     {
-        public string[] Parameters { get; set; } // String[] etc..
+        public string[] Parameters { get; set; } // String[] etc.. if null it means that you dont want to check it
     }
 
     public partial class Target
     {
-        public string ReturnType { get; set; } // String[] etc..
+        public string ReturnType { get; set; } // String[] etc.. if null or empty it means that you dont want to check it
     }
 }

@@ -24,6 +24,10 @@ namespace Test
             VerifyMeNot();
             WriteLog();
             BigMethodBootySorryIMeanBody();
+            SameName();
+            SameName("SameName: 1 string param");
+            SameName(1337);
+            SameName("SameName: 2 param; string, int ", 1337);
             Console.Read();
         }
 
@@ -102,6 +106,26 @@ namespace Test
             {
                 Console.WriteLine(i);
             }
+        }
+
+        static void SameName()
+        {
+            Console.WriteLine("SameName: No params");
+        }
+
+        static void SameName(string t)
+        {
+            Console.WriteLine(t);
+        }
+
+        static void SameName(int i)
+        {
+            Console.WriteLine("SameName: 1 int param " + i);
+        }
+
+        static void SameName(string t, int i)
+        {
+            Console.WriteLine(t + i);
         }
     }
 }

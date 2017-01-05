@@ -206,6 +206,20 @@ namespace Example
 
 
             /*
+             * Overload selection & manipulation
+             */
+            target = new Target()
+            {
+                Namespace = "Test",
+                Class = "Program",
+                Method = "SameName",
+                Parameters = new [] {"String", "Int32"}
+            };
+            p.WriteEmptyBody(target);
+            p.Save("Test12.exe");
+
+
+            /*
              * OBFUSCATED EXAMPLES HERE, BECAUSE WE DONT WANT TO OVERWRITE THE OBFUSCATED ASSEMBLY INTERNALLY 
              */
 
