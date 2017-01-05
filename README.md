@@ -38,7 +38,20 @@ public string[] NestedClasses { get; set; }
 
 /* If the path to the method has 1 nested class use this */
 public string NestedClass { get; set; }
+
+/* If you want to set the parameters for the method (if it's overloaded) use this */
+public string[] Parameters { get; set; }
+
+/* If you want to set the return type for the method use this */
+public string ReturnType { get; set; }
 ```
+ReturnType and Parameters are case sensitive!
+Example:
+* String[]
+* Int32
+* etc
+
+
 Please make sure that you don't assign inconsistent values, e.g.
 ```cs
 var target = new Target
@@ -312,20 +325,20 @@ Example JSON:
 {
     "target":"Test.exe",
     "targets":[{
-        "namespace":"Test",
-        "class":"Program",
-        "method":"ReplaceMe",
-        "action":"replace",
+        "ns":"Test",
+        "cl":"Program",
+        "me":"ReplaceMe",
+        "ac":"replace",
         "index":0,
         "instructions":[{
             "opcode":"ldstr",
             "operand":"script working"
         }]
     },{
-        "namespace":"Test",
-        "class":"Program",
-        "method":"RemoveMe",
-        "action":"empty"
+        "ns":"Test",
+        "cl":"Program",
+        "me":"RemoveMe",
+        "ac":"empty"
     }]
 }
 ```
