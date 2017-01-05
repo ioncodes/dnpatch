@@ -35,6 +35,12 @@ namespace dnpatch
             _keepOldMaxStack = keepOldMaxStack;
         }
 
+        public PatchHelper(Stream stream, bool keepOldMaxStacks)
+        {
+            _module = ModuleDefMD.Load(stream);
+            _keepOldMaxStack = keepOldMaxStacks;
+        }
+
         public  void PatchAndClear(Target target)
         {
             string[] nestedClasses = { };

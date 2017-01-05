@@ -33,6 +33,11 @@ namespace dnpatch
             patcher = new PatchHelper(module, keepOldMaxStack);
         }
 
+        public Patcher(Stream stream, bool keepOldMaxStacks)
+        {
+            patcher = new PatchHelper(stream, keepOldMaxStacks);
+        }
+
         public void Patch(Target target)
         {
             if ((target.Indices != null || target.Index != -1) &&
