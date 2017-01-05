@@ -29,6 +29,18 @@ namespace dnpatch
             _keepOldMaxStack = keepOldMaxStack;
         }
 
+        public PatchHelper(ModuleDefMD module, bool keepOldMaxStack)
+        {
+            _module = module;
+            _keepOldMaxStack = keepOldMaxStack;
+        }
+
+        public PatchHelper(Stream stream, bool keepOldMaxStacks)
+        {
+            _module = ModuleDefMD.Load(stream);
+            _keepOldMaxStack = keepOldMaxStacks;
+        }
+
         public  void PatchAndClear(Target target)
         {
             string[] nestedClasses = { };
@@ -176,6 +188,10 @@ namespace dnpatch
 
         public  void Save(bool backup)
         {
+            if (string.IsNullOrEmpty(_file))
+            {
+                throw new Exception("Assembly/module was loaded in memory, and no file was specified. Use Save(string) method to save the patched assembly.");
+            }
             if (_keepOldMaxStack)
                 _module.Write(_file + ".tmp", new ModuleWriterOptions(_module)
                 {
