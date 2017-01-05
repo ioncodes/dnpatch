@@ -35,4 +35,14 @@ namespace dnpatch
     {
         public string NestedClass { get; set; }
     }
+
+    public partial class Target
+    {
+        public string[] Parameters { get; set; } // String[] etc..
+    }
+
+    public partial class Target
+    {
+        public string ReturnType { get; set; } // String[] etc..
+    }
 }

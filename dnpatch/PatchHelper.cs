@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using dnlib.DotNet;
@@ -53,7 +54,7 @@ namespace dnpatch
                 nestedClasses = new[] { target.NestedClass };
             }
             var type = FindType(target.Namespace + "." + target.Class, nestedClasses);
-            var method = FindMethod(type, target.Method);
+            var method = FindMethod(type, target.Method, target.Parameters, target.ReturnType);
             var instructions = method.Body.Instructions;
             instructions.Clear();
             if (target.Instructions != null)
@@ -81,7 +82,7 @@ namespace dnpatch
                 nestedClasses = new[] { target.NestedClass };
             }
             var type = FindType(target.Namespace + "." + target.Class, nestedClasses);
-            var method = FindMethod(type, target.Method);
+            var method = FindMethod(type, target.Method, target.Parameters, target.ReturnType);
             var instructions = method.Body.Instructions;
             if (target.Indices != null && target.Instructions != null)
             {
@@ -162,9 +163,32 @@ namespace dnpatch
             return null;
         }
 
-        public  MethodDef FindMethod(TypeDef type, string methodName)
+        public  MethodDef FindMethod(TypeDef type, string methodName, string[] parameters, string returnType)
         {
-            return type.Methods.FirstOrDefault(m => methodName == m.Name);
+            if (parameters == null)
+                parameters = new string[] {}; // incase someone sets it to null
+            foreach (var m in type.Methods)
+            {
+                bool isMethod = false;
+                if (parameters.Length != m.Parameters.Count) continue;
+                if (methodName != m.Name) continue;
+                if (!string.IsNullOrEmpty(returnType) && returnType != m.ReturnType.TypeName) continue;
+                for (int i = 0; i < m.Parameters.Count; i++)
+                {
+                    var param = m.Parameters[i];
+                    if (param.Type.TypeName == parameters[i])
+                    {
+                        isMethod = true;
+                    }
+                    else
+                    {
+                        isMethod = false;
+                        break;
+                    }
+                }
+                if(isMethod) return m;
+            }
+            return null;
         }
 
         public  Target FixTarget(Target target)
@@ -546,7 +570,7 @@ namespace dnpatch
             TypeDef type = FindType(target.Namespace + "." + target.Class, target.NestedClasses);
             MethodDef m = null;
             if (target.Method != null)
-                m = FindMethod(type, target.Method);
+                m = FindMethod(type, target.Method, target.Parameters, target.ReturnType);
             if (m != null)
             {
                 List<int> indexList = new List<int>();
@@ -643,7 +667,7 @@ namespace dnpatch
             TypeDef type = FindType(target.Namespace + "." + target.Class, target.NestedClasses);
             MethodDef m = null;
             if (target.Method != null)
-                m = FindMethod(type, target.Method);
+                m = FindMethod(type, target.Method, target.Parameters, target.ReturnType);
             if (m != null)
             {
                 List<int> indexList = new List<int>();
@@ -755,7 +779,7 @@ namespace dnpatch
                 nestedClasses = new[] { target.NestedClass };
             }
             var type = FindType(target.Namespace + "." + target.Class, nestedClasses);
-            var method = FindMethod(type, target.Method);
+            var method = FindMethod(type, target.Method, target.Parameters, target.ReturnType);
             var instructions = method.Body.Instructions;
             if (target.Index != -1 && target.Instruction != null)
             {
@@ -786,7 +810,7 @@ namespace dnpatch
                 nestedClasses = new[] { target.NestedClass };
             }
             var type = FindType(target.Namespace + "." + target.Class, nestedClasses);
-            var method = FindMethod(type, target.Method);
+            var method = FindMethod(type, target.Method, target.Parameters, target.ReturnType);
             var instructions = method.Body.Instructions;
             if (target.Index != -1 && target.Indices == null)
             {
@@ -808,14 +832,14 @@ namespace dnpatch
         public  Instruction[] GetInstructions(Target target)
         {
             var type = FindType(target.Namespace + "." + target.Class, target.NestedClasses);
-            MethodDef method = FindMethod(type, target.Method);
+            MethodDef method = FindMethod(type, target.Method, target.Parameters, target.ReturnType);
             return (Instruction[])method.Body.Instructions;
         }
 
         public  void PatchOperand(Target target, string operand)
         {
             TypeDef type = FindType(target.Namespace + "." + target.Class, target.NestedClasses);
-            MethodDef method = FindMethod(type, target.Method);
+            MethodDef method = FindMethod(type, target.Method, target.Parameters, target.ReturnType);
             var instructions = method.Body.Instructions;
             if (target.Indices == null && target.Index != -1)
             {
@@ -837,7 +861,7 @@ namespace dnpatch
         public  void PatchOperand(Target target, int operand)
         {
             TypeDef type = FindType(target.Namespace + "." + target.Class, target.NestedClasses);
-            MethodDef method = FindMethod(type, target.Method);
+            MethodDef method = FindMethod(type, target.Method, target.Parameters, target.ReturnType);
             var instructions = method.Body.Instructions;
             if (target.Indices == null && target.Index != -1)
             {
@@ -856,10 +880,10 @@ namespace dnpatch
             }
         }
 
-        public  void PatchOperand(Target target, string[] operand)
+        public void PatchOperand(Target target, string[] operand)
         {
             TypeDef type = FindType(target.Namespace + "." + target.Class, target.NestedClasses);
-            MethodDef method = FindMethod(type, target.Method);
+            MethodDef method = FindMethod(type, target.Method, target.Parameters, target.ReturnType);
             var instructions = method.Body.Instructions;
             if (target.Indices != null && target.Index == -1)
             {
@@ -877,7 +901,7 @@ namespace dnpatch
         public  void PatchOperand(Target target, int[] operand)
         {
             TypeDef type = FindType(target.Namespace + "." + target.Class, target.NestedClasses);
-            MethodDef method = FindMethod(type, target.Method);
+            MethodDef method = FindMethod(type, target.Method, target.Parameters, target.ReturnType);
             var instructions = method.Body.Instructions;
             if (target.Indices != null && target.Index == -1)
             {
@@ -895,7 +919,7 @@ namespace dnpatch
         public  string GetOperand(Target target)
         {
             TypeDef type = FindType(target.Namespace + "." + target.Class, target.NestedClasses);
-            MethodDef method = FindMethod(type, target.Method);
+            MethodDef method = FindMethod(type, target.Method, target.Parameters, target.ReturnType);
             return method.Body.Instructions[target.Index].Operand.ToString();
         }
 
@@ -903,7 +927,7 @@ namespace dnpatch
         {
             occurence--; // Fix the occurence, e.g. second occurence must be 1 but hoomans like to write like they speak so why don't assist them?
             var type = FindType(target.Namespace + "." + target.Class, target.NestedClasses);
-            MethodDef method = FindMethod(type, target.Method);
+            MethodDef method = FindMethod(type, target.Method, target.Parameters, target.ReturnType);
             var instructions = method.Body.Instructions;
             int index = 0;
             int occurenceCounter = 0;
