@@ -155,6 +155,16 @@ namespace dnpatch
             patcher.PatchAndClear(target);
         }
 
+        /// <summary>
+        /// Find methods that contain a certain OpCode[] signature
+        /// </summary>
+        /// <param name="signature"></param>
+        /// <returns></returns>
+        public HashSet<MethodDef> FindMethodsByOpCodeSignature(OpCode[] signature)
+        {
+            return patcher.FindMethodsByOpCodeSignature(signature);
+        }
+
         public void WriteEmptyBody(Target target)
         {
             target = patcher.FixTarget(target);
