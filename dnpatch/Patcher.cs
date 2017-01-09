@@ -33,14 +33,14 @@ namespace dnpatch
             patcher = new PatchHelper(module, keepOldMaxStack);
         }
 
-        public Patcher(ModuleDef module, bool keepOldMaxStacks)
+        public Patcher(ModuleDef module, bool keepOldMaxStack)
         {
-            patcher = new PatchHelper(module, keepOldMaxStacks);
+            patcher = new PatchHelper(module, keepOldMaxStack);
         }
 
-        public Patcher(Stream stream, bool keepOldMaxStacks)
+        public Patcher(Stream stream, bool keepOldMaxStack)
         {
-            patcher = new PatchHelper(stream, keepOldMaxStacks);
+            patcher = new PatchHelper(stream, keepOldMaxStack);
         }
 
         public void Patch(Target target)
