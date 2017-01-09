@@ -36,10 +36,16 @@ namespace dnpatch
             _keepOldMaxStack = keepOldMaxStack;
         }
 
-        public PatchHelper(Stream stream, bool keepOldMaxStacks)
+        public PatchHelper(ModuleDef module, bool keepOldMaxStack)
+        {
+            _module = module;
+            _keepOldMaxStack = keepOldMaxStack;
+        }
+
+        public PatchHelper(Stream stream, bool keepOldMaxStack)
         {
             _module = ModuleDefMD.Load(stream);
-            _keepOldMaxStack = keepOldMaxStacks;
+            _keepOldMaxStack = keepOldMaxStack;
         }
 
         public  void PatchAndClear(Target target)

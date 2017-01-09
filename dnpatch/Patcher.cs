@@ -33,9 +33,14 @@ namespace dnpatch
             patcher = new PatchHelper(module, keepOldMaxStack);
         }
 
-        public Patcher(Stream stream, bool keepOldMaxStacks)
+        public Patcher(ModuleDef module, bool keepOldMaxStack)
         {
-            patcher = new PatchHelper(stream, keepOldMaxStacks);
+            patcher = new PatchHelper(module, keepOldMaxStack);
+        }
+
+        public Patcher(Stream stream, bool keepOldMaxStack)
+        {
+            patcher = new PatchHelper(stream, keepOldMaxStack);
         }
 
         public void Patch(Target target)
@@ -153,6 +158,16 @@ namespace dnpatch
             }
 
             patcher.PatchAndClear(target);
+        }
+
+        /// <summary>
+        /// Find methods that contain a certain OpCode[] signature
+        /// </summary>
+        /// <param name="signature"></param>
+        /// <returns></returns>
+        public HashSet<MethodDef> FindMethodsByOpCodeSignature(OpCode[] signature)
+        {
+            return patcher.FindMethodsByOpCodeSignature(signature);
         }
 
         public void WriteEmptyBody(Target target)
