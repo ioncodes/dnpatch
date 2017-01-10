@@ -4,9 +4,31 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using dnlib.DotNet.Emit;
+using dnlib.DotNet;
 
 namespace dnpatch
 {
+    public partial class Target
+    {
+        public Target() { }
+        
+        public Target(MethodDef method)
+        {
+            Namespace = method.DeclaringType.Namespace;
+            Class = method.DeclaringType.Name;
+            Method = method.Name;
+        }
+
+        /// <summary>
+        /// Cast MethodDef to Target -> (Target)MethodDef
+        /// </summary>
+        /// <param name="value"></param>
+        static public implicit operator Target(MethodDef value)
+        {
+            return new Target(value);
+        }
+    }
+
     public partial class Target
     {
         public string Namespace { get; set; }
