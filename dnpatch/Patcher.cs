@@ -165,7 +165,7 @@ namespace dnpatch
         /// </summary>
         /// <param name="signature"></param>
         /// <returns></returns>
-        public HashSet<MethodDef> FindMethodsByOpCodeSignature(OpCode[] signature)
+        public Target[] FindMethodsByOpCodeSignature(params OpCode[] signature)
         {
             return patcher.FindMethodsByOpCodeSignature(signature);
         }
