@@ -675,8 +675,8 @@ namespace dnpatch
                     {
                         if (md.Body.HasInstructions)
                         {
-                            OpCode[] ops = md.Body.Instructions.ToArray().GetOpCodes();
-                            if (ops.IndexOf<OpCode>(signature).Count() > 0)
+                            OpCode[] codes = md.Body.Instructions.GetOpCodes().ToArray();
+                            if (codes.IndexOf<OpCode>(signature).Count() > 0)
                             {
                                 found.Add(md);
                             }

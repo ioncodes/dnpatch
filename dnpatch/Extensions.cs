@@ -35,14 +35,9 @@ namespace dnpatch
         /// </summary>
         /// <param name="main"></param>
         /// <returns></returns>
-        public static OpCode[] GetOpCodes(this Instruction[] main)
+        public static IEnumerable<OpCode> GetOpCodes(this ICollection<Instruction> main)
         {
-            List<OpCode> opcodes = new List<OpCode>();
-            for (int i = 0; i < main.Length; i++)
-            {
-                opcodes.Add(main[i].OpCode);
-            }
-            return opcodes.ToArray();
+            return from instruction in main select instruction.OpCode;
         }
     }
 }
