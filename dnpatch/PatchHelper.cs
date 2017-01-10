@@ -663,7 +663,7 @@ namespace dnpatch
         /// Find methods that contain a certain OpCode[] signature
         /// </summary>
         /// <returns></returns>
-        public HashSet<MethodDef> FindMethodsByOpCodeSignature(OpCode[] signature)
+        public Target[] FindMethodsByOpCodeSignature(OpCode[] signature)
         {
             HashSet<MethodDef> found = new HashSet<MethodDef>();
 
@@ -675,8 +675,8 @@ namespace dnpatch
                     {
                         if (md.Body.HasInstructions)
                         {
-                            OpCode[] ops = md.Body.Instructions.ToArray().GetOpCodes();
-                            if (ops.IndexOf<OpCode>(signature).Count() > 0)
+                            OpCode[] codes = md.Body.Instructions.GetOpCodes().ToArray();
+                            if (codes.IndexOf<OpCode>(signature).Count() > 0)
                             {
                                 found.Add(md);
                             }
@@ -685,7 +685,8 @@ namespace dnpatch
                 }
             }
 
-            return found;
+            //cast each to Target
+            return (from method in found select (Target)method).ToArray();
         }
 
         public  Target[] FindInstructionsByOpcode(Target target, OpCode[] opcode, bool removeIfFound = false)

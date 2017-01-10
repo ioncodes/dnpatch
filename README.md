@@ -145,6 +145,16 @@ Target target = new Target()
 target.Index = p.FindInstruction(target, toFind, 2); // Sir, find the second occurence!
 ```
 
+### Finding methods by OpCode signature
+You can find methods (Target[]) by scanning their body for an OpCode signature
+```cs
+OpCode[] codes = new OpCode[] {
+	OpCodes.Ldstr,
+	OpCodes.Call
+};
+var result = p.FindMethodsByOpCodeSignature(codes); // holds Target[]
+```
+
 ### Replacing instructions
 In some cases it might be easier to just replace an instruction. At this point of development, it doesn't make much sense, but the features will come soon.
 ```cs
