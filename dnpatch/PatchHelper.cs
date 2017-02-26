@@ -169,6 +169,11 @@ namespace dnpatch
             return null;
         }
 
+        public PropertyDef FindProperty(TypeDef type, string property)
+        {
+            return type.Properties.FirstOrDefault(prop => prop.Name == property);
+        }
+
         public  MethodDef FindMethod(TypeDef type, string methodName, string[] parameters, string returnType)
         {
             bool checkParams = parameters != null;
@@ -986,6 +991,26 @@ namespace dnpatch
                 index++;
             }
             return -1;
+        }
+
+        public void RewriteProperty(Target target)
+        {
+            TypeDef type = FindType(target.Namespace + "." + target.Class, target.NestedClasses);
+            PropertyDef property = FindProperty(type, target.Property);
+            IList<Instruction> instructions = null;
+            if (target.PropertyMethod == PropertyMethod.Get)
+            {
+                instructions = property.GetMethod.Body.Instructions;
+            }
+            else
+            {
+                instructions = property.SetMethod.Body.Instructions;
+            }
+            instructions.Clear();
+            foreach (var instruction in target.Instructions)
+            {
+                instructions.Add(instruction);
+            }
         }
     }
 }

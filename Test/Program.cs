@@ -8,6 +8,13 @@ namespace Test
 {
     class Program
     {
+        private bool _isPremium = false;
+
+        public bool IsPremium
+        {
+            get { return _isPremium; }
+        }
+
         static void Main(string[] args)
         {
             Print();

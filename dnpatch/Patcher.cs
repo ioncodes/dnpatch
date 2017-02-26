@@ -211,5 +211,10 @@ namespace dnpatch
         {
             return patcher.BuildMemberRef(ns, cs, name, type);
         }
+
+        public void RewriteProperty(Target target)
+        {
+            patcher.RewriteProperty(target);
+        }
     }
 }

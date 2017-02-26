@@ -67,4 +67,16 @@ namespace dnpatch
     {
         public string ReturnType { get; set; } // String[] etc.. if null or empty it means that you dont want to check it
     }
+
+    public partial class Target
+    {
+        public string Property { get; set; }
+        public PropertyMethod PropertyMethod { get; set; }
+    }
+
+    public enum PropertyMethod
+    {
+        Get,
+        Set
+    }
 }

@@ -145,7 +145,7 @@ namespace Example
                 Namespace = "Test",
                 Class = "Program",
                 Method = "RemoveMe",
-                Indices = new[]{0,1}
+                Indices = new[]{1,2}
             };
             p.RemoveInstruction(target);
             p.Save("Test7.exe");
@@ -217,6 +217,25 @@ namespace Example
             };
             p.WriteEmptyBody(target);
             p.Save("Test12.exe");
+
+
+            /*
+             * Rewrite property getter to return true
+             */
+            target = new Target()
+            {
+                Namespace = "Test",
+                Class = "Program",
+                Property = "IsPremium",
+                PropertyMethod = PropertyMethod.Get,
+                Instructions = new []
+                {
+                    Instruction.Create(OpCodes.Ldc_I4_1),
+                    Instruction.Create(OpCodes.Ret)  
+                }
+            };
+            p.RewriteProperty(target);
+            p.Save("Test13.exe");
 
 
             /*
