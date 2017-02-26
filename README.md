@@ -44,6 +44,10 @@ public string[] Parameters { get; set; }
 
 /* If you want to set the return type for the method use this */
 public string ReturnType { get; set; }
+
+/* If you want to rewrite the getters or setters of a property use this */
+public string Property { get; set; } // The name
+public PropertyMethod PropertyMethod { get; set; } // See below, determines patch target
 ```
 ReturnType and Parameters are case sensitive!
 Example:
@@ -51,6 +55,14 @@ Example:
 * Int32
 * etc
 
+PropertyMethod is defined as this:
+```cs
+public enum PropertyMethod
+{
+	Get,
+	Set
+}
+```
 
 Please make sure that you don't assign inconsistent values, e.g.
 ```cs
@@ -282,7 +294,28 @@ p.FindInstructionsByOperand(Target,int[],bool);
 // for opcodes:
 p.FindInstructionsByOpcode(Target,int[],bool);
 ```
-mbo
+
+### Patch properties
+Now you can rewrite a propertie's getter and setter like this:
+```cs
+target = new Target()
+{
+	Namespace = "Test",
+	Class = "Program",
+	Property = "IsPremium", // Property name
+	PropertyMethod = PropertyMethod.Get, // Getter or Setter
+	Instructions = new []
+	{
+		Instruction.Create(OpCodes.Ldc_I4_1),
+		Instruction.Create(OpCodes.Ret)  
+	} // the new instructions
+};
+p.RewriteProperty(target); // Will overwrite it with return true in getter
+```
+The property called 'Property' holds the name of the target property.  
+PropertyMethod can be 'PropertyMethod.Get' or 'PropertyMethod.Set'.  
+Instructions are the new Instructions for the getter or setter.
+
 ### Building calls
 To build calls like "Console.WriteLine()" you can use this method:
 ```cs
