@@ -1,12 +1,22 @@
 # dnpatch
 [WIP] .NET Patcher library using dnlib.
 
-*If you have questions feel free to ask me via Gitter! I'm glad to help you out!*
+*If you have questions feel free to ask me via Gitter! I'm glad to help you out! Taking feature requests!*
 
 [![Build status](https://ci.appveyor.com/api/projects/status/39jhu0noimfkgfw2?svg=true)](https://ci.appveyor.com/project/ioncodes/dnpatch)
 [![Github All Releases](https://img.shields.io/github/downloads/ioncodes/dnpatch/total.svg)]
 (https://github.com/ioncodes/dnpatch/releases)
 [![Join the chat at https://gitter.im/dnpatch/Lobby](https://badges.gitter.im/dnpatch/Lobby.svg)](https://gitter.im/dnpatch/Lobby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
+## What is dnpatch?
+dnpatch is the ultimate library for all your .NET patching needs. It offers automated assembly patching, signature scanning and last but but not least bypassing of obfuscators by it's ability to find methods in renamed/obfuscated types. Since the stars on GitHub exploded in a few days, dnpatch has been extended by a couple of projects. The most important one is dnpatch.deobfuscation which integrates de4dot directly into dnpatch. Also there is dnpatch.script, which gives you the ability to write patchers with pure JSON!
+The library itself, uses dnlib (see next part).
+
+## Notes
+Since dnpatch uses dnlib, it is highly recommended to use dnSpy to analyze your assemblies first, so it is guaranteed that you will use the correct names, offsets, etc, because it does use dnlib aswell.
+
+## Recommendations
+It is highly recommended to calculate the position of instructions instead of defining indexes, to ensure that the patcher will still work after assembly updates.
 
 ## Patching
 The constructor takes the filename of the assembly.
@@ -391,3 +401,4 @@ Name this file script.json and place it into TestScript build folder and use it 
 I'd like to thank these people:
 * [0xd4d](https://github.com/0xd4d) for creating [dnlib](https://github.com/0xd4d/dnlib)
 * [0xd4d](https://github.com/0xd4d) for creating [de4dot](https://github.com/0xd4d/de4dot)
+* [Rottweiler](https://github.com/Rottweiler) for the PRs and help!
