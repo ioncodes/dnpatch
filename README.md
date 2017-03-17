@@ -4,8 +4,7 @@
 *If you have questions feel free to ask me via Gitter! I'm glad to help you out! Taking feature requests!*
 
 [![Build status](https://ci.appveyor.com/api/projects/status/39jhu0noimfkgfw2?svg=true)](https://ci.appveyor.com/project/ioncodes/dnpatch)
-[![Github All Releases](https://img.shields.io/github/downloads/ioncodes/dnpatch/total.svg)]
-(https://github.com/ioncodes/dnpatch/releases)
+[![Github All Releases](https://img.shields.io/github/downloads/ioncodes/dnpatch/total.svg)](https://github.com/ioncodes/dnpatch/releases)
 [![Join the chat at https://gitter.im/dnpatch/Lobby](https://badges.gitter.im/dnpatch/Lobby.svg)](https://gitter.im/dnpatch/Lobby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
 ## What is dnpatch?
