@@ -57,7 +57,7 @@ namespace dnpatch
             }
             else
             {
-                throw new Exception("Check your Target object for inconsistent assignements");
+                throw new Exception("Check your Target object for inconsistent assignments");
             }
         }
 
@@ -77,7 +77,7 @@ namespace dnpatch
                 }
                 else
                 {
-                    throw new Exception("Check your Target object for inconsistent assignements");
+                    throw new Exception("Check your Target object for inconsistent assignments");
                 }
             }
         }
@@ -202,6 +202,12 @@ namespace dnpatch
             return patcher.FindInstructionsByOpcode(target, opcode, removeIfFound);
         }
 
+        [Obsolete("This functions is still in development")]
+        public Target[] FindInstructionsByRegex(Target target, string pattern, bool ignoreOperand)
+        {
+            return patcher.FindInstructionsByRegex(target, pattern, ignoreOperand);
+        }
+
         public string GetOperand(Target target)
         {
             return patcher.GetOperand(target);
@@ -215,6 +221,17 @@ namespace dnpatch
         public void RewriteProperty(Target target)
         {
             patcher.RewriteProperty(target);
+        }
+
+        public void InjectMethod(Target target)
+        {
+            /*
+             *  Example: https://github.com/0xd4d/dnlib/blob/master/Examples/Example2.cs
+             *  MethodImplAttributes methImplFlags = MethodImplAttributes.IL | MethodImplAttributes.Managed;
+			 *  MethodAttributes methFlags = MethodAttributes.Public | MethodAttributes.Static | MethodAttributes.HideBySig | MethodAttributes.ReuseSlot;
+			 *  MethodDef meth1 = new MethodDefUser("MyMethod", MethodSig.CreateStatic(mod.CorLibTypes.Int32, mod.CorLibTypes.Int32, mod.CorLibTypes.Int32), methImplFlags, methFlags);
+             */
+            patcher.InjectMethod(target);
         }
     }
 }

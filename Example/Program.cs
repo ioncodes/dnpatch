@@ -239,6 +239,23 @@ namespace Example
 
 
             /*
+             * Find Instructions by Regex
+             */
+            target = new Target()
+            {
+                Namespace = "Test",
+                Class = "Program",
+                Method = "FindSomeILByRegex",
+            };
+            var regexed = p.FindInstructionsByRegex(target, "ldc\\.i4\\s+1123[\\W\\d\\w]+\"Damn\"", false);
+            foreach(var @int in regexed[0].Indices)
+            {
+                Console.Write(@int);
+            }
+            p.Save("Test14.exe");
+            
+
+            /*
              * OBFUSCATED EXAMPLES HERE, BECAUSE WE DONT WANT TO OVERWRITE THE OBFUSCATED ASSEMBLY INTERNALLY 
              */
 

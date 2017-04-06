@@ -74,6 +74,21 @@ namespace dnpatch
         public PropertyMethod PropertyMethod { get; set; }
     }
 
+    public partial class Target
+    {
+        public ParamDef[] ParameterDefs { get; set; }
+    }
+
+    public partial class Target
+    {
+        public MethodDef MethodDef { get; set; }
+    }
+
+    public partial class Target
+    {
+        public Local[] Locals { get; set; }
+    }
+
     public enum PropertyMethod
     {
         Get,

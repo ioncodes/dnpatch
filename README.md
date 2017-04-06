@@ -349,6 +349,24 @@ Here is an IL example for Console.WriteLine:
 Instruction.Create(OpCodes.Call, p.BuildMemberRef("System", "Console", "WriteLine", Patcher.MemberRefType.Static));
 ```
 
+### Injecting methods (Untested)
+If you want to inject methods into classes, call InjectMethod. Make sure to set MethodDef and Instructions. Optionally set Locals, ParameterDefs.
+```cs
+Target target = new Target();
+MethodImplAttributes methImplFlags = MethodImplAttributes.IL | MethodImplAttributes.Managed;
+MethodAttributes methFlags = MethodAttributes.Public | MethodAttributes.Static | MethodAttributes.HideBySig | MethodAttributes.ReuseSlot;
+MethodDef meth1 = new MethodDefUser("MyMethod",
+            MethodSig.CreateStatic(mod.CorLibTypes.Int32, mod.CorLibTypes.Int32, mod.CorLibTypes.Int32),
+            methImplFlags, methFlags);
+target.ParameterDefs = { new ParamDefUser("a", 1) };
+target.Locals = { new Local(mod.CorLibTypes.Int32) };
+target.MethodDef = meth1;
+target.Class = "";
+// ... target as always...
+patcher.InjectMethod(target);
+```
+For now refer to this page: https://github.com/0xd4d/dnlib/blob/master/Examples/Example2.cs
+
 ### Saving the patched assembly
 If you want to safe the assembly under a different name use this:
 ```cs

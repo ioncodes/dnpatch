@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using dnlib.DotNet;
 using dnlib.DotNet.Emit;
@@ -784,7 +785,52 @@ namespace dnpatch
             return targets.ToArray();
         }
 
-        public  MemberRef BuildMemberRef(string ns, string cs, string name, Patcher.MemberRefType type)
+        public Target[] FindInstructionsByRegex(Target target, string pattern, bool ignoreOperand)
+        {
+            var targets = new List<Target>();
+            if(target.Namespace != null)
+            {
+                var type = FindType(target.Namespace + "." + target.Class, target.NestedClasses);
+                if(target.Method != null) 
+                {
+                    string body = "";
+                    var method = FindMethod(type, target.Method, target.Parameters, target.ReturnType);
+                    foreach(var instruction in method.Body.Instructions) 
+                    {
+                        if(!ignoreOperand) 
+                        {
+                            body += instruction.OpCode + " " + instruction.Operand + "\n";
+                        }
+                        else
+                        {
+                            body += instruction.OpCode + "\n";
+                        }
+                    }
+                    foreach(Match match in Regex.Matches(body, pattern))
+                    {
+                        int startIndex = body.Split(new string[] {match.Value}, StringSplitOptions.None)[0].Split('\n').Length-1;
+                        int[] indices = {};
+                        for(int i = 0; i < match.Value.Split('\n').Length; i++)
+                        {
+                            indices[i] = startIndex + i;
+                        }
+                        var t = new Target()
+                        {
+                            Indices = indices,
+                            Method = target.Method,
+                            Class = target.Class,
+                            Namespace = target.Namespace,
+                            NestedClasses = target.NestedClasses,
+                            NestedClass = target.NestedClass
+                        };
+                        targets.Add(t);
+                    }
+                }
+            }
+            return targets.ToArray();
+        }
+
+        public MemberRef BuildMemberRef(string ns, string cs, string name, Patcher.MemberRefType type)
         {
             TypeRef consoleRef = new TypeRefUser(_module, ns, cs, _module.CorLibTypes.AssemblyRef);
             if (type == Patcher.MemberRefType.Static)
@@ -1010,6 +1056,33 @@ namespace dnpatch
             foreach (var instruction in target.Instructions)
             {
                 instructions.Add(instruction);
+            }
+        }
+
+        // See this: https://github.com/0xd4d/dnlib/blob/master/Examples/Example2.cs
+        public void InjectMethod(Target target)
+        {
+            var type = FindType(target.Namespace + "." + target.Class, target.NestedClasses);
+            type.Methods.Add(target.MethodDef);
+            CilBody body = new CilBody();
+            target.MethodDef.Body = body;
+            if (target.ParameterDefs != null)
+            {
+                foreach (var param in target.ParameterDefs)
+                {
+                    target.MethodDef.ParamDefs.Add(param);
+                }
+            }
+            if (target.Locals != null)
+            {
+                foreach (var local in target.Locals)
+                {
+                    body.Variables.Add(local);
+                }
+            }
+            foreach (var il in target.Instructions)
+            {
+                body.Instructions.Add(il);
             }
         }
     }

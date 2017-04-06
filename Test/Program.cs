@@ -35,6 +35,7 @@ namespace Test
             SameName("SameName: 1 string param");
             SameName(1337);
             SameName("SameName: 2 param; string, int ", 1337);
+            FindSomeILByRegex();
             Console.Read();
         }
 
@@ -133,6 +134,36 @@ namespace Test
         static void SameName(string t, int i)
         {
             Console.WriteLine(t + i);
+        }
+
+        static void FindSomeILByRegex()
+        {
+            int imUseless = 1337;
+            for (int i = 0; i < imUseless; i++)
+            {
+                Console.WriteLine(i);
+            }
+            imUseless = 1233;
+            for (int i = 0; i < imUseless; i++)
+            {
+                Console.WriteLine(i);
+            }
+            imUseless = 3123;
+            for (int i = 0; i < imUseless; i++)
+            {
+                Console.WriteLine(i);
+            }
+            imUseless = 1231;
+            for (int i = 0; i < imUseless; i++)
+            {
+                Console.WriteLine(i);
+            }
+            imUseless = 1123;
+            for (int i = 0; i < imUseless; i++)
+            {
+                for(int j = 0; j < 9; j++) Console.WriteLine("Damn");
+                Console.WriteLine(i);
+            }
         }
     }
 }
