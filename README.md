@@ -358,8 +358,8 @@ MethodAttributes methFlags = MethodAttributes.Public | MethodAttributes.Static |
 MethodDef meth1 = new MethodDefUser("MyMethod",
             MethodSig.CreateStatic(mod.CorLibTypes.Int32, mod.CorLibTypes.Int32, mod.CorLibTypes.Int32),
             methImplFlags, methFlags);
-target.ParameterDefs = { new ParamDefUser("a", 1) };
-target.Locals = { new Local(mod.CorLibTypes.Int32) };
+target.ParameterDefs = new[] { new ParamDefUser("a", 1) };
+target.Locals = new[] { new Local(mod.CorLibTypes.Int32) };
 target.MethodDef = meth1;
 target.Class = "";
 // ... target as always...
