@@ -869,7 +869,7 @@ namespace dnpatch
             {
                 for(int i = 0;i<target.Indices.Length;i++) {
                     var index = target.Indices[i];
-                    instructions[index] = target.Instructions[i]
+                    instructions[index] = target.Instructions[i];
                 }
             }
             else
