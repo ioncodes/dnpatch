@@ -94,7 +94,7 @@ namespace dnpatch.script
                     JArray instructions = (JArray) t["instructions"];
                     if (instructions.Count == 1)
                     {
-                        if (instructions[0]["opcode"] != null && instructions[0]["operand"] != "")
+                        if (instructions[0]["opcode"] != null && instructions[0]["operand"] != null)
                         {
                             var operand = instructions[0].Last.Last;
                             if (operand.Type == JTokenType.Integer)
@@ -123,14 +123,16 @@ namespace dnpatch.script
                     }
                     else
                     {
-                        foreach (var instruction in instructions)
+                        target.Instructions = new Instruction[instructions.Count];
+                        for (int i = 0; i < instructions.Count; i++)
                         {
-                            if (instruction.First != null && instruction.First.Value<string>() != "")
-                                target.Instruction =
+                            var instruction = instructions[i];
+                            if (instruction["opcode"] != null && instruction["operand"] != null)
+                                target.Instructions[i] =
                                     Instruction.Create((OpCode)GetInstructionField(instruction.First.ToString()).GetValue(this),
                                         instruction.Last.Last.Value<dynamic>());
                             else
-                                target.Instruction =
+                                target.Instructions[i] =
                                     Instruction.Create(
                                         (OpCode)GetInstructionField(instruction.First.First.ToString()).GetValue(this));
                         }
