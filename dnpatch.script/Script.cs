@@ -94,7 +94,7 @@ namespace dnpatch.script
                     JArray instructions = (JArray) t["instructions"];
                     if (instructions.Count == 1)
                     {
-                        if (instructions[0]["opcode"] != null && instructions[0]["operand" != "")
+                        if (instructions[0]["opcode"] != null && instructions[0]["operand"] != "")
                         {
                             var operand = instructions[0].Last.Last;
                             if (operand.Type == JTokenType.Integer)
