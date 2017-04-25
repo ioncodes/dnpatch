@@ -128,8 +128,8 @@ namespace dnpatch.script
                         {
                             var instruction = instructions[i];
                             if (instruction["opcode"] != null && instruction["operand"] != null)
-                                target.Instructions[i] =
-                                    Instruction.Create((OpCode)GetInstructionField(instruction.First.ToString()).GetValue(this),
+                                target.Instruction =
+                                    Instruction.Create((OpCode)GetInstructionField(instruction.First.First.ToString()).GetValue(this),
                                         instruction.Last.Last.Value<dynamic>());
                             else
                                 target.Instructions[i] =
