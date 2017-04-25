@@ -867,9 +867,9 @@ namespace dnpatch
             }
             else if (target.Indices != null && target.Instructions != null)
             {
-                foreach (var index in target.Indices)
-                {
-                    instructions[index] = target.Instructions[index];
+                for(int i = 0;i<target.Indices.Length;i++) {
+                    var index = target.Indices[i];
+                    instructions[index] = target.Instructions[i];
                 }
             }
             else
