@@ -127,7 +127,7 @@ namespace dnpatch.script
                         {
                             if (instruction.First != null && instruction.First.Value<string>() != "")
                                 target.Instruction =
-                                    Instruction.Create((OpCode)GetInstructionField(instruction.First.ToString()).GetValue(this),
+                                    Instruction.Create((OpCode)GetInstructionField(instruction.First.First.ToString()).GetValue(this),
                                         instruction.Last.Last.Value<dynamic>());
                             else
                                 target.Instruction =
