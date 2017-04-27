@@ -1085,5 +1085,70 @@ namespace dnpatch
                 body.Instructions.Add(il);
             }
         }
+
+        public void AddCustomAttribute(Target target, CustomAttribute attribute)
+        {
+            TypeDef type = FindType(target.Namespace + "." + target.Class, target.NestedClasses);
+            if (target.Method != null)
+            {
+                MethodDef method = FindMethod(type, target.Method, target.Parameters, target.ReturnType);
+                method.CustomAttributes.Add(attribute);
+            }
+            else
+            {
+                type.CustomAttributes.Add(attribute);
+            }
+        }
+        public void RemoveCustomAttribute(Target target, CustomAttribute attribute)
+        {
+            TypeDef type = FindType(target.Namespace + "." + target.Class, target.NestedClasses);
+            if (target.Method != null)
+            {
+                MethodDef method = FindMethod(type, target.Method, target.Parameters, target.ReturnType);
+                method.CustomAttributes.Remove(attribute);
+            }
+            else
+            {
+                type.CustomAttributes.Remove(attribute);
+            }
+        }
+
+        public void RemoveCustomAttribute(Target target, int attributeIndex)
+        {
+            TypeDef type = FindType(target.Namespace + "." + target.Class, target.NestedClasses);
+            if (target.Method != null)
+            {
+                MethodDef method = FindMethod(type, target.Method, target.Parameters, target.ReturnType);
+                method.CustomAttributes.RemoveAt(attributeIndex);
+            }
+            else
+            {
+                type.CustomAttributes.RemoveAt(attributeIndex);
+            }
+        }
+
+        public void ClearCustomAttributes(Target target)
+        {
+            TypeDef type = FindType(target.Namespace + "." + target.Class, target.NestedClasses);
+            if (target.Method != null)
+            {
+                MethodDef method = FindMethod(type, target.Method, target.Parameters, target.ReturnType);
+                method.CustomAttributes.Clear();
+            }
+            else
+            {
+                type.CustomAttributes.Clear();
+            }
+        }
+
+        public Target GetEntryPoint()
+        {
+            return new Target()
+            {
+                Namespace = _module.EntryPoint.DeclaringType.Namespace,
+                Class = _module.EntryPoint.DeclaringType.Name,
+                Method = _module.EntryPoint.Name
+            };
+        }
     }
 }
