@@ -214,6 +214,11 @@ namespace dnpatch
             return _patcher.GetOperand(target);
         }
 
+        public int GetLdcI4Operand(Target target)
+        {
+            return _patcher.GetLdcI4Operand(target);
+        }
+
         public MemberRef BuildMemberRef(string ns, string cs, string name, MemberRefType type)
         {
             return _patcher.BuildMemberRef(ns, cs, name, type);
