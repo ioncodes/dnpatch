@@ -1003,6 +1003,13 @@ namespace dnpatch
             return method.Body.Instructions[target.Index].Operand.ToString();
         }
 
+        public int GetLdcI4Operand(Target target)
+        {
+            TypeDef type = FindType(target.Namespace + "." + target.Class, target.NestedClasses);
+            MethodDef method = FindMethod(type, target.Method, target.Parameters, target.ReturnType);
+            return method.Body.Instructions[target.Index].GetLdcI4Value();
+        }
+
         public  int FindInstruction(Target target, Instruction instruction, int occurence)
         {
             occurence--; // Fix the occurence, e.g. second occurence must be 1 but hoomans like to write like they speak so why don't assist them?
