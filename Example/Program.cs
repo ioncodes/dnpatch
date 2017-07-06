@@ -22,10 +22,6 @@ namespace Example
                 Instruction.Create(OpCodes.Call, p.BuildCall(typeof(Console), "WriteLine", typeof(void), new[] { typeof(string) })), // Console.WriteLine call
                 Instruction.Create(OpCodes.Ret) // Always return smth
             };
-            foreach (var memberRef in p.GetModule().GetMemberRefs())
-            {
-                Console.WriteLine(memberRef.Name);
-            }
             Target target = new Target()
             {
                 Namespace = "Test",
