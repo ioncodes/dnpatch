@@ -8,14 +8,14 @@
 [![Join the chat at https://gitter.im/dnpatch/Lobby](https://badges.gitter.im/dnpatch/Lobby.svg)](https://gitter.im/dnpatch/Lobby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
 ## What is dnpatch?
-dnpatch is the ultimate library for all your .NET patching needs. It offers automated assembly patching, signature scanning and last but but not least bypassing of obfuscators by it's ability to find methods in renamed/obfuscated types. Since the stars on GitHub exploded in a few days, dnpatch has been extended by a couple of projects. The most important one is dnpatch.deobfuscation which integrates de4dot directly into dnpatch. Also there is dnpatch.script, which gives you the ability to write patchers with pure JSON!
-The library itself, uses dnlib (see next part).
+dnpatch is the ultimate library for all your .NET patching needs. It offers automated assembly patching, signature scanning and last but but not least bypassing of obfuscators by its ability to find methods in renamed/obfuscated types. Since the stars on GitHub exploded in a few days, dnpatch has been extended by a couple of projects. The most important one is dnpatch.deobfuscation which integrates de4dot directly into dnpatch. Also there is dnpatch.script, which gives you the ability to write patchers with pure JSON!
+The library itself uses dnlib (see next part).
 
 ## Notes
-Since dnpatch uses dnlib, it is highly recommended to use dnSpy to analyze your assemblies first, so it is guaranteed that you will use the correct names, offsets, etc, because it does use dnlib aswell.
+Since dnpatch uses dnlib, it is highly recommended to use dnSpy to analyze your assemblies first, to ensure that you use the correct names, offsets, etc, because it uses dnlib aswell.
 
 ## Recommendations
-It is highly recommended to calculate the position of instructions instead of defining indexes, to ensure that the patcher will still work after assembly updates.
+It is highly recommended that you calculate the instruction's index instead of defining it, to improve the likelihood of compatibility with future updates.
 
 ## Patching
 The constructor takes the filename of the assembly.
@@ -28,7 +28,7 @@ Patcher patcher = new Patcher("Test.exe", true);
 ```
 
 ### Targeting Methods
-All methods take an object called Target as argument. The object is defined as follows:
+All methods take an object called Target as an argument. The object is defined as follows:
 ```cs
 public string Namespace { get; set; } // needed
 public string Class { get; set; } // needed
@@ -85,7 +85,7 @@ var target = new Target
 If you want to patch multiple methods create a Target[] and pass it to the functions, it is accepted by the most of them.
 
 ### Creating Instructions
-Reference dnlib and create an Instruction[] or Instruction with your Instruction(s) and assign Indexes (int[]) or Index with the indexes where the Instructions are. You can find them by reverse engineering your assembly via dnSpy or some other decompiler.
+Reference dnlib and create an Instruction[] or Instruction with your Instruction(s), then assign assign indexes where the Instructions are.You can find them by reverse engineering your assembly via dnSpy or any other decompiler.
 
 Small Example:
 ```cs
@@ -137,7 +137,7 @@ patcher.Patch(Target[]);
 ```
 
 ### Finding an instruction
-In some cases it might be useful to have find an instruction within a method, for example if the method got updated.
+In some cases, it might be useful to find an instruction within a method, for example if the method was updated.
 ```cs
 Instruction opCode = Instruction.Create(OpCodes.Ldstr, "TheTrain");
 Instruction toFind = Instruction.Create(OpCodes.Ldstr, "TheWord");
@@ -152,7 +152,7 @@ target.Index = p.FindInstruction(target, toFind);
 // now you have the full Target object
 ```
 
-Let's say there are multiple identical instructions. What now, baoss? Well, it's simple. There's an overload that takes and int which is the occurence of the instruction which you'd like to find.
+Let's say there are multiple identical instructions. What now, baoss? Well, it's simple. There's an overload that takes an int which is the occurence of the instruction which you'd like to find.
 ```cs
 Instruction opCode = Instruction.Create(OpCodes.Ldstr, "TheTrain");
 Instruction toFind = Instruction.Create(OpCodes.Ldstr, "TheWord");
@@ -294,7 +294,7 @@ p.FindInstructionsByOpcode(OpCode[]);
 Both ways return an Target[] which contains all targets pointing to the findings.
 
 #### Find instructions in methods or classes
-If you want to find the instructions and you know the class and optionally the method you can let this method return a Target[] with the pathes and indexes.
+If you want to find the instructions and you know the class (and optionally the method), you can let this method return a Target[] with the pathes and indexes.
 ```cs
 p.FindInstructionsByOperand(Target,int[],bool);
 // int[]: the operands
@@ -305,7 +305,7 @@ p.FindInstructionsByOpcode(Target,int[],bool);
 ```
 
 ### Patch properties
-Now you can rewrite a propertie's getter and setter like this:
+Now you can rewrite a property's getter and setter like this:
 ```cs
 target = new Target()
 {
@@ -374,7 +374,7 @@ patcher.InjectMethod(target);
 For now refer to this page: https://github.com/0xd4d/dnlib/blob/master/Examples/Example2.cs
 
 ### Saving the patched assembly
-If you want to safe the assembly under a different name use this:
+If you want to save the assembly under a different name use this:
 ```cs
 patcher.Save(String); // filename here
 ```
