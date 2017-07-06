@@ -113,9 +113,9 @@ To clear the whole methodbody and write your instructions, make sure that you do
 Here is an example:
 ```cs
 Instruction[] opCodes = {
-    Instruction.Create(OpCodes.Ldstr, "Hello Sir"), // String to print
-    Instruction.Create(OpCodes.Call, p.BuildMemberRef("System", "Console", "WriteLine")), // Console.WriteLine call -> BUILDMEMBERREF IS ONLY FOR CONSOLE.WRITELINE
-    Instruction.Create(OpCodes.Ret) // Alaway return smth
+    Instruction.Create(OpCodes.Ldstr, "Hello Sir"),
+    Instruction.Create(OpCodes.Call, p.BuildCall(typeof(Console), "WriteLine", typeof(void), new[] { typeof(string) })),
+    Instruction.Create(OpCodes.Ret)
 };
 Target target = new Target()
 {
@@ -326,27 +326,33 @@ PropertyMethod can be 'PropertyMethod.Get' or 'PropertyMethod.Set'.
 Instructions are the new Instructions for the getter or setter.
 
 ### Building calls
-To build calls like "Console.WriteLine()" you can use this method:
+To build calls like "Console.WriteLine(string)" you can use this method:
 ```cs
-p.BuildMemberRef(string, string, string, Patcher.MemberRefType);
+p.BuildCall(typeof(Console), "WriteLine", typeof(void), new[] { typeof(string) })
 /* 
- * string 1 -> namespace, e.g. "System"
- * string 2 -> class, e.g. "Console"
- * string 3 -> method, e.g. "WriteLine"
- * MemberRefType -> the reference type, e.g. Static
+ * Type -> type, a Type instance
+ * string -> method, the name of the method
+ * Type -> returnType, a Type instance of the return value
+ * Type[] -> parameters, an array with the parameter's Types
  */
-```
-MemberRefType is defined as follows:
-```cs
-public enum MemberRefType
-{
-    Static,
-    Instance
-}
 ```
 Here is an IL example for Console.WriteLine:
 ```cs
-Instruction.Create(OpCodes.Call, p.BuildMemberRef("System", "Console", "WriteLine", Patcher.MemberRefType.Static));
+Patcher p = new Patcher("Test.exe");
+Instruction[] opcodesConsoleWriteLine = {
+    Instruction.Create(OpCodes.Ldstr, "Hello Sir"), // String to print
+    Instruction.Create(OpCodes.Call, p.BuildCall(typeof(Console), "WriteLine", typeof(void), new[] { typeof(string) })), // Console.WriteLine call
+    Instruction.Create(OpCodes.Ret) // Always return smth
+};
+Target target = new Target()
+{
+    Namespace = "Test",
+    Class = "Program",
+    Method = "Print",
+    Instructions = opcodesConsoleWriteLine
+};
+p.Patch(target);
+p.Save("Test1.exe");
 ```
 
 ### Injecting methods (Untested)
