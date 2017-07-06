@@ -14,12 +14,6 @@ namespace dnpatch
     {
         private readonly PatchHelper _patcher = null;
 
-        public enum MemberRefType
-        {
-            Static,
-            Instance
-        }
-
         public Patcher(string file)
         {
             _patcher = new PatchHelper(file);
