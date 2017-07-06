@@ -426,3 +426,4 @@ I'd like to thank these people:
 * [0xd4d](https://github.com/0xd4d) for creating [de4dot](https://github.com/0xd4d/de4dot)
 * [Rottweiler](https://github.com/Rottweiler) for the PRs and help!
 * [0megaD](https://github.com/0megaD) for the fixes which my eyes missed and for using dnpatch in his projects!
+* [DivideREiS](https://github.com/dividereis) for fixing my typos and getting my lazy ass back to work on the BuildMemberRef/BuildCall method!
