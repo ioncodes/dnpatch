@@ -6,6 +6,7 @@ using System.Runtime.InteropServices;
 using dnlib.DotNet;
 using dnlib.DotNet.Emit;
 using dnlib.DotNet.Writer;
+using CallingConvention = dnlib.DotNet.CallingConvention;
 
 namespace dnpatch
 {
@@ -42,6 +43,11 @@ namespace dnpatch
         public Patcher(Stream stream, bool keepOldMaxStack)
         {
             _patcher = new PatchHelper(stream, keepOldMaxStack);
+        }
+
+        public ModuleDef GetModule()
+        {
+            return _patcher.Module;
         }
 
         public void Patch(Target target)
@@ -219,9 +225,9 @@ namespace dnpatch
             return _patcher.GetLdcI4Operand(target);
         }
 
-        public MemberRef BuildMemberRef(string ns, string cs, string name, MemberRefType type)
+        public IMethod BuildCall(Type type, string method, Type returnType, Type[] parameters)
         {
-            return _patcher.BuildMemberRef(ns, cs, name, type);
+            return _patcher.BuildCall(type, method, returnType, parameters);
         }
 
         public void RewriteProperty(Target target)

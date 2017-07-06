@@ -19,9 +19,13 @@ namespace Example
             Patcher p = new Patcher("Test.exe");
             Instruction[] opcodesConsoleWriteLine = {
                 Instruction.Create(OpCodes.Ldstr, "Hello Sir"), // String to print
-                Instruction.Create(OpCodes.Call, p.BuildMemberRef("System", "Console", "WriteLine", Patcher.MemberRefType.Static)), // Console.WriteLine call
-                Instruction.Create(OpCodes.Ret) // Alaway return smth
+                Instruction.Create(OpCodes.Call, p.BuildCall(typeof(Console), "WriteLine", typeof(void), new[] { typeof(string) })), // Console.WriteLine call
+                Instruction.Create(OpCodes.Ret) // Always return smth
             };
+            foreach (var memberRef in p.GetModule().GetMemberRefs())
+            {
+                Console.WriteLine(memberRef.Name);
+            }
             Target target = new Target()
             {
                 Namespace = "Test",
@@ -313,7 +317,7 @@ namespace Example
                 obfTarget.Instructions = new Instruction[]
                 {
                     Instruction.Create(OpCodes.Ldstr, "Obfuscators cant beat my library :P"),
-                    Instruction.Create(OpCodes.Call, op.BuildMemberRef("System", "Console", "WriteLine", Patcher.MemberRefType.Static)),
+                    Instruction.Create(OpCodes.Call,  op.BuildCall(typeof(Console), "WriteLine", typeof(void), new[]{typeof(string)})),
                     Instruction.Create(OpCodes.Ret)  
                 };
                 obfTarget.Indices = null; // Replace whole body

@@ -14,38 +14,38 @@ namespace dnpatch
 {
     internal class PatchHelper
     {
-        private readonly ModuleDef _module;
+        public readonly ModuleDef Module;
         private readonly string _file;
         private readonly bool _keepOldMaxStack = false;
 
         public PatchHelper(string file)
         {
             _file = file;
-            _module = ModuleDefMD.Load(file);
+            Module = ModuleDefMD.Load(file);
         }
 
         public PatchHelper(string file, bool keepOldMaxStack)
         {
             _file = file;
-            _module = ModuleDefMD.Load(file);
+            Module = ModuleDefMD.Load(file);
             _keepOldMaxStack = keepOldMaxStack;
         }
 
         public PatchHelper(ModuleDefMD module, bool keepOldMaxStack)
         {
-            _module = module;
+            Module = module;
             _keepOldMaxStack = keepOldMaxStack;
         }
 
         public PatchHelper(ModuleDef module, bool keepOldMaxStack)
         {
-            _module = module;
+            Module = module;
             _keepOldMaxStack = keepOldMaxStack;
         }
 
         public PatchHelper(Stream stream, bool keepOldMaxStack)
         {
-            _module = ModuleDefMD.Load(stream);
+            Module = ModuleDefMD.Load(stream);
             _keepOldMaxStack = keepOldMaxStack;
         }
 
@@ -124,9 +124,9 @@ namespace dnpatch
         {
             if (classPath.First() == '.')
                 classPath = classPath.Remove(0, 1);
-            foreach (var module in _module.Assembly.Modules)
+            foreach (var module in Module.Assembly.Modules)
             {
-                foreach (var type in _module.Types)
+                foreach (var type in Module.Types)
                 {
                     if (type.FullName == classPath)
                     {
@@ -207,12 +207,12 @@ namespace dnpatch
         public  void Save(string name)
         {
             if (_keepOldMaxStack)
-                _module.Write(name, new ModuleWriterOptions(_module)
+                Module.Write(name, new ModuleWriterOptions(Module)
                 {
                     MetaDataOptions = {Flags = MetaDataFlags.KeepOldMaxStack}
                 });
             else
-                _module.Write(name);
+                Module.Write(name);
         }
 
         public  void Save(bool backup)
@@ -222,13 +222,13 @@ namespace dnpatch
                 throw new Exception("Assembly/module was loaded in memory, and no file was specified. Use Save(string) method to save the patched assembly.");
             }
             if (_keepOldMaxStack)
-                _module.Write(_file + ".tmp", new ModuleWriterOptions(_module)
+                Module.Write(_file + ".tmp", new ModuleWriterOptions(Module)
                 {
                     MetaDataOptions = { Flags = MetaDataFlags.KeepOldMaxStack }
                 });
             else
-                _module.Write(_file + ".tmp");
-            _module.Dispose();
+                Module.Write(_file + ".tmp");
+            Module.Dispose();
             if (backup)
             {
                 if (File.Exists(_file + ".bak"))
@@ -248,7 +248,7 @@ namespace dnpatch
         {
             List<ObfuscatedTarget> obfuscatedTargets = new List<ObfuscatedTarget>();
             List<string> operands = operand.ToList();
-            foreach (var type in _module.Types)
+            foreach (var type in Module.Types)
             {
                 if (!type.HasNestedTypes)
                 {
@@ -358,7 +358,7 @@ namespace dnpatch
         {
             List<ObfuscatedTarget> obfuscatedTargets = new List<ObfuscatedTarget>();
             List<int> operands = operand.ToList();
-            foreach (var type in _module.Types)
+            foreach (var type in Module.Types)
             {
                 if (!type.HasNestedTypes)
                 {
@@ -468,7 +468,7 @@ namespace dnpatch
         {
             List<ObfuscatedTarget> obfuscatedTargets = new List<ObfuscatedTarget>();
             List<string> operands = opcode.Select(o => o.Name).ToList();
-            foreach (var type in _module.Types)
+            foreach (var type in Module.Types)
             {
                 if (!type.HasNestedTypes)
                 {
@@ -673,7 +673,7 @@ namespace dnpatch
         {
             HashSet<MethodDef> found = new HashSet<MethodDef>();
 
-            foreach (TypeDef td in _module.Types)
+            foreach (TypeDef td in Module.Types)
             {
                 foreach (MethodDef md in td.Methods)
                 {
@@ -830,21 +830,23 @@ namespace dnpatch
             return targets.ToArray();
         }
 
-        public MemberRef BuildMemberRef(string ns, string cs, string name, Patcher.MemberRefType type)
+        private bool CheckParametersByType(ParameterInfo[] parameters, Type[] types)
         {
-            TypeRef consoleRef = new TypeRefUser(_module, ns, cs, _module.CorLibTypes.AssemblyRef);
-            if (type == Patcher.MemberRefType.Static)
+            return !parameters.Where((t, i) => types[i] != t.ParameterType).Any();
+        }
+
+        public IMethod BuildCall(Type type, string method, Type returnType, Type[] parameters)
+        {
+            Importer importer = new Importer(Module);
+            foreach (var m in type.GetMethods())
             {
-                return new MemberRefUser(_module, name,
-                    MethodSig.CreateStatic(_module.CorLibTypes.Void, _module.CorLibTypes.String),
-                    consoleRef);
+                if (m.Name == method && m.ReturnType == returnType && m.GetParameters().Length == parameters.Length && CheckParametersByType(m.GetParameters(), parameters))
+                {
+                    IMethod meth = importer.Import(m);
+                    return meth;
+                }
             }
-            else
-            {
-                return new MemberRefUser(_module, name,
-                   MethodSig.CreateInstance(_module.CorLibTypes.Void, _module.CorLibTypes.String),
-                   consoleRef);
-            }
+            return null;
         }
 
         public  void ReplaceInstruction(Target target)
@@ -1152,9 +1154,9 @@ namespace dnpatch
         {
             return new Target()
             {
-                Namespace = _module.EntryPoint.DeclaringType.Namespace,
-                Class = _module.EntryPoint.DeclaringType.Name,
-                Method = _module.EntryPoint.Name
+                Namespace = Module.EntryPoint.DeclaringType.Namespace,
+                Class = Module.EntryPoint.DeclaringType.Name,
+                Method = Module.EntryPoint.Name
             };
         }
     }
