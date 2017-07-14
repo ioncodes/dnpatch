@@ -8,7 +8,7 @@ namespace dnpatch
 
         public override string ToString()
         {
-            return string.Format("[AssemblyInfo: OverwriteOriginal={0}, Name={1}]", OverwriteOriginal, Name);
+            return $"[AssemblyInfo: OverwriteOriginal={OverwriteOriginal}, Name={Name}]";
         }
     }
 }
