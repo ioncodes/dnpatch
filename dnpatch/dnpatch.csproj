@@ -52,6 +52,7 @@
     <Compile Include="AssemblyInfo.cs" />
     <Compile Include="Assembly.cs" />
     <Compile Include="AssemblyData.cs" />
+    <Compile Include="AssemblyModel.cs" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

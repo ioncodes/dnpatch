@@ -7,6 +7,7 @@ namespace dnpatch
     {
         public AssemblyInfo AssemblyInfo;
         public AssemblyData AssemblyData;
+        public AssemblyModel AssemblyModel;
 
         internal Assembly(AssemblyInfo assemblyInfo)
         {
@@ -15,6 +16,7 @@ namespace dnpatch
             {
                 Module = ModuleDefMD.Load(AssemblyInfo.Name)
             };
+            AssemblyModel = new AssemblyModel();
         }
     }
 }
