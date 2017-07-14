@@ -22,6 +22,16 @@ namespace dnpatch
 
         public Assembly LoadAssembly(string name)
         {
+            Assembly value;
+            if (Assemblies.TryGetValue(name, out value))
+            {
+                return value;
+            }
+            else
+            {
+                Console.WriteLine($"Error: {name} is not initialized");
+            }
+            
             return Assemblies[name];
         }
     }
