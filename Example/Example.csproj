@@ -33,10 +33,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="dnlib, Version=1.6.0.0, Culture=neutral, PublicKeyToken=50e96378b6e77999, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\Libraries\dnlib.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -55,7 +51,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\dnpatch\dnpatch.csproj">
-      <Project>{14ca7a28-7fa8-40a0-abc6-81e9f36318de}</Project>
+      <Project>{14CA7A28-7FA8-40A0-ABC6-81E9F36318DE}</Project>
       <Name>dnpatch</Name>
     </ProjectReference>
   </ItemGroup>

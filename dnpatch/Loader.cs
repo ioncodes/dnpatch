@@ -2,11 +2,11 @@
 
 namespace dnpatch
 {
-    public class Patcher
+    public class Loader
     {
         public Dictionary<string, Assembly> Assemblies { get; internal set; } // Set of all loaded assemblies for patching
 
-        public Patcher() 
+        public Loader() 
         {
             Assemblies = new Dictionary<string, Assembly>();    
         }
