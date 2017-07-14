@@ -244,3 +244,5 @@ ModelManifest.xml
 /.idea/.idea.dnpatch
 /.idea/.idea.dnpatch/.idea
 /.idea/.idea.dnpatch/.idea/contentModel.xml
+
+\.DS_Store
