@@ -29,10 +29,8 @@ namespace dnpatch
             }
             else
             {
-                Console.WriteLine($"Error: {name} is not initialized");
+                return null;
             }
-            
-            return Assemblies[name];
         }
     }
 }
