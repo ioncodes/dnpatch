@@ -18,5 +18,10 @@ namespace dnpatch
             };
             AssemblyModel = new AssemblyModel();
         }
+
+        public void SetNamespace(string @namespace)
+        {
+            AssemblyModel.Namespace = @namespace; 
+        }
     }
 }
