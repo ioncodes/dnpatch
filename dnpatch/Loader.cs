@@ -23,15 +23,7 @@ namespace dnpatch
 
         public Assembly LoadAssembly(string name)
         {
-            Assembly value;
-            if (Assemblies.TryGetValue(name, out value))
-            {
-                return value;
-            }
-            else
-            {
-                return null;
-            }
+            return Assemblies.TryGetValue(name, out Assembly value) ? value : null;
         }
     }
 }
