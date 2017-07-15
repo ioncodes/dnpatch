@@ -9,6 +9,8 @@ namespace dnpatch
         public string Namespace { get; internal set; }
         public TypeDef Type { get; internal set; }
         public MethodDef Method { get; internal set; }
+        public FieldDef Field { get; internal set; }
         public PropertyDef Property { get; internal set; }
+        public EventDef Event { get; internal set; }
     }
 }
