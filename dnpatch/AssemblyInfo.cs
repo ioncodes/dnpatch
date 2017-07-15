@@ -11,7 +11,7 @@ namespace dnpatch
 
         public override string ToString()
         {
-            return $"[AssemblyInfo: OverwriteOriginal={OverwriteOriginal}, Name={Name}]";
+            return $"[AssemblyInfo: OverwriteOriginal={OverwriteOriginal}, CreateBackup={CreateBackup}, Name={Name}, OutputName={OutputName}, InternalName={InternalName}]";
         }
     }
 }
