@@ -5,6 +5,7 @@ namespace dnpatch
     {
         public bool OverwriteOriginal { get; internal set; }
         public string Name { get; internal set; }
+        public string InternalName { get; internal set; }
 
         public override string ToString()
         {

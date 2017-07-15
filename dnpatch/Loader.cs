@@ -16,7 +16,8 @@ namespace dnpatch
             Assemblies.Add(name, new Assembly(new AssemblyInfo()
             {
                 Name = fileName,
-                OverwriteOriginal = overwriteOriginal
+                OverwriteOriginal = overwriteOriginal,
+                InternalName = name
             }));
         }
 
