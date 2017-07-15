@@ -29,9 +29,9 @@ namespace Example
 
             security.Overwrite(instructions: new Instruction[] // return true
             {
-				Instruction.Create(OpCodes.Ldc_I4_1),
-				Instruction.Create(OpCodes.Ret)
-			});
+                Instruction.Create(OpCodes.Ldc_I4_1),
+                Instruction.Create(OpCodes.Ret)
+            });
 
             loader.Save(); // Write changes to disk
 
