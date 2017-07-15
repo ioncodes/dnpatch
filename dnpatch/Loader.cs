@@ -29,7 +29,7 @@ namespace dnpatch
             return Assemblies.TryGetValue(name, out Assembly value) ? value : null;
         }
 
-        public void Write()
+        public void Save()
         {
             foreach(var assembly in Assemblies)
             {

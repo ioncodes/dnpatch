@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using dnlib.DotNet.Emit;
 using dnpatch;
 
 namespace Example
@@ -29,6 +26,14 @@ namespace Example
             ui.SetNamespace("UI");
             ui.SetType("UI");
             ui.SetMethod("GetCredits");
+
+            security.Overwrite(instructions: new Instruction[] // return true
+            {
+				Instruction.Create(OpCodes.Ldc_I4_1),
+				Instruction.Create(OpCodes.Ret)
+			});
+
+            loader.Save(); // Write changes to disk
 
             Console.Read();
         }
