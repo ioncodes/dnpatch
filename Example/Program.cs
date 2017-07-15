@@ -13,8 +13,8 @@ namespace Example
         {
             Loader loader = new Loader();
 
-            loader.Initialize("crack", "Security.dll", true, true); // crack the license mechanism
-            loader.Initialize("credits", "UI.dll", true, true); // add credits to the UI window
+            loader.Initialize("crack", "Security.dll", "Security.dll", true, true); // crack the license mechanism
+            loader.Initialize("credits", "UI.dll", "UI.dll", true, true); // add credits to the UI window
 
             Assembly security = loader.LoadAssembly("crack");
             Assembly ui = loader.LoadAssembly("credits");
