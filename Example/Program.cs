@@ -12,11 +12,15 @@ namespace Example
         static void Main(string[] args)
         {
             Loader loader = new Loader();
-            loader.Initialize("crack", "license.dll", true); // crack the license mechanism
-            loader.Initialize("credits", "ui.dll", true); // add credits to the UI window
+
+            loader.Initialize("crack", "Security.dll", true); // crack the license mechanism
+            loader.Initialize("credits", "UI.dll", true); // add credits to the UI window
+
             Assembly license = loader.LoadAssembly("crack");
             Assembly ui = loader.LoadAssembly("credits");
+
             Console.WriteLine(license.AssemblyInfo.ToString());
+            Console.WriteLine(ui.AssemblyInfo.ToString());
 
             Console.Read();
         }
