@@ -19,13 +19,13 @@ namespace Example
             Console.WriteLine(security.AssemblyInfo.ToString());
             Console.WriteLine(ui.AssemblyInfo.ToString());
 
-            security.SetNamespace("Security");
-            security.SetType("Security");
-            security.SetMethod("IsLicensed");
+            security.Model.SetNamespace("Security");
+            security.Model.SetType("Security");
+            security.Model.SetMethod("IsLicensed");
 
-            ui.SetNamespace("UI");
-            ui.SetType("UI");
-            ui.SetMethod("GetCredits");
+            ui.Model.SetNamespace("UI");
+            ui.Model.SetType("UI");
+            ui.Model.SetMethod("GetCredits");
 
             security.IL.Overwrite(instructions: new Instruction[] // return true
             {

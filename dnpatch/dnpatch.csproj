@@ -57,6 +57,9 @@
     <Compile Include="Processors\ILProcessor.cs" />
     <Compile Include="Types\Assembly.cs" />
     <Compile Include="Context\ILContext.cs" />
+    <Compile Include="Model\Model.cs" />
+    <Compile Include="Context\ModelContext.cs" />
+    <Compile Include="Provider\ContextProvider.cs" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
@@ -65,6 +68,8 @@
     <Folder Include="Types\" />
     <Folder Include="Processors\" />
     <Folder Include="Context\" />
+    <Folder Include="Model\" />
+    <Folder Include="Provider\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
