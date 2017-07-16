@@ -6,6 +6,7 @@ namespace Example
 {
     class Program
     {
+        // Set model type & method by name (string)
         static void Main(string[] args)
         {
             Loader loader = new Loader();

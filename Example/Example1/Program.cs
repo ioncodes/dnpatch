@@ -6,6 +6,7 @@ namespace Example1
 {
     class MainClass
     {
+        // Set model by Type & MethodInfo reference
         public static void Main(string[] args)
         {
 			Loader loader = new Loader();
