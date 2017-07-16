@@ -61,7 +61,7 @@ namespace dnpatch
 			VerifyModel();
 		}
 
-        public void SetMethod(MethodBase method)
+        public void SetMethod(MethodInfo method)
 		{
             _assembly.AssemblyModel.Method = FindMethod(method);
 			VerifyModel();
@@ -129,7 +129,7 @@ namespace dnpatch
             return null;
         }
 
-        private MethodDef FindMethod(MethodBase m)
+        private MethodDef FindMethod(MethodInfo m)
         {
             foreach (var method in _assembly.AssemblyModel.Type.Methods)
 			{
