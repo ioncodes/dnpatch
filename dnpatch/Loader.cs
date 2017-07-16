@@ -34,20 +34,30 @@ namespace dnpatch
             foreach(var assembly in Assemblies)
             {
                 var asm = assembly.Value; // no not ASMR, ffs...
-                if(asm.AssemblyInfo.CreateBackup)
-                {
-                    File.Copy(asm.AssemblyInfo.Name, $"{asm.AssemblyInfo.Name}.bak", true);
-                }
-                if (asm.AssemblyInfo.OverwriteOriginal)
-                {
-                    asm.AssemblyData.Module.Write($"{asm.AssemblyInfo.OutputName}.tmp");
-                    asm.AssemblyData.Module.Dispose();
-                    File.Delete(asm.AssemblyInfo.OutputName);
-                    File.Move($"{asm.AssemblyInfo.OutputName}.tmp", asm.AssemblyInfo.OutputName);
-                    continue;
-                }
-                asm.AssemblyData.Module.Write(asm.AssemblyInfo.OutputName);
+                SaveAssembly(asm);
             }
+        }
+
+        public void Save(string name)
+        {
+            SaveAssembly(Assemblies[name]);
+        }
+
+        private void SaveAssembly(Assembly asm)
+        {
+			if (asm.AssemblyInfo.CreateBackup)
+			{
+				File.Copy(asm.AssemblyInfo.Name, $"{asm.AssemblyInfo.Name}.bak", true);
+			}
+			if (asm.AssemblyInfo.OverwriteOriginal)
+			{
+				asm.AssemblyData.Module.Write($"{asm.AssemblyInfo.OutputName}.tmp");
+				asm.AssemblyData.Module.Dispose();
+				File.Delete(asm.AssemblyInfo.OutputName);
+				File.Move($"{asm.AssemblyInfo.OutputName}.tmp", asm.AssemblyInfo.OutputName);
+                return;
+			}
+			asm.AssemblyData.Module.Write(asm.AssemblyInfo.OutputName);
         }
     }
 }
