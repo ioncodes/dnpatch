@@ -60,6 +60,8 @@
     <Compile Include="Model\Model.cs" />
     <Compile Include="Context\ModelContext.cs" />
     <Compile Include="Provider\ContextProvider.cs" />
+    <Compile Include="Context\InstructionContext.cs" />
+    <Compile Include="Processors\InstructionProcessor.cs" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>

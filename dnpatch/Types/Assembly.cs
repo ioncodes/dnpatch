@@ -11,6 +11,7 @@ namespace dnpatch
         public AssemblyData AssemblyData;
         public AssemblyModel AssemblyModel;
         public ILContext IL;
+        public InstructionContext Instructions;
         public ModelContext Model;
 
         internal Assembly(AssemblyInfo assemblyInfo)
@@ -20,7 +21,8 @@ namespace dnpatch
             AssemblyData = new AssemblyData() // Load assembly data
             {
                 Module = module,
-                Entrypoint = module.IsEntryPointValid ? module.EntryPoint : null
+                Entrypoint = module.IsEntryPointValid ? module.EntryPoint : null,
+                Importer = new Importer(module)
             };
             AssemblyModel = new AssemblyModel();
             ContextProvider.Provide(this);

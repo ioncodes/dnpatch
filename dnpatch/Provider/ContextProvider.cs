@@ -8,6 +8,7 @@ namespace dnpatch
         {
             assembly.IL = new ILContext(assembly);
             assembly.Model = new ModelContext(assembly);
+            assembly.Instructions = new InstructionContext(assembly);
         }
     }
 }
