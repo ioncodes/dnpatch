@@ -56,6 +56,7 @@
     <Compile Include="Types\InstructionSet.cs" />
     <Compile Include="Processors\ILProcessor.cs" />
     <Compile Include="Types\Assembly.cs" />
+    <Compile Include="Context\ILContext.cs" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
@@ -63,6 +64,7 @@
     <Folder Include="Enums\" />
     <Folder Include="Types\" />
     <Folder Include="Processors\" />
+    <Folder Include="Context\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

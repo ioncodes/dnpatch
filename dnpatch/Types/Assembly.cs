@@ -6,7 +6,7 @@ using dnlib.DotNet.Emit;
 
 namespace dnpatch
 {
-    public class Assembly
+    public partial class Assembly
     {
         public AssemblyInfo AssemblyInfo;
         public AssemblyData AssemblyData;
@@ -59,14 +59,6 @@ namespace dnpatch
         {
             AssemblyModel.Event = AssemblyModel.Type.FindEvent(eventName) ?? throw new Exception($"Event '{AssemblyModel.Type.FullName}.{eventName}' does not exist.");
             VerifyModel();
-        }
-
-        public class ILContext : ILProcessor
-        {
-            internal ILContext(Assembly assembly) : base(assembly)
-            {
-                _assembly = assembly; 
-            }
         }
 
         private void VerifyModel()
