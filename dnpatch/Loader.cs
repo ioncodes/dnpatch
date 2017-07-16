@@ -36,7 +36,7 @@ namespace dnpatch
                 var asm = assembly.Value; // no not ASMR, ffs...
                 if(asm.AssemblyInfo.CreateBackup)
                 {
-                    File.Copy(asm.AssemblyInfo.Name, $"{asm.AssemblyInfo.Name}.bak");
+                    File.Copy(asm.AssemblyInfo.Name, $"{asm.AssemblyInfo.Name}.bak", true);
                 }
                 if (asm.AssemblyInfo.OverwriteOriginal)
                 {

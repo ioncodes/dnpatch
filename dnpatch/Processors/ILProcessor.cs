@@ -4,58 +4,65 @@ namespace dnpatch
 {
     public class ILProcessor
     {
-        public void Clear(Assembly assembly)
+        protected Assembly _assembly;
+
+        internal ILProcessor(Assembly assembly)
+		{
+            _assembly = assembly;
+		}
+
+        public void Clear()
         {
-            if (assembly.AssemblyModel.Method != null)
+            if (_assembly.AssemblyModel.Method != null)
             {
-                assembly.AssemblyModel.Method.Body.Instructions.Clear();
+                _assembly.AssemblyModel.Method.Body.Instructions.Clear();
             }
             else
             {
-                if (assembly.AssemblyModel.PropertyMethod == PropertyMethod.Get)
+                if (_assembly.AssemblyModel.PropertyMethod == PropertyMethod.Get)
                 {
-                    assembly.AssemblyModel.Property.GetMethod.Body.Instructions.Clear();
+                    _assembly.AssemblyModel.Property.GetMethod.Body.Instructions.Clear();
                 }
                 else
                 {
-                    assembly.AssemblyModel.Property.SetMethod.Body.Instructions.Clear();
+                    _assembly.AssemblyModel.Property.SetMethod.Body.Instructions.Clear();
                 }
             }
         }
 
-        public void Append(Assembly assembly, InstructionSet instructionSet)
+        public void Append(InstructionSet instructionSet)
         {
             if(instructionSet.Indices != null)
             {
-                Append(assembly, instructionSet.Instructions, instructionSet.Indices);
+                Append(instructionSet.Instructions, instructionSet.Indices);
             }
             else
             {
-                Append(assembly, instructionSet.Instructions);
+                Append(instructionSet.Instructions);
             }
         }
 
 
-        public void Append(Assembly assembly, Instruction[] instructions, int[] indices)
+        public void Append(Instruction[] instructions, int[] indices)
         {
-            if (assembly.AssemblyModel.Method != null)
+            if (_assembly.AssemblyModel.Method != null)
             {
                 for (int i = 0; i < instructions.Length; i++)
                 {
                     var instruction = instructions[i];
                     var index = indices[i];
-                    assembly.AssemblyModel.Method.Body.Instructions.Insert(index, instruction);
+                    _assembly.AssemblyModel.Method.Body.Instructions.Insert(index, instruction);
                 }
             }
             else
             {
-                if (assembly.AssemblyModel.PropertyMethod == PropertyMethod.Get)
+                if (_assembly.AssemblyModel.PropertyMethod == PropertyMethod.Get)
                 {
                     for (int i = 0; i < instructions.Length; i++)
                     {
                         var instruction = instructions[i];
                         var index = indices[i];
-                        assembly.AssemblyModel.Property.GetMethod.Body.Instructions.Insert(index, instruction);
+                        _assembly.AssemblyModel.Property.GetMethod.Body.Instructions.Insert(index, instruction);
                     }
                 }
                 else
@@ -64,83 +71,83 @@ namespace dnpatch
                     {
                         var instruction = instructions[i];
                         var index = indices[i];
-                        assembly.AssemblyModel.Property.SetMethod.Body.Instructions.Insert(index, instruction);
+                        _assembly.AssemblyModel.Property.SetMethod.Body.Instructions.Insert(index, instruction);
                     }
                 }
             }
         }
 
-        public void Append(Assembly assembly, Instruction[] instructions)
+        public void Append(Instruction[] instructions)
         {
-			if (assembly.AssemblyModel.Method != null)
+			if (_assembly.AssemblyModel.Method != null)
 			{
                 foreach(var instruction in instructions)
                 {
-                    assembly.AssemblyModel.Method.Body.Instructions.Add(instruction);
+                    _assembly.AssemblyModel.Method.Body.Instructions.Add(instruction);
                 }
             }
 			else
 			{
-				if (assembly.AssemblyModel.PropertyMethod == PropertyMethod.Get)
+				if (_assembly.AssemblyModel.PropertyMethod == PropertyMethod.Get)
 				{
 					foreach (var instruction in instructions)
 					{
-                        assembly.AssemblyModel.Property.GetMethod.Body.Instructions.Add(instruction);
+                        _assembly.AssemblyModel.Property.GetMethod.Body.Instructions.Add(instruction);
 					}
 				}
 				else
 				{
 					foreach (var instruction in instructions)
 					{
-						assembly.AssemblyModel.Property.SetMethod.Body.Instructions.Add(instruction);
+						_assembly.AssemblyModel.Property.SetMethod.Body.Instructions.Add(instruction);
 					}
 				}
 			}
         }
 
-        public void Overwrite(Assembly assembly, Instruction[] instructions)
+        public void Overwrite(Instruction[] instructions)
         {
-            Clear(assembly);
-            Append(assembly, instructions);
+            Clear();
+            Append(instructions);
         }
 
-		public void Overwrite(Assembly assembly, Instruction[] instructions, int[] indices)
+		public void Overwrite(Instruction[] instructions, int[] indices)
 		{
             for (int i = 0; i < instructions.Length; i++)
 			{
 				var instruction = instructions[i];
                 var index = indices[i];
-				Write(assembly, instruction, index);
+				Write(instruction, index);
 			}
 		}
 
-        public void Overwrite(Assembly assembly, InstructionSet instructionSet)
+        public void Overwrite(InstructionSet instructionSet)
 		{
             if (instructionSet.Indices != null)
             {
-                Overwrite(assembly, instructionSet.Instructions, instructionSet.Indices);
+                Overwrite(instructionSet.Instructions, instructionSet.Indices);
             }
             else
             {
-                Append(assembly, instructionSet.Instructions);
+                Append(instructionSet.Instructions);
             }
 		}
 
-        public void Write(Assembly assembly, Instruction instruction, int index)
+        public void Write(Instruction instruction, int index)
         {
-			if (assembly.AssemblyModel.Method != null)
+			if (_assembly.AssemblyModel.Method != null)
 			{
-                assembly.AssemblyModel.Method.Body.Instructions[index] = instruction;
+                _assembly.AssemblyModel.Method.Body.Instructions[index] = instruction;
 			}
 			else
 			{
-				if (assembly.AssemblyModel.PropertyMethod == PropertyMethod.Get)
+				if (_assembly.AssemblyModel.PropertyMethod == PropertyMethod.Get)
 				{
-					assembly.AssemblyModel.Property.GetMethod.Body.Instructions[index] = instruction;
+					_assembly.AssemblyModel.Property.GetMethod.Body.Instructions[index] = instruction;
 				}
 				else
 				{
-					assembly.AssemblyModel.Property.SetMethod.Body.Instructions[index] = instruction;
+					_assembly.AssemblyModel.Property.SetMethod.Body.Instructions[index] = instruction;
 				}
 			}
         }

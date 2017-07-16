@@ -6,11 +6,12 @@ using dnlib.DotNet.Emit;
 
 namespace dnpatch
 {
-    public class Assembly : ILProcessor
+    public class Assembly
     {
         public AssemblyInfo AssemblyInfo;
         public AssemblyData AssemblyData;
         public AssemblyModel AssemblyModel;
+        public ILContext IL;
 
         internal Assembly(AssemblyInfo assemblyInfo)
         {
@@ -20,6 +21,7 @@ namespace dnpatch
                 Module = ModuleDefMD.Load(AssemblyInfo.Name)
             };
             AssemblyModel = new AssemblyModel();
+            IL = new ILContext(this);
         }
 
         public void SetNamespace(string @namespace)
@@ -59,40 +61,13 @@ namespace dnpatch
             VerifyModel();
         }
 
-        public void Clear()
+        public class ILContext : ILProcessor
         {
-            base.Clear(this);
+            internal ILContext(Assembly assembly) : base(assembly)
+            {
+                _assembly = assembly; 
+            }
         }
-
-        public void Append(InstructionSet instructionSet)
-        {
-            base.Append(this, instructionSet);
-        }
-
-        public void Append(Instruction[] instructions)
-        {
-            base.Append(this, instructions);
-        }
-
-		public void Append(Instruction[] instructions, int[] indices)
-		{
-            base.Append(this, instructions, indices);
-		}
-
-        public void Overwrite(InstructionSet instructionSet)
-        {
-            base.Overwrite(this, instructionSet);
-        }
-
-        public void Overwrite(Instruction[] instructions)
-		{
-			base.Overwrite(this, instructions);
-		}
-
-		public void Overwrite(Instruction[] instructions, int[] indices)
-		{
-			base.Overwrite(this, instructions, indices);
-		}
 
         private void VerifyModel()
         {

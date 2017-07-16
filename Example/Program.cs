@@ -27,11 +27,13 @@ namespace Example
             ui.SetType("UI");
             ui.SetMethod("GetCredits");
 
-            security.Overwrite(instructions: new Instruction[] // return true
+            security.IL.Overwrite(instructions: new Instruction[] // return true
             {
                 Instruction.Create(OpCodes.Ldc_I4_1),
                 Instruction.Create(OpCodes.Ret)
             });
+
+            ui.IL.Write(Instruction.Create(OpCodes.Ldstr, "Cracked By Evil-Corp"), 1);
 
             loader.Save(); // Write changes to disk
 
