@@ -16,9 +16,11 @@ namespace dnpatch
         internal Assembly(AssemblyInfo assemblyInfo)
         {
             AssemblyInfo = assemblyInfo;
+            var module = ModuleDefMD.Load(AssemblyInfo.Name);
             AssemblyData = new AssemblyData() // Load assembly data
             {
-                Module = ModuleDefMD.Load(AssemblyInfo.Name)
+                Module = module,
+                Entrypoint = module.IsEntryPointValid ? module.EntryPoint : null
             };
             AssemblyModel = new AssemblyModel();
             ContextProvider.Provide(this);

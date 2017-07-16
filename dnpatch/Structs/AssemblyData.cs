@@ -6,5 +6,6 @@ namespace dnpatch
     public struct AssemblyData
     {
         public ModuleDefMD Module { get; internal set; }
+        public MethodDef Entrypoint { get; internal set; }
     }
 }
