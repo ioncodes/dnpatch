@@ -13,13 +13,23 @@ namespace dnpatch.Processors
 			_assembly = assembly;
 		}
 
+        /// <summary>
+        /// Imports the method into the assembly and builds a call.
+        /// </summary>
+        /// <param name="method">The method.</param>
+        /// <returns>The call</returns>
         public IMethod BuildCall(MethodDef method)
 		{
 			IMethod meth = _assembly.AssemblyData.Importer.Import(method);
 			return meth;
 		}
 
-		public IMethod BuildCall(MethodInfo method)
+        /// <summary>
+        /// Imports the method into the assembly and builds a call.
+        /// </summary>
+        /// <param name="method">The method.</param>
+        /// <returns>The call</returns>
+        public IMethod BuildCall(MethodInfo method)
 		{
 			IMethod meth = _assembly.AssemblyData.Importer.Import(method);
 			return meth;

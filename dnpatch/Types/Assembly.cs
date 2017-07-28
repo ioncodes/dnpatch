@@ -5,13 +5,31 @@ using dnpatch.Structs;
 
 namespace dnpatch.Types
 {
-    public partial class Assembly
+    public class Assembly
     {
+        /// <summary>
+        /// The assembly information
+        /// </summary>
         public AssemblyInfo AssemblyInfo;
+        /// <summary>
+        /// The assembly data
+        /// </summary>
         public AssemblyData AssemblyData;
+        /// <summary>
+        /// The assembly model
+        /// </summary>
         public AssemblyModel AssemblyModel;
+        /// <summary>
+        /// IL processing accessor
+        /// </summary>
         public Context.Assembly.ILContext IL;
+        /// <summary>
+        /// Instruction processing accessor
+        /// </summary>
         public Context.Assembly.InstructionContext Instructions;
+        /// <summary>
+        /// Model accessor
+        /// </summary>
         public Context.Assembly.ModelContext Model;
 
         internal Assembly(AssemblyInfo assemblyInfo)

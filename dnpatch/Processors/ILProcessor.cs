@@ -19,6 +19,9 @@ namespace dnpatch.Processors
 
         #region Write
 
+        /// <summary>
+        /// Clears the method body
+        /// </summary>
         public void Clear()
         {
             if (_assembly.AssemblyModel.Method != null)
@@ -38,6 +41,10 @@ namespace dnpatch.Processors
             }
         }
 
+        /// <summary>
+        /// Appends the specified instruction set.
+        /// </summary>
+        /// <param name="instructionSet">The instruction set.</param>
         public void Append(InstructionSet instructionSet)
         {
             if(instructionSet.Indices != null)
@@ -50,7 +57,11 @@ namespace dnpatch.Processors
             }
         }
 
-
+        /// <summary>
+        /// Appends the specified instructions.
+        /// </summary>
+        /// <param name="instructions">The instructions.</param>
+        /// <param name="indices">The indices.</param>
         public void Append(Instruction[] instructions, int[] indices)
         {
             if (_assembly.AssemblyModel.Method != null)
@@ -85,6 +96,10 @@ namespace dnpatch.Processors
             }
         }
 
+        /// <summary>
+        /// Appends the specified instructions.
+        /// </summary>
+        /// <param name="instructions">The instructions.</param>
         public void Append(Instruction[] instructions)
         {
 			if (_assembly.AssemblyModel.Method != null)
@@ -113,13 +128,22 @@ namespace dnpatch.Processors
 			}
         }
 
+        /// <summary>
+        /// Overwrites the body with the specified instructions.
+        /// </summary>
+        /// <param name="instructions">The instructions.</param>
         public void Overwrite(Instruction[] instructions)
         {
             Clear();
             Append(instructions);
         }
 
-		public void Overwrite(Instruction[] instructions, int[] indices)
+        /// <summary>
+        /// Overwrites the body with the specified instructions.
+        /// </summary>
+        /// <param name="instructions">The instructions.</param>
+        /// <param name="indices">The indices.</param>
+        public void Overwrite(Instruction[] instructions, int[] indices)
 		{
             for (int i = 0; i < instructions.Length; i++)
 			{
@@ -129,6 +153,10 @@ namespace dnpatch.Processors
 			}
 		}
 
+        /// <summary>
+        /// Overwrites the body with the specified instructions.
+        /// </summary>
+        /// <param name="instructionSet">The instruction set.</param>
         public void Overwrite(InstructionSet instructionSet)
 		{
             if (instructionSet.Indices != null)
@@ -141,6 +169,11 @@ namespace dnpatch.Processors
             }
 		}
 
+        /// <summary>
+        /// Writes the specified instruction at the specified index.
+        /// </summary>
+        /// <param name="instruction">The instruction.</param>
+        /// <param name="index">The index.</param>
         public void Write(Instruction instruction, int index)
         {
 			if (_assembly.AssemblyModel.Method != null)
@@ -164,6 +197,12 @@ namespace dnpatch.Processors
 
         #region Read
 
+        /// <summary>
+        /// Finds the method.
+        /// </summary>
+        /// <param name="instructions">The instructions.</param>
+        /// <param name="searchMode">The search mode.</param>
+        /// <returns>A list of the found methods</returns>
         public List<MethodDef> FindMethod(Instruction[] instructions, SearchMode searchMode)
         {
             List<MethodDef> methods = new List<MethodDef>();
@@ -181,6 +220,12 @@ namespace dnpatch.Processors
             return methods;
         }
 
+        /// <summary>
+        /// Finds the method.
+        /// </summary>
+        /// <param name="opcodes">The opcodes.</param>
+        /// <param name="searchMode">The search mode.</param>
+        /// <returns>A list of the found methods</returns>
         public List<MethodDef> FindMethod(OpCode[] opcodes, SearchMode searchMode)
         {
             List<MethodDef> methods = new List<MethodDef>();

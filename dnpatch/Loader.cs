@@ -7,13 +7,31 @@ namespace dnpatch
 {
     public class Loader
     {
+        /// <summary>
+        /// Gets the assemblies.
+        /// </summary>
+        /// <value>
+        /// The assemblies.
+        /// </value>
         public Dictionary<string, Assembly> Assemblies { get; internal set; } // Set of all loaded assemblies for patching
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Loader"/> class.
+        /// </summary>
         public Loader() 
         {
             Assemblies = new Dictionary<string, Assembly>();    
         }
 
+        /// <summary>
+        /// Initializes a new assembly
+        /// </summary>
+        /// <param name="name">Internal identifier for the assembly</param>
+        /// <param name="fileName">Name of the file.</param>
+        /// <param name="outputName">Name of the output.</param>
+        /// <param name="overwriteOriginal">Overwrite original assembly</param>
+        /// <param name="createBackup">Create backup of assembly.</param>
+        /// <param name="preloadData">Preload Types and Methods.</param>
         public void Initialize(string name, string fileName, string outputName, bool overwriteOriginal, bool createBackup, bool preloadData) 
         {
             Assemblies.Add(name, new Assembly(new AssemblyInfo()
@@ -27,11 +45,19 @@ namespace dnpatch
             }));
         }
 
+        /// <summary>
+        /// Returns the assembly by the specified identifier
+        /// </summary>
+        /// <param name="name">The internal identifier.</param>
+        /// <returns></returns>
         public Assembly LoadAssembly(string name)
         {
             return Assemblies.TryGetValue(name, out Assembly value) ? value : null;
         }
 
+        /// <summary>
+        /// Saves all assemblies.
+        /// </summary>
         public void Save()
         {
             foreach(var assembly in Assemblies)
@@ -41,6 +67,10 @@ namespace dnpatch
             }
         }
 
+        /// <summary>
+        /// Saves the specified assembly.
+        /// </summary>
+        /// <param name="name">The internal identifier.</param>
         public void Save(string name)
         {
             SaveAssembly(Assemblies[name]);

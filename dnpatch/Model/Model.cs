@@ -17,95 +17,165 @@ namespace dnpatch.Model
             _assembly = assembly;
         }
 
+        /// <summary>
+        /// Sets the target namespace.
+        /// </summary>
+        /// <param name="namespace">The namespace.</param>
         public void SetNamespace(string @namespace) // TODO: Remove this, I never needed it...
 		{
 			_assembly.AssemblyModel.Namespace = @namespace;
 		}
 
-		public void SetType(string classPath)
+        /// <summary>
+        /// Sets the target type.
+        /// </summary>
+        /// <param name="classPath">The class path.</param>
+        /// <exception cref="Exception"></exception>
+        public void SetType(string classPath)
 		{
 			string path = $"{_assembly.AssemblyModel.Namespace}.{classPath}";
 			TypeDef type = _assembly.AssemblyData.Module.FindReflection(path);
 			_assembly.AssemblyModel.Type = type ?? throw new Exception($"Type '{path}' does not exist.");
 		}
 
-		public void SetType(Type type)
+        /// <summary>
+        /// Sets the target type.
+        /// </summary>
+        /// <param name="type">The type.</param>
+        public void SetType(Type type)
 		{
             _assembly.AssemblyModel.Type = FindType(type);
 		}
 
+        /// <summary>
+        /// Sets the target type.
+        /// </summary>
+        /// <param name="type">The type.</param>
         public void SetType(TypeDef type)
 		{
             _assembly.AssemblyModel.Type = type;
 		}
 
-		public void SetField(string fieldName)
+        /// <summary>
+        /// Sets the target field.
+        /// </summary>
+        /// <param name="fieldName">Name of the field.</param>
+        /// <exception cref="Exception"></exception>
+        public void SetField(string fieldName)
 		{
 			_assembly.AssemblyModel.Field = _assembly.AssemblyModel.Type.FindField(fieldName) ?? throw new Exception($"Field '{_assembly.AssemblyModel.Type.FullName}.{fieldName}' does not exist.");
 			VerifyModel();
 		}
 
+        /// <summary>
+        /// Sets the target field.
+        /// </summary>
+        /// <param name="field">The field.</param>
         public void SetField(FieldInfo field)
 		{
             _assembly.AssemblyModel.Field = FindField(field);
 			VerifyModel();
 		}
 
+        /// <summary>
+        /// Sets the target field.
+        /// </summary>
+        /// <param name="field">The field.</param>
         public void SetField(FieldDef field)
 		{
             _assembly.AssemblyModel.Field = field;
 			VerifyModel();
 		}
 
-		public void SetMethod(string methodName)
+        /// <summary>
+        /// Sets the target method.
+        /// </summary>
+        /// <param name="methodName">Name of the method.</param>
+        /// <exception cref="Exception"></exception>
+        public void SetMethod(string methodName)
 		{
 			_assembly.AssemblyModel.Method = _assembly.AssemblyModel.Type.FindMethod(methodName) ?? throw new Exception($"Method '{_assembly.AssemblyModel.Type.FullName}.{methodName}' does not exist.");
 			VerifyModel();
 		}
 
+        /// <summary>
+        /// Sets the target method.
+        /// </summary>
+        /// <param name="method">The method.</param>
         public void SetMethod(MethodInfo method)
 		{
             _assembly.AssemblyModel.Method = FindMethod(method);
 			VerifyModel();
 		}
 
+        /// <summary>
+        /// Sets the target method.
+        /// </summary>
+        /// <param name="method">The method.</param>
         public void SetMethod(MethodDef method)
 		{
             _assembly.AssemblyModel.Method = method;
 			VerifyModel();
 		}
 
-		public void SetProperty(string propertyName, PropertyMethod propertyMethod)
+        /// <summary>
+        /// Sets the target property.
+        /// </summary>
+        /// <param name="propertyName">Name of the property.</param>
+        /// <param name="propertyMethod">The property method.</param>
+        /// <exception cref="Exception"></exception>
+        public void SetProperty(string propertyName, PropertyMethod propertyMethod)
 		{
 			_assembly.AssemblyModel.Property = _assembly.AssemblyModel.Type.FindProperty(propertyName) ?? throw new Exception($"Property '{_assembly.AssemblyModel.Type.FullName}.{propertyName}' does not exist.");
 			_assembly.AssemblyModel.PropertyMethod = propertyMethod;
 			VerifyModel();
 		}
 
+        /// <summary>
+        /// Sets the target property.
+        /// </summary>
+        /// <param name="property">The property.</param>
         public void SetProperty(PropertyInfo property)
 		{
             _assembly.AssemblyModel.Property = FindProperty(property);
 			VerifyModel();
 		}
 
+        /// <summary>
+        /// Sets the target property.
+        /// </summary>
+        /// <param name="property">The property.</param>
         public void SetProperty(PropertyDef property)
 		{
             _assembly.AssemblyModel.Property = property;
 			VerifyModel();
 		}
 
-		public void SetEvent(string eventName)
+        /// <summary>
+        /// Sets the target event.
+        /// </summary>
+        /// <param name="eventName">Name of the event.</param>
+        /// <exception cref="Exception"></exception>
+        public void SetEvent(string eventName)
 		{
 			_assembly.AssemblyModel.Event = _assembly.AssemblyModel.Type.FindEvent(eventName) ?? throw new Exception($"Event '{_assembly.AssemblyModel.Type.FullName}.{eventName}' does not exist.");
 			VerifyModel();
 		}
 
+        /// <summary>
+        /// Sets the target event.
+        /// </summary>
+        /// <param name="event">The event.</param>
         public void SetEvent(EventInfo @event)
 		{
             _assembly.AssemblyModel.Event = FindEvent(@event);
 			VerifyModel();
 		}
 
+        /// <summary>
+        /// Sets the target event.
+        /// </summary>
+        /// <param name="event">The event.</param>
         public void SetEvent(EventDef @event)
 		{
             _assembly.AssemblyModel.Event = @event;
