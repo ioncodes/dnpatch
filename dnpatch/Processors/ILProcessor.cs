@@ -16,11 +16,11 @@ namespace dnpatch.Processors
         /// <summary>
         /// The assembly
         /// </summary>
-        protected Assembly _assembly;
+        protected Assembly Assembly;
 
         internal ILProcessor(Assembly assembly)
 		{
-            _assembly = assembly;
+            Assembly = assembly;
 		}
 
         #region Write
@@ -30,19 +30,19 @@ namespace dnpatch.Processors
         /// </summary>
         public void Clear()
         {
-            if (_assembly.AssemblyModel.Method != null)
+            if (Assembly.AssemblyModel.Method != null)
             {
-                _assembly.AssemblyModel.Method.Body.Instructions.Clear();
+                Assembly.AssemblyModel.Method.Body.Instructions.Clear();
             }
             else
             {
-                if (_assembly.AssemblyModel.PropertyMethod == PropertyMethod.Get)
+                if (Assembly.AssemblyModel.PropertyMethod == PropertyMethod.Get)
                 {
-                    _assembly.AssemblyModel.Property.GetMethod.Body.Instructions.Clear();
+                    Assembly.AssemblyModel.Property.GetMethod.Body.Instructions.Clear();
                 }
                 else
                 {
-                    _assembly.AssemblyModel.Property.SetMethod.Body.Instructions.Clear();
+                    Assembly.AssemblyModel.Property.SetMethod.Body.Instructions.Clear();
                 }
             }
         }
@@ -70,24 +70,24 @@ namespace dnpatch.Processors
         /// <param name="indices">The indices.</param>
         public void Append(Instruction[] instructions, int[] indices)
         {
-            if (_assembly.AssemblyModel.Method != null)
+            if (Assembly.AssemblyModel.Method != null)
             {
                 for (int i = 0; i < instructions.Length; i++)
                 {
                     var instruction = instructions[i];
                     var index = indices[i];
-                    _assembly.AssemblyModel.Method.Body.Instructions.Insert(index, instruction);
+                    Assembly.AssemblyModel.Method.Body.Instructions.Insert(index, instruction);
                 }
             }
             else
             {
-                if (_assembly.AssemblyModel.PropertyMethod == PropertyMethod.Get)
+                if (Assembly.AssemblyModel.PropertyMethod == PropertyMethod.Get)
                 {
                     for (int i = 0; i < instructions.Length; i++)
                     {
                         var instruction = instructions[i];
                         var index = indices[i];
-                        _assembly.AssemblyModel.Property.GetMethod.Body.Instructions.Insert(index, instruction);
+                        Assembly.AssemblyModel.Property.GetMethod.Body.Instructions.Insert(index, instruction);
                     }
                 }
                 else
@@ -96,7 +96,7 @@ namespace dnpatch.Processors
                     {
                         var instruction = instructions[i];
                         var index = indices[i];
-                        _assembly.AssemblyModel.Property.SetMethod.Body.Instructions.Insert(index, instruction);
+                        Assembly.AssemblyModel.Property.SetMethod.Body.Instructions.Insert(index, instruction);
                     }
                 }
             }
@@ -108,27 +108,27 @@ namespace dnpatch.Processors
         /// <param name="instructions">The instructions.</param>
         public void Append(Instruction[] instructions)
         {
-			if (_assembly.AssemblyModel.Method != null)
+			if (Assembly.AssemblyModel.Method != null)
 			{
                 foreach(var instruction in instructions)
                 {
-                    _assembly.AssemblyModel.Method.Body.Instructions.Add(instruction);
+                    Assembly.AssemblyModel.Method.Body.Instructions.Add(instruction);
                 }
             }
 			else
 			{
-				if (_assembly.AssemblyModel.PropertyMethod == PropertyMethod.Get)
+				if (Assembly.AssemblyModel.PropertyMethod == PropertyMethod.Get)
 				{
 					foreach (var instruction in instructions)
 					{
-                        _assembly.AssemblyModel.Property.GetMethod.Body.Instructions.Add(instruction);
+                        Assembly.AssemblyModel.Property.GetMethod.Body.Instructions.Add(instruction);
 					}
 				}
 				else
 				{
 					foreach (var instruction in instructions)
 					{
-						_assembly.AssemblyModel.Property.SetMethod.Body.Instructions.Add(instruction);
+						Assembly.AssemblyModel.Property.SetMethod.Body.Instructions.Add(instruction);
 					}
 				}
 			}
@@ -182,19 +182,19 @@ namespace dnpatch.Processors
         /// <param name="index">The index.</param>
         public void Write(Instruction instruction, int index)
         {
-			if (_assembly.AssemblyModel.Method != null)
+			if (Assembly.AssemblyModel.Method != null)
 			{
-                _assembly.AssemblyModel.Method.Body.Instructions[index] = instruction;
+                Assembly.AssemblyModel.Method.Body.Instructions[index] = instruction;
 			}
 			else
 			{
-				if (_assembly.AssemblyModel.PropertyMethod == PropertyMethod.Get)
+				if (Assembly.AssemblyModel.PropertyMethod == PropertyMethod.Get)
 				{
-					_assembly.AssemblyModel.Property.GetMethod.Body.Instructions[index] = instruction;
+					Assembly.AssemblyModel.Property.GetMethod.Body.Instructions[index] = instruction;
 				}
 				else
 				{
-					_assembly.AssemblyModel.Property.SetMethod.Body.Instructions[index] = instruction;
+					Assembly.AssemblyModel.Property.SetMethod.Body.Instructions[index] = instruction;
 				}
 			}
         }
@@ -212,9 +212,9 @@ namespace dnpatch.Processors
         public List<MethodDef> FindMethod(Instruction[] instructions, SearchMode searchMode)
         {
             List<MethodDef> methods = new List<MethodDef>();
-            List<MethodDef> assemblyMethods = _assembly.AssemblyInfo.PreloadData
-                ? _assembly.AssemblyData.Methods
-                : _assembly.GetAllMethods();
+            List<MethodDef> assemblyMethods = Assembly.AssemblyInfo.PreloadData
+                ? Assembly.AssemblyData.Methods
+                : Assembly.GetAllMethods();
             foreach (var method in assemblyMethods)
             {
                 if(!method.HasBody) continue;
@@ -235,9 +235,9 @@ namespace dnpatch.Processors
         public List<MethodDef> FindMethod(OpCode[] opcodes, SearchMode searchMode)
         {
             List<MethodDef> methods = new List<MethodDef>();
-            List<MethodDef> assemblyMethods = _assembly.AssemblyInfo.PreloadData
-                ? _assembly.AssemblyData.Methods
-                : _assembly.GetAllMethods();
+            List<MethodDef> assemblyMethods = Assembly.AssemblyInfo.PreloadData
+                ? Assembly.AssemblyData.Methods
+                : Assembly.GetAllMethods();
             foreach (var method in assemblyMethods)
             {
                 if (!method.HasBody) continue;

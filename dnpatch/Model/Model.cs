@@ -13,11 +13,14 @@ namespace dnpatch.Model
     /// </summary>
     public class Model
     {
-        protected Assembly _assembly;
+        /// <summary>
+        /// The assembly
+        /// </summary>
+        protected Assembly Assembly;
 
         internal Model(Assembly assembly)
         {
-            _assembly = assembly;
+            Assembly = assembly;
         }
 
         /// <summary>
@@ -26,7 +29,7 @@ namespace dnpatch.Model
         /// <param name="namespace">The namespace.</param>
         public void SetNamespace(string @namespace) // TODO: Remove this, I never needed it...
 		{
-			_assembly.AssemblyModel.Namespace = @namespace;
+			Assembly.AssemblyModel.Namespace = @namespace;
 		}
 
         /// <summary>
@@ -36,9 +39,9 @@ namespace dnpatch.Model
         /// <exception cref="Exception"></exception>
         public void SetType(string classPath)
 		{
-			string path = $"{_assembly.AssemblyModel.Namespace}.{classPath}";
-			TypeDef type = _assembly.AssemblyData.Module.FindReflection(path);
-			_assembly.AssemblyModel.Type = type ?? throw new Exception($"Type '{path}' does not exist.");
+			string path = $"{Assembly.AssemblyModel.Namespace}.{classPath}";
+			TypeDef type = Assembly.AssemblyData.Module.FindReflection(path);
+			Assembly.AssemblyModel.Type = type ?? throw new Exception($"Type '{path}' does not exist.");
 		}
 
         /// <summary>
@@ -47,7 +50,7 @@ namespace dnpatch.Model
         /// <param name="type">The type.</param>
         public void SetType(Type type)
 		{
-            _assembly.AssemblyModel.Type = FindType(type);
+            Assembly.AssemblyModel.Type = FindType(type);
 		}
 
         /// <summary>
@@ -56,7 +59,7 @@ namespace dnpatch.Model
         /// <param name="type">The type.</param>
         public void SetType(TypeDef type)
 		{
-            _assembly.AssemblyModel.Type = type;
+            Assembly.AssemblyModel.Type = type;
 		}
 
         /// <summary>
@@ -66,7 +69,7 @@ namespace dnpatch.Model
         /// <exception cref="Exception"></exception>
         public void SetField(string fieldName)
 		{
-			_assembly.AssemblyModel.Field = _assembly.AssemblyModel.Type.FindField(fieldName) ?? throw new Exception($"Field '{_assembly.AssemblyModel.Type.FullName}.{fieldName}' does not exist.");
+			Assembly.AssemblyModel.Field = Assembly.AssemblyModel.Type.FindField(fieldName) ?? throw new Exception($"Field '{Assembly.AssemblyModel.Type.FullName}.{fieldName}' does not exist.");
 			VerifyModel();
 		}
 
@@ -76,7 +79,7 @@ namespace dnpatch.Model
         /// <param name="field">The field.</param>
         public void SetField(FieldInfo field)
 		{
-            _assembly.AssemblyModel.Field = FindField(field);
+            Assembly.AssemblyModel.Field = FindField(field);
 			VerifyModel();
 		}
 
@@ -86,7 +89,7 @@ namespace dnpatch.Model
         /// <param name="field">The field.</param>
         public void SetField(FieldDef field)
 		{
-            _assembly.AssemblyModel.Field = field;
+            Assembly.AssemblyModel.Field = field;
 			VerifyModel();
 		}
 
@@ -97,7 +100,7 @@ namespace dnpatch.Model
         /// <exception cref="Exception"></exception>
         public void SetMethod(string methodName)
 		{
-			_assembly.AssemblyModel.Method = _assembly.AssemblyModel.Type.FindMethod(methodName) ?? throw new Exception($"Method '{_assembly.AssemblyModel.Type.FullName}.{methodName}' does not exist.");
+			Assembly.AssemblyModel.Method = Assembly.AssemblyModel.Type.FindMethod(methodName) ?? throw new Exception($"Method '{Assembly.AssemblyModel.Type.FullName}.{methodName}' does not exist.");
 			VerifyModel();
 		}
 
@@ -107,7 +110,7 @@ namespace dnpatch.Model
         /// <param name="method">The method.</param>
         public void SetMethod(MethodInfo method)
 		{
-            _assembly.AssemblyModel.Method = FindMethod(method);
+            Assembly.AssemblyModel.Method = FindMethod(method);
 			VerifyModel();
 		}
 
@@ -117,7 +120,7 @@ namespace dnpatch.Model
         /// <param name="method">The method.</param>
         public void SetMethod(MethodDef method)
 		{
-            _assembly.AssemblyModel.Method = method;
+            Assembly.AssemblyModel.Method = method;
 			VerifyModel();
 		}
 
@@ -129,8 +132,8 @@ namespace dnpatch.Model
         /// <exception cref="Exception"></exception>
         public void SetProperty(string propertyName, PropertyMethod propertyMethod)
 		{
-			_assembly.AssemblyModel.Property = _assembly.AssemblyModel.Type.FindProperty(propertyName) ?? throw new Exception($"Property '{_assembly.AssemblyModel.Type.FullName}.{propertyName}' does not exist.");
-			_assembly.AssemblyModel.PropertyMethod = propertyMethod;
+			Assembly.AssemblyModel.Property = Assembly.AssemblyModel.Type.FindProperty(propertyName) ?? throw new Exception($"Property '{Assembly.AssemblyModel.Type.FullName}.{propertyName}' does not exist.");
+			Assembly.AssemblyModel.PropertyMethod = propertyMethod;
 			VerifyModel();
 		}
 
@@ -140,7 +143,7 @@ namespace dnpatch.Model
         /// <param name="property">The property.</param>
         public void SetProperty(PropertyInfo property)
 		{
-            _assembly.AssemblyModel.Property = FindProperty(property);
+            Assembly.AssemblyModel.Property = FindProperty(property);
 			VerifyModel();
 		}
 
@@ -150,7 +153,7 @@ namespace dnpatch.Model
         /// <param name="property">The property.</param>
         public void SetProperty(PropertyDef property)
 		{
-            _assembly.AssemblyModel.Property = property;
+            Assembly.AssemblyModel.Property = property;
 			VerifyModel();
 		}
 
@@ -161,7 +164,7 @@ namespace dnpatch.Model
         /// <exception cref="Exception"></exception>
         public void SetEvent(string eventName)
 		{
-			_assembly.AssemblyModel.Event = _assembly.AssemblyModel.Type.FindEvent(eventName) ?? throw new Exception($"Event '{_assembly.AssemblyModel.Type.FullName}.{eventName}' does not exist.");
+			Assembly.AssemblyModel.Event = Assembly.AssemblyModel.Type.FindEvent(eventName) ?? throw new Exception($"Event '{Assembly.AssemblyModel.Type.FullName}.{eventName}' does not exist.");
 			VerifyModel();
 		}
 
@@ -171,7 +174,7 @@ namespace dnpatch.Model
         /// <param name="event">The event.</param>
         public void SetEvent(EventInfo @event)
 		{
-            _assembly.AssemblyModel.Event = FindEvent(@event);
+            Assembly.AssemblyModel.Event = FindEvent(@event);
 			VerifyModel();
 		}
 
@@ -181,13 +184,13 @@ namespace dnpatch.Model
         /// <param name="event">The event.</param>
         public void SetEvent(EventDef @event)
 		{
-            _assembly.AssemblyModel.Event = @event;
+            Assembly.AssemblyModel.Event = @event;
 			VerifyModel();
 		}
 
         private TypeDef FindType(Type t)
         {
-            foreach(var type in _assembly.AssemblyData.Module.Types)
+            foreach(var type in Assembly.AssemblyData.Module.Types)
             {
                 foreach(var nestedType in type.NestedTypes)
                 {
@@ -206,7 +209,7 @@ namespace dnpatch.Model
 
         private MethodDef FindMethod(MethodInfo m)
         {
-            foreach (var method in _assembly.AssemblyModel.Type.Methods)
+            foreach (var method in Assembly.AssemblyModel.Type.Methods)
 			{
 				if (Compare(method, m))
 				{
@@ -218,7 +221,7 @@ namespace dnpatch.Model
 
         private PropertyDef FindProperty(PropertyInfo p)
 		{
-            foreach (var property in _assembly.AssemblyModel.Type.Properties)
+            foreach (var property in Assembly.AssemblyModel.Type.Properties)
 			{
                 if (Compare(property, p))
 				{
@@ -230,7 +233,7 @@ namespace dnpatch.Model
 
         private EventDef FindEvent(EventInfo e)
         {
-            foreach (var @event in _assembly.AssemblyModel.Type.Events)
+            foreach (var @event in Assembly.AssemblyModel.Type.Events)
 			{
 				if (Compare(@event, e))
 				{
@@ -242,7 +245,7 @@ namespace dnpatch.Model
 
         private FieldDef FindField(FieldInfo f)
         {
-            foreach (var field in _assembly.AssemblyModel.Type.Fields)
+            foreach (var field in Assembly.AssemblyModel.Type.Fields)
 			{
 				if (Compare(field, f))
 				{
@@ -261,11 +264,11 @@ namespace dnpatch.Model
 		{
 			if (new List<bool>()
 			{
-				_assembly.AssemblyModel.Event != null,
-				_assembly.AssemblyModel.Field != null,
-				_assembly.AssemblyModel.Method != null,
-				_assembly.AssemblyModel.Property != null
-			}.Count(b => b) > 1) throw new Exception($"Check your AssemblyModel in Assembly '{_assembly.AssemblyInfo.InternalName}'. Multiple assignments found for properties: Event, Field, Method, Property");
+				Assembly.AssemblyModel.Event != null,
+				Assembly.AssemblyModel.Field != null,
+				Assembly.AssemblyModel.Method != null,
+				Assembly.AssemblyModel.Property != null
+			}.Count(b => b) > 1) throw new Exception($"Check your AssemblyModel in Assembly '{Assembly.AssemblyInfo.InternalName}'. Multiple assignments found for properties: Event, Field, Method, Property");
 		}
     }
 }

@@ -13,7 +13,7 @@
 		{
             internal ModelContext(Types.Assembly assembly) : base(assembly)
 			{
-				_assembly = assembly;
+				Assembly = assembly;
 			}
 		}
 	}

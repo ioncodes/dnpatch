@@ -12,11 +12,11 @@ namespace dnpatch.Processors
         /// <summary>
         /// The assembly
         /// </summary>
-        protected Assembly _assembly;
+        protected Assembly Assembly;
 
         internal InstructionProcessor(Assembly assembly)
 		{
-			_assembly = assembly;
+			Assembly = assembly;
 		}
 
         /// <summary>
@@ -26,7 +26,7 @@ namespace dnpatch.Processors
         /// <returns>The call</returns>
         public IMethod BuildCall(MethodDef method)
 		{
-			IMethod meth = _assembly.AssemblyData.Importer.Import(method);
+			IMethod meth = Assembly.AssemblyData.Importer.Import(method);
 			return meth;
 		}
 
@@ -37,7 +37,7 @@ namespace dnpatch.Processors
         /// <returns>The call</returns>
         public IMethod BuildCall(MethodInfo method)
 		{
-			IMethod meth = _assembly.AssemblyData.Importer.Import(method);
+			IMethod meth = Assembly.AssemblyData.Importer.Import(method);
 			return meth;
 		}
     }

@@ -15,7 +15,7 @@ namespace dnpatch.Context
         {
             internal ILContext(Types.Assembly assembly) : base(assembly)
             {
-                _assembly = assembly;
+                Assembly = assembly;
             }
         }
     }
