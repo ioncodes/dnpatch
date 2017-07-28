@@ -1,18 +1,17 @@
-﻿using System;
-using System.Linq;
-using System.Collections.Generic;
-using dnlib.DotNet;
+﻿using dnlib.DotNet;
+using dnpatch.Provider;
+using dnpatch.Structs;
 
-namespace dnpatch
+namespace dnpatch.Types
 {
     public partial class Assembly
     {
         public AssemblyInfo AssemblyInfo;
         public AssemblyData AssemblyData;
         public AssemblyModel AssemblyModel;
-        public ILContext IL;
-        public InstructionContext Instructions;
-        public ModelContext Model;
+        public Context.Assembly.ILContext IL;
+        public Context.Assembly.InstructionContext Instructions;
+        public Context.Assembly.ModelContext Model;
 
         internal Assembly(AssemblyInfo assemblyInfo)
         {

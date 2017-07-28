@@ -1,10 +1,12 @@
 ﻿using System;
-using System.Reflection;
-using System.Linq;
 using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
 using dnlib.DotNet;
+using dnpatch.Enums;
+using Assembly = dnpatch.Types.Assembly;
 
-namespace dnpatch
+namespace dnpatch.Model
 {
     public class Model
     {

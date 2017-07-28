@@ -1,5 +1,4 @@
-﻿using System;
-namespace dnpatch
+﻿namespace dnpatch.Enums
 {
     public enum PropertyMethod
     {

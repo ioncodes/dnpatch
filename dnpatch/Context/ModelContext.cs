@@ -1,10 +1,10 @@
-﻿namespace dnpatch
+﻿namespace dnpatch.Context
 {
 	public partial class Assembly
 	{
-        public class ModelContext : Model
+        public class ModelContext : Model.Model
 		{
-            internal ModelContext(Assembly assembly) : base(assembly)
+            internal ModelContext(Types.Assembly assembly) : base(assembly)
 			{
 				_assembly = assembly;
 			}

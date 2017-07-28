@@ -1,5 +1,4 @@
-﻿using System;
-namespace dnpatch
+﻿namespace dnpatch.Structs
 {
     public struct AssemblyInfo
     {

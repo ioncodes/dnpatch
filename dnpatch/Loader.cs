@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.IO;
+using dnpatch.Structs;
+using dnpatch.Types;
 
 namespace dnpatch
 {

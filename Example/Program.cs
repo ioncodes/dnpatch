@@ -1,6 +1,7 @@
 ﻿using System;
 using dnlib.DotNet.Emit;
 using dnpatch;
+using dnpatch.Types;
 
 namespace Example
 {

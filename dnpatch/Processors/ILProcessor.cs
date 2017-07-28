@@ -1,6 +1,8 @@
 ﻿using dnlib.DotNet.Emit;
+using dnpatch.Enums;
+using dnpatch.Types;
 
-namespace dnpatch
+namespace dnpatch.Processors
 {
     public class ILProcessor
     {

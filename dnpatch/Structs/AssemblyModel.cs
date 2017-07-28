@@ -1,7 +1,7 @@
-﻿using System;
-using dnlib.DotNet;
+﻿using dnlib.DotNet;
+using dnpatch.Enums;
 
-namespace dnpatch
+namespace dnpatch.Structs
 {
     // The good ol' Target
     public struct AssemblyModel

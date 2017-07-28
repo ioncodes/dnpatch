@@ -1,7 +1,6 @@
-﻿using System;
-using dnlib.DotNet;
+﻿using dnlib.DotNet;
 
-namespace dnpatch
+namespace dnpatch.Structs
 {
     public struct AssemblyData
     {

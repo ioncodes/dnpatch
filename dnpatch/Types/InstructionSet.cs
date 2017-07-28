@@ -1,7 +1,6 @@
-﻿using System;
-using dnlib.DotNet.Emit;
+﻿using dnlib.DotNet.Emit;
 
-namespace dnpatch
+namespace dnpatch.Types
 {
     // Combines Instructions and Indices. If Indices equals null, ignore them.
     // TODO: Im not sure if we should stick to this idea. Or even force this type?

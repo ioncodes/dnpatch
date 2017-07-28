@@ -1,10 +1,12 @@
-﻿namespace dnpatch
+﻿using dnpatch.Processors;
+
+namespace dnpatch.Context
 {
     public partial class Assembly
     {
         public class ILContext : ILProcessor
         {
-            internal ILContext(Assembly assembly) : base(assembly)
+            internal ILContext(Types.Assembly assembly) : base(assembly)
             {
                 _assembly = assembly;
             }
