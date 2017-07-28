@@ -3,7 +3,9 @@ using dnpatch.Enums;
 
 namespace dnpatch.Structs
 {
-    // The good ol' Target
+    /// <summary>
+    /// The assembly target model. The good ol' target.
+    /// </summary>
     public struct AssemblyModel
     {
         /// <summary>

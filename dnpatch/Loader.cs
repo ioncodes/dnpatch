@@ -5,6 +5,9 @@ using dnpatch.Types;
 
 namespace dnpatch
 {
+    /// <summary>
+    /// Assembly loader and manager
+    /// </summary>
     public class Loader
     {
         /// <summary>

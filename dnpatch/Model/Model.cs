@@ -8,6 +8,9 @@ using Assembly = dnpatch.Types.Assembly;
 
 namespace dnpatch.Model
 {
+    /// <summary>
+    /// The model for the assembly
+    /// </summary>
     public class Model
     {
         protected Assembly _assembly;

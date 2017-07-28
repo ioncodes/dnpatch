@@ -3,6 +3,9 @@ using dnlib.DotNet;
 
 namespace dnpatch.Structs
 {
+    /// <summary>
+    /// The assembly reflection data
+    /// </summary>
     public struct AssemblyData
     {
         /// <summary>

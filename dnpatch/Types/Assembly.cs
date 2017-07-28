@@ -5,6 +5,9 @@ using dnpatch.Structs;
 
 namespace dnpatch.Types
 {
+    /// <summary>
+    /// The assembly
+    /// </summary>
     public class Assembly
     {
         /// <summary>

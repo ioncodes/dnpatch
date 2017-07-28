@@ -4,9 +4,15 @@ using Assembly = dnpatch.Types.Assembly;
 
 namespace dnpatch.Processors
 {
+    /// <summary>
+    /// Instruction processing engine
+    /// </summary>
     public class InstructionProcessor
     {
-		protected Assembly _assembly;
+        /// <summary>
+        /// The assembly
+        /// </summary>
+        protected Assembly _assembly;
 
         internal InstructionProcessor(Assembly assembly)
 		{

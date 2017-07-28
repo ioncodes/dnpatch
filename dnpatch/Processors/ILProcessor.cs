@@ -8,8 +8,14 @@ using dnpatch.Types;
 
 namespace dnpatch.Processors
 {
+    /// <summary>
+    /// IL processing engine
+    /// </summary>
     public class ILProcessor
     {
+        /// <summary>
+        /// The assembly
+        /// </summary>
         protected Assembly _assembly;
 
         internal ILProcessor(Assembly assembly)

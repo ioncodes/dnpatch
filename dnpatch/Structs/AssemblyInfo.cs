@@ -1,5 +1,8 @@
 ﻿namespace dnpatch.Structs
 {
+    /// <summary>
+    /// The assembly settings
+    /// </summary>
     public struct AssemblyInfo
     {
         /// <summary>
