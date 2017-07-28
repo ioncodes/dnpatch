@@ -41,9 +41,6 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Xml" />
-    <Reference Include="dnlib">
-      <HintPath>..\Libraries\dnlib.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Program.cs" />
@@ -53,6 +50,10 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\dnlib\src\dnlib.csproj">
+      <Project>{fdfc1237-143f-4919-8318-4926901f4639}</Project>
+      <Name>dnlib</Name>
+    </ProjectReference>
     <ProjectReference Include="..\dnpatch\dnpatch.csproj">
       <Project>{14CA7A28-7FA8-40A0-ABC6-81E9F36318DE}</Project>
       <Name>dnpatch</Name>

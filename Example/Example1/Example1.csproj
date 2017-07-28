@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -28,9 +28,6 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
-    <Reference Include="dnlib">
-      <HintPath>..\..\Libraries\dnlib.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Program.cs" />
@@ -44,6 +41,10 @@
     <ProjectReference Include="..\..\CrackMe\Security\Security.csproj">
       <Project>{DA2530DF-1960-4F77-864C-6C0B0330EFC2}</Project>
       <Name>Security</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\dnlib\src\dnlib.csproj">
+      <Project>{fdfc1237-143f-4919-8318-4926901f4639}</Project>
+      <Name>dnlib</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\dnpatch\dnpatch.csproj">
       <Project>{14CA7A28-7FA8-40A0-ABC6-81E9F36318DE}</Project>
