@@ -5,7 +5,7 @@ using dnpatch.Types;
 
 namespace Example1
 {
-    class MainClass
+    class Program
     {
         // Set model by Type & MethodInfo reference
         public static void Main(string[] args)

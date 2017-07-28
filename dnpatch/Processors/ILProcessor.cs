@@ -1,5 +1,9 @@
-﻿using dnlib.DotNet.Emit;
+﻿using System.Collections.Generic;
+using System.Linq;
+using dnlib.DotNet;
+using dnlib.DotNet.Emit;
 using dnpatch.Enums;
+using dnpatch.Misc;
 using dnpatch.Types;
 
 namespace dnpatch.Processors
@@ -12,6 +16,8 @@ namespace dnpatch.Processors
 		{
             _assembly = assembly;
 		}
+
+        #region Write
 
         public void Clear()
         {
@@ -153,5 +159,49 @@ namespace dnpatch.Processors
 				}
 			}
         }
+
+        #endregion
+
+        #region Read
+
+        public List<MethodDef> FindMethod(Instruction[] instructions, SearchMode searchMode)
+        {
+            List<MethodDef> methods = new List<MethodDef>();
+            foreach (var method in GetAllMethods())
+            {
+                if(!method.HasBody) continue;
+                if (searchMode == SearchMode.Consecutive && method.Body.Instructions.ContainsSequence(instructions))
+                    methods.Add(method);
+                else if(searchMode == SearchMode.Default && !method.Body.Instructions.Except(instructions).Any())
+                    methods.Add(method);
+            }
+            return methods;
+        }
+
+        public List<MethodDef> FindMethod(OpCode[] opcodes, SearchMode searchMode)
+        {
+            List<MethodDef> methods = new List<MethodDef>();
+            foreach (var method in GetAllMethods())
+            {
+                if (!method.HasBody) continue;
+                if (searchMode == SearchMode.Consecutive && method.Body.Instructions.Select(ins => ins.OpCode).ToList().ContainsSequence(opcodes))
+                    methods.Add(method);
+                else if (searchMode == SearchMode.Default && !method.Body.Instructions.Select(ins => ins.OpCode).ToList().Any())
+                    methods.Add(method);
+            }
+            return methods;
+        }
+
+        private List<MethodDef> GetAllMethods()
+        {
+            List<MethodDef> methods = new List<MethodDef>();
+            foreach (var type in _assembly.AssemblyData.Module.Types)
+            {
+                methods.AddRange(type.Methods.Where(i => i.HasBody));
+            }
+            return methods;
+        }
+
+        #endregion
     }
 }
