@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using dnlib.DotNet;
+using dnpatch.Types;
 
 namespace dnpatch.Misc
 {
@@ -26,6 +28,21 @@ namespace dnpatch.Misc
             }
 
             return false;
+        }
+
+        public static List<MethodDef> GetAllMethods(this Assembly assembly)
+        {
+            List<MethodDef> methods = new List<MethodDef>();
+            foreach (var type in assembly.AssemblyData.Module.Types)
+            {
+                methods.AddRange(type.Methods.Where(i => i.HasBody));
+            }
+            return methods;
+        }
+
+        public static List<TypeDef> GetAllTypes(this Assembly assembly)
+        {
+            return (List<TypeDef>) assembly.AssemblyData.Module.Types;
         }
     }
 }

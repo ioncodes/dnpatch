@@ -7,6 +7,7 @@
         public string Name { get; internal set; }
         public string OutputName { get; internal set; }
         public string InternalName { get; internal set; }
+        public bool PreloadData { get; internal set; }
 
         public override string ToString()
         {

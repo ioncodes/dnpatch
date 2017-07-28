@@ -167,7 +167,10 @@ namespace dnpatch.Processors
         public List<MethodDef> FindMethod(Instruction[] instructions, SearchMode searchMode)
         {
             List<MethodDef> methods = new List<MethodDef>();
-            foreach (var method in GetAllMethods())
+            List<MethodDef> assemblyMethods = _assembly.AssemblyInfo.PreloadData
+                ? _assembly.AssemblyData.Methods
+                : _assembly.GetAllMethods();
+            foreach (var method in assemblyMethods)
             {
                 if(!method.HasBody) continue;
                 if (searchMode == SearchMode.Consecutive && method.Body.Instructions.ContainsSequence(instructions))
@@ -181,23 +184,16 @@ namespace dnpatch.Processors
         public List<MethodDef> FindMethod(OpCode[] opcodes, SearchMode searchMode)
         {
             List<MethodDef> methods = new List<MethodDef>();
-            foreach (var method in GetAllMethods())
+            List<MethodDef> assemblyMethods = _assembly.AssemblyInfo.PreloadData
+                ? _assembly.AssemblyData.Methods
+                : _assembly.GetAllMethods();
+            foreach (var method in assemblyMethods)
             {
                 if (!method.HasBody) continue;
                 if (searchMode == SearchMode.Consecutive && method.Body.Instructions.Select(ins => ins.OpCode).ToList().ContainsSequence(opcodes))
                     methods.Add(method);
                 else if (searchMode == SearchMode.Default && !method.Body.Instructions.Select(ins => ins.OpCode).ToList().Any())
                     methods.Add(method);
-            }
-            return methods;
-        }
-
-        private List<MethodDef> GetAllMethods()
-        {
-            List<MethodDef> methods = new List<MethodDef>();
-            foreach (var type in _assembly.AssemblyData.Module.Types)
-            {
-                methods.AddRange(type.Methods.Where(i => i.HasBody));
             }
             return methods;
         }

@@ -1,4 +1,5 @@
 ﻿using dnlib.DotNet;
+using dnpatch.Misc;
 using dnpatch.Provider;
 using dnpatch.Structs;
 
@@ -23,6 +24,11 @@ namespace dnpatch.Types
                 Entrypoint = module.IsEntryPointValid ? module.EntryPoint : null,
                 Importer = new Importer(module)
             };
+            if (assemblyInfo.PreloadData)
+            {
+                AssemblyData.Types = this.GetAllTypes();
+                AssemblyData.Methods = this.GetAllMethods();
+            }
             AssemblyModel = new AssemblyModel();
             ContextProvider.Provide(this);
         }

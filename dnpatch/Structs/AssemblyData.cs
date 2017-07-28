@@ -1,4 +1,5 @@
-﻿using dnlib.DotNet;
+﻿using System.Collections.Generic;
+using dnlib.DotNet;
 
 namespace dnpatch.Structs
 {
@@ -7,5 +8,7 @@ namespace dnpatch.Structs
         public ModuleDefMD Module { get; internal set; }
         public MethodDef Entrypoint { get; internal set; }
         public Importer Importer { get; internal set; }
+        public List<MethodDef> Methods { get; internal set; }
+        public List<TypeDef> Types { get; internal set; }
     }
 }

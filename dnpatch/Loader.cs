@@ -14,7 +14,7 @@ namespace dnpatch
             Assemblies = new Dictionary<string, Assembly>();    
         }
 
-        public void Initialize(string name, string fileName, string outputName, bool overwriteOriginal, bool createBackup) 
+        public void Initialize(string name, string fileName, string outputName, bool overwriteOriginal, bool createBackup, bool preloadData) 
         {
             Assemblies.Add(name, new Assembly(new AssemblyInfo()
             {
@@ -22,7 +22,8 @@ namespace dnpatch
                 OverwriteOriginal = overwriteOriginal,
                 InternalName = name,
                 OutputName = outputName,
-                CreateBackup = createBackup
+                CreateBackup = createBackup,
+                PreloadData = preloadData
             }));
         }
 
