@@ -42,7 +42,7 @@ namespace dnpatch.Misc
 
         public static List<TypeDef> GetAllTypes(this Assembly assembly)
         {
-            return (List<TypeDef>) assembly.AssemblyData.Module.Types;
+            return assembly.AssemblyData.Module.Types as List<TypeDef>;
         }
     }
 }
