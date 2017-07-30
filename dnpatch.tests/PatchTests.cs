@@ -12,7 +12,7 @@ namespace dnpatch.tests
     [TestClass()]
     public class PatchTests
     {
-        [ClassInitialize()]
+        [AssemblyInitialize()]
         public static void CompileDefault(TestContext context)
         {
             Compiler.Compile("Security.dll", Code.Security);

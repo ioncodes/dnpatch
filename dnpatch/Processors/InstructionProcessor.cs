@@ -1,5 +1,7 @@
 ﻿using System.Reflection;
 using dnlib.DotNet;
+using dnlib.DotNet.Emit;
+using dnpatch.Enums;
 using Assembly = dnpatch.Types.Assembly;
 
 namespace dnpatch.Processors

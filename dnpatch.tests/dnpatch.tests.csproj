@@ -155,6 +155,7 @@
   <ItemGroup>
     <Compile Include="Code.cs" />
     <Compile Include="Compiler.cs" />
+    <Compile Include="FindTests.cs" />
     <Compile Include="PatchTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

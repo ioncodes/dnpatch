@@ -209,21 +209,30 @@ namespace dnpatch.Processors
         /// <param name="instructions">The instructions.</param>
         /// <param name="searchMode">The search mode.</param>
         /// <returns>A list of the found methods</returns>
-        public List<MethodDef> FindMethod(Instruction[] instructions, SearchMode searchMode)
+        public List<MethodDef> FindMethod(Instruction[] instructions, SearchMode searchMode) // TODO: Make it faster and more reliable
         {
-            List<MethodDef> methods = new List<MethodDef>();
             List<MethodDef> assemblyMethods = Assembly.AssemblyInfo.PreloadData
                 ? Assembly.AssemblyData.Methods
                 : Assembly.GetAllMethods();
-            foreach (var method in assemblyMethods)
+            return assemblyMethods.Where(method => method.HasBody).Where(Find).ToList();
+
+            bool Find(MethodDef method)
             {
-                if(!method.HasBody) continue;
-                if (searchMode == SearchMode.Consecutive && method.Body.Instructions.ContainsSequence(instructions))
-                    methods.Add(method);
-                else if(searchMode == SearchMode.Default && !method.Body.Instructions.Except(instructions).Any())
-                    methods.Add(method);
+                if (searchMode == SearchMode.Consecutive)
+                {
+                    bool hasOpCodes = method.Body.Instructions.Select(o => o.OpCode).ToList()
+                        .ContainsSequence(instructions.Select(o => o.OpCode).ToList());
+                    bool hasOperand = method.Body.Instructions.Select(o => o.Operand).Where(o => o != null).ToList()
+                        .ContainsSequence(instructions.Select(o => o.Operand).Where(o => o != null).ToList());
+                    return hasOperand && hasOpCodes;
+                }
+                else
+                {
+                    bool hasOpCodes = !instructions.Select(o => o.OpCode).ToList().Except(method.Body.Instructions.Select(o => o.OpCode).ToList()).Any();
+                    bool hasOperand = !instructions.Select(o => o.Operand).Where(o => o != null).ToList().Except(method.Body.Instructions.Select(o => o.Operand).Where(o => o != null).ToList()).Any();
+                    return hasOperand && hasOpCodes;
+                }
             }
-            return methods;
         }
 
         /// <summary>
@@ -243,7 +252,7 @@ namespace dnpatch.Processors
                 if (!method.HasBody) continue;
                 if (searchMode == SearchMode.Consecutive && method.Body.Instructions.Select(ins => ins.OpCode).ToList().ContainsSequence(opcodes))
                     methods.Add(method);
-                else if (searchMode == SearchMode.Default && !method.Body.Instructions.Select(ins => ins.OpCode).ToList().Any())
+                else if (searchMode == SearchMode.Default && !opcodes.ToList().Except(method.Body.Instructions.Select(ins => ins.OpCode).ToList()).Any())
                     methods.Add(method);
             }
             return methods;

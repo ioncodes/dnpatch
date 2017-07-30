@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using dnlib.DotNet;
+using dnlib.DotNet.Emit;
+using dnpatch.Enums;
 using dnpatch.Types;
 
 namespace dnpatch.Misc
