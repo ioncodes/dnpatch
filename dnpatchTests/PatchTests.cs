@@ -6,13 +6,22 @@ using dnlib.DotNet;
 using dnlib.DotNet.Emit;
 using dnpatch;
 using dnpatch.Types;
+using dnpatchTests;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Code = dnpatchTests.Code;
 
-namespace dnpatchTests
+namespace dnpatch.tests
 {
     [TestClass()]
     public class PatchTests
     {
+        [ClassInitialize()]
+        public static void CompileDefault(TestContext context)
+        {
+            Compiler.Compile("Security.dll", Code.Security);
+            Compiler.Compile("UI.dll", Code.UI);
+        }
+
         [TestMethod()]
         public void PatchDefault()
         {
@@ -69,6 +78,9 @@ namespace dnpatchTests
         [TestMethod()]
         public void PatchByReference()
         {
+            Type secType = System.Reflection.Assembly.LoadFrom("Security.dll").GetType("Security.Security");
+            Type uiType = System.Reflection.Assembly.LoadFrom("UI.dll").GetType("UI.UI");
+
             Loader loader = new Loader();
 
             loader.Initialize("crack", "Security.dll", "Security.byref.dll", false, true, true); // crack the license mechanism
@@ -81,12 +93,12 @@ namespace dnpatchTests
             Console.WriteLine(ui.AssemblyInfo.ToString());
 
             security.Model.SetNamespace("Security");
-            security.Model.SetType(typeof(Security.Security));
-            security.Model.SetMethod(typeof(Security.Security).GetMethod("IsLicensed"));
+            security.Model.SetType(secType);
+            security.Model.SetMethod(secType.GetMethod("IsLicensed"));
 
             ui.Model.SetNamespace("UI");
-            ui.Model.SetType(typeof(UI.UI));
-            ui.Model.SetMethod(typeof(UI.UI).GetMethod("GetCredits"));
+            ui.Model.SetType(uiType);
+            ui.Model.SetMethod(uiType.GetMethod("GetCredits"));
 
             security.IL.Overwrite(instructions: new Instruction[] // return true
             {
