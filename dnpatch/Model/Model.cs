@@ -209,50 +209,22 @@ namespace dnpatch.Model
 
         private MethodDef FindMethod(MethodInfo m)
         {
-            foreach (var method in Assembly.AssemblyModel.Type.Methods)
-			{
-				if (Compare(method, m))
-				{
-                    return method;
-				}
-			}
-			return null;
+            return Assembly.AssemblyModel.Type.Methods.FirstOrDefault(method => Compare(method, m));
         }
 
         private PropertyDef FindProperty(PropertyInfo p)
-		{
-            foreach (var property in Assembly.AssemblyModel.Type.Properties)
-			{
-                if (Compare(property, p))
-				{
-                    return property;
-				}
-			}
-			return null;
-		}
+        {
+            return Assembly.AssemblyModel.Type.Properties.FirstOrDefault(property => Compare(property, p));
+        }
 
         private EventDef FindEvent(EventInfo e)
         {
-            foreach (var @event in Assembly.AssemblyModel.Type.Events)
-			{
-				if (Compare(@event, e))
-				{
-					return @event;
-				}
-			}
-			return null;
+            return Assembly.AssemblyModel.Type.Events.FirstOrDefault(@event => Compare(@event, e));
         }
 
         private FieldDef FindField(FieldInfo f)
         {
-            foreach (var field in Assembly.AssemblyModel.Type.Fields)
-			{
-				if (Compare(field, f))
-				{
-                    return field;
-				}
-			}
-			return null;
+            return Assembly.AssemblyModel.Type.Fields.FirstOrDefault(field => Compare(field, f));
         }
 
         private bool Compare(dynamic one, dynamic two)
