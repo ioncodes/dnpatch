@@ -4,11 +4,8 @@ using System.Collections.Generic;
 using System.Linq;
 using dnlib.DotNet;
 using dnlib.DotNet.Emit;
-using dnpatch;
 using dnpatch.Types;
-using dnpatchTests;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Code = dnpatchTests.Code;
 
 namespace dnpatch.tests
 {

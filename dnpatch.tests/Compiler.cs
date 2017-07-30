@@ -9,7 +9,7 @@ using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CSharp;
 
-namespace dnpatchTests
+namespace dnpatch.tests
 {
     static class Compiler
     {

@@ -9,8 +9,8 @@
     <ProjectGuid>{02E36734-4011-48CF-93EF-1C10A692E216}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>dnpatchTests</RootNamespace>
-    <AssemblyName>dnpatchTests</AssemblyName>
+    <RootNamespace>dnpatch.tests</RootNamespace>
+    <AssemblyName>dnpatch.tests</AssemblyName>
     <TargetFrameworkVersion>v4.7</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>

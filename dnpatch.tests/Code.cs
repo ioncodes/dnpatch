@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace dnpatchTests
+namespace dnpatch.tests
 {
     static class Code
     {

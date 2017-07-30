@@ -5,7 +5,7 @@ VisualStudioVersion = 15.0.26430.16
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "dnpatch", "dnpatch\dnpatch.csproj", "{14CA7A28-7FA8-40A0-ABC6-81E9F36318DE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "dnpatch.tests", "dnpatchTests\dnpatch.tests.csproj", "{02E36734-4011-48CF-93EF-1C10A692E216}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "dnpatch.tests", "dnpatch.tests\dnpatch.tests.csproj", "{02E36734-4011-48CF-93EF-1C10A692E216}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "dnlib", "dnlib\src\dnlib.csproj", "{FDFC1237-143F-4919-8318-4926901F4639}"
 EndProject
