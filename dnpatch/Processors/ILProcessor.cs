@@ -28,21 +28,64 @@ namespace dnpatch.Processors
         /// <summary>
         /// Clears the method body
         /// </summary>
-        public void Clear()
+        public void Clear(bool createNew = false)
         {
             if (Assembly.AssemblyModel.Method != null)
             {
-                Assembly.AssemblyModel.Method.Body.Instructions.Clear();
+                if (createNew)
+                {
+                    Assembly.AssemblyModel.Method.Body = new CilBody();
+                }
+                else
+                {
+                    Assembly.AssemblyModel.Method.Body.Instructions.Clear();
+                }
             }
             else
             {
                 if (Assembly.AssemblyModel.PropertyMethod == PropertyMethod.Get)
                 {
-                    Assembly.AssemblyModel.Property.GetMethod.Body.Instructions.Clear();
+                    if (createNew)
+                    {
+                        Assembly.AssemblyModel.Property.GetMethod.Body = new CilBody();
+                    }
+                    else
+                    {
+                        Assembly.AssemblyModel.Property.GetMethod.Body.Instructions.Clear();
+                    }
                 }
                 else
                 {
-                    Assembly.AssemblyModel.Property.SetMethod.Body.Instructions.Clear();
+                    if (createNew)
+                    {
+                        Assembly.AssemblyModel.Property.SetMethod.Body = new CilBody();
+                    }
+                    else
+                    {
+                        Assembly.AssemblyModel.Property.SetMethod.Body.Instructions.Clear();
+                    }
+                }
+            }
+        }
+
+        /// <summary>
+        /// Removes the exception handlers from the body
+        /// </summary>
+        public void RemoveExceptionHandlers()
+        {
+            if (Assembly.AssemblyModel.Method != null)
+            {
+                Assembly.AssemblyModel.Method.Body.ExceptionHandlers.Clear();
+            }
+            else
+            {
+                if (Assembly.AssemblyModel.PropertyMethod == PropertyMethod.Get)
+                {
+                    Assembly.AssemblyModel.Property.GetMethod.Body.ExceptionHandlers.Clear();
+                }
+                else
+                {
+                    Assembly.AssemblyModel.Property.SetMethod.Body.ExceptionHandlers.Clear();
                 }
             }
         }
