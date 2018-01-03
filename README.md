@@ -6,7 +6,7 @@
 [![Join the chat at https://gitter.im/dnpatch/Lobby](https://badges.gitter.im/dnpatch/Lobby.svg)](https://gitter.im/dnpatch/Lobby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
 ## What is dnpatch?
-dnpatch is the ultimate library for all your .NET patching needs. It offers automated assembly patching, signature scanning and last but but not least bypassing of obfuscators by its ability to find methods in renamed/obfuscated types. Since the stars on GitHub exploded in a few days, dnpatch has been extended by a couple of projects. The most important one is dnpatch.deobfuscation which integrates de4dot directly into dnpatch. Also there is dnpatch.script, which gives you the ability to write patchers with pure JSON!
+dnpatch is the ultimate library for all your .NET patching needs. It offers automated assembly patching, signature scanning and last but but not least bypassing of obfuscators by its ability to find methods in renamed/obfuscated types.  
 The library itself uses dnlib (see next part).
 
 ## Notes
