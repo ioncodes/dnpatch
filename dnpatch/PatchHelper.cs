@@ -915,7 +915,7 @@ namespace dnpatch
         {
             var type = FindType(target.Namespace + "." + target.Class, target.NestedClasses);
             MethodDef method = FindMethod(type, target.Method, target.Parameters, target.ReturnType);
-            return (Instruction[])method.Body.Instructions;
+            return method.Body.Instructions.ToArray();
         }
 
         public  void PatchOperand(Target target, string operand)
