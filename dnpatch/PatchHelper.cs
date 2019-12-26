@@ -840,10 +840,18 @@ namespace dnpatch
             Importer importer = new Importer(Module);
             foreach (var m in type.GetMethods())
             {
-                if (m.Name == method && m.ReturnType == returnType && m.GetParameters().Length == parameters.Length && CheckParametersByType(m.GetParameters(), parameters))
+                if (m.Name == method && m.ReturnType == returnType)
                 {
-                    IMethod meth = importer.Import(m);
-                    return meth;
+                    if (m.GetParameters().Length == 0  && parameters == null)
+                    {
+                        IMethod meth = importer.Import(m);
+                        return meth;
+                    }
+                    if ( m.GetParameters().Length == parameters.Length && CheckParametersByType(m.GetParameters(), parameters))
+                    {
+                        IMethod meth = importer.Import(m);
+                        return meth;
+                    }
                 }
             }
             return null;
